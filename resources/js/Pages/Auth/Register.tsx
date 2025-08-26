@@ -48,7 +48,23 @@ export default function Register() {
                     <span className="text-2xl font-bold">AgriConnect</span>
                 </div>
 
-                <div className="space-x-3">
+                <div className="space-x-3 flex items-center">
+                {/* Home Button */}
+                <Link
+                    href="/"
+                    className="bg-yellow-500 hover:bg-yellow-600 text-green-900 font-bold px-4 py-2 rounded-lg"
+                >
+                    {t('Home')}
+                </Link>
+                {/* login button*/}
+                <Link
+                    href={route('login')}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-green-900 font-bold px-4 py-2 rounded-lg"
+                >
+                    {t('Log in')}
+                </Link>
+
+                    {/* Translator Buttons */}
                     <button onClick={() => changeLanguage('en')}>English</button>
                     <button onClick={() => changeLanguage('si')}>සිංහල</button>
                     <button onClick={() => changeLanguage('ta')}>தமிழ்</button>
@@ -189,3 +205,4 @@ export default function Register() {
         </div>
     );
 }
+
