@@ -26,9 +26,22 @@ Route::get('/dashboard', function () {
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
+    
     // Supplier routes
-    Route::middleware(['auth'])->group(function () {
-        Route::resource('suppliers', SupplierController::class);
+    Route::prefix('supplier')->name('suppliers.')->group(function () {
+
+         // Fixed route first
+        Route::get('/profile', [SupplierController::class, 'profile'])->name('profile.show');
+        Route::get('/{supplier}/edit', [SupplierController::class, 'edit'])->name('edit');
+        Route::put('/{supplier}', [SupplierController::class, 'update'])->name('update');
+
+         // Other routes
+        Route::get('/', [SupplierController::class, 'index'])->name('index');
+        Route::get('/create', [SupplierController::class, 'create'])->name('create');
+        Route::post('/', [SupplierController::class, 'store'])->name('store');
+        Route::get('/{supplier}', [SupplierController::class, 'show'])->name('show');
+        Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
+        
     });
 
 require __DIR__.'/auth.php';
