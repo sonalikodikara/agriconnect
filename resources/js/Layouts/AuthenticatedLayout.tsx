@@ -6,6 +6,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/components/NavLink';
 import ResponsiveNavLink from '@/components/ResponsiveNavLink';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { Toaster } from "@/components/ui/toaster"; 
 
 export default function Authenticated({
     header,
@@ -18,6 +19,7 @@ export default function Authenticated({
 
     return (
         <div className="min-h-screen bg-green-100">
+             
             {/* Navbar */}
             <nav className="border-b border-gray-100 bg-green-700 sticky top-0 z-50">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -144,7 +146,10 @@ export default function Authenticated({
                 <LanguageSwitcher />
             </div>
 
-            <main>{children}</main>
+            <main>{children}</main> 
+
+            {/* Toast Notifications */}
+            <Toaster position="top-right" />
         </div>
     );
 }

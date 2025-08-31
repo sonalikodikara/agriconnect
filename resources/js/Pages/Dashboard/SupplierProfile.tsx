@@ -1,7 +1,8 @@
 import React, { useState } from 'react'; 
 import { useTranslation } from 'react-i18next';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { FaCamera, FaHome, FaTimes } from 'react-icons/fa';
+import { toast } from "@/hooks/use-toast"; // import toast
 
 export default function SupplierProfile() {
     const { t } = useTranslation();
@@ -100,40 +101,52 @@ export default function SupplierProfile() {
     ];
 
     const goHome = () => {
-        Inertia.visit('/');
+         router.visit('/');
     };
 
     const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    Inertia.post('/suppliers', {
-        business_name: businessName,
-        contact_person: contactPerson,
-        email,
-        phone,
-        district,
-        province,
-        address,
-        description,
-        website,
-        established,
-        experience,
-        specialization,
-        certifications,
-        profile_image: profileImage,
-        cover_image: coverImage,
-    }, {
-        forceFormData: true, // ensures files are sent as FormData
-        onSuccess: () => {
-            alert(t('Supplier saved successfully!'));
-            handleCancel(); // reset form after save if you want
+    router.post(
+        route("suppliers.store"), // ✅ uses Laravel route helper if you installed ziggy
+        {
+            business_name: businessName,
+            contact_person: contactPerson,
+            email,
+            phone,
+            district,
+            province,
+            address,
+            description,
+            website,
+            established,
+            experience,
+            specialization,
+            certifications,
+            profile_image: profileImage,
+            cover_image: coverImage,
         },
-        onError: (errors) => {
-            console.error(errors);
-            alert(t('There were validation errors.'));
-        }
-    });
-};
+        {
+            forceFormData: true,
+                onSuccess: () => {
+                    toast({
+                        title: t("Success"),
+                        description: t("Supplier saved successfully!"),
+                        variant: "success", // optional, depending on your toast config
+                    });
+                    handleCancel();
+                },
+                onError: (errors) => {
+                    console.error(errors);
+                    toast({
+                        title: t("Error"),
+                        description: t("There were validation errors."),
+                        variant: "destructive",
+                    });
+                },
+            }
+        );
+    };
 
     return (
         <div className="max-w-6xl mx-auto p-6">
