@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; 
 import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
-import { FaCamera, FaHome, FaTimes } from 'react-icons/fa';
+import { FaCamera, FaHome, FaTimes, FaPlus } from 'react-icons/fa';
 import { toast } from "@/hooks/use-toast"; // import toast
 
 export default function SupplierProfile() {
@@ -27,6 +27,8 @@ export default function SupplierProfile() {
     // Quick add options
     const quickSpecializations = ['Organic Farming', 'Pesticides', 'Fertilizers', 'Livestock', 'Irrigation'];
     const quickCertifications = ['ISO 9001', 'Organic Certificate', 'Quality Certificate', 'Test Report'];
+    const [newSpecialization, setNewSpecialization] = useState('');
+    const [newCertification, setNewCertification] = useState('');
 
     const handleSpecializationAdd = (value: string) => {
         if (value && !specialization.includes(value)) {
@@ -361,82 +363,118 @@ export default function SupplierProfile() {
 
                     {/* Specializations */}
                     <div className="bg-white shadow rounded-lg p-6">
-                    <h2 className="font-bold text-xl text-gray-800 mb-2">{t('Specialization')}</h2>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                        {specialization.map((item) => (
-                        <span
-                            key={item}
-                            className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"
-                        >
-                            {t(item)} 
-                            <FaTimes className="cursor-pointer" onClick={() => setSpecialization(specialization.filter(s => s !== item))} />
-                        </span>
-                        ))}
-                    </div>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                        {quickSpecializations.map((option) => (
-                        <button
-                            key={option}
-                            type="button"
-                            className={`px-3 py-1 rounded border ${specialization.includes(option) ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700'}`}
-                            onClick={() => handleSpecializationAdd(option)}
-                        >
-                            {t(option)}
-                        </button>
-                        ))}
-                    </div>
-                    <input
-                        type="text"
-                        placeholder={t('Add specialization')}
-                        onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            const value = (e.target as HTMLInputElement).value.trim();
-                            if (value) handleSpecializationAdd(value);
-                            (e.target as HTMLInputElement).value = '';
-                        }
-                        }}
-                        className="border p-2 rounded w-full mb-2"
-                    />
+                        <h2 className="font-bold text-xl text-gray-800 mb-2">{t('Specialization')}</h2>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {specialization.map((item) => (
+                                <span
+                                    key={item}
+                                    className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"
+                                >
+                                    {t(item)} 
+                                    <FaTimes className="cursor-pointer" onClick={() => setSpecialization(specialization.filter(s => s !== item))} />
+                                </span>
+                            ))}
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {quickSpecializations.map((option) => (
+                                <button
+                                    key={option}
+                                    type="button"
+                                    className={`px-3 py-1 rounded border ${specialization.includes(option) ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700'}`}
+                                    onClick={() => handleSpecializationAdd(option)}
+                                >
+                                    {t(option)}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                placeholder={t('Add specialization')}
+                                className="border p-2 rounded w-full"
+                                value={newSpecialization}
+                                onChange={(e) => setNewSpecialization(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        if (newSpecialization.trim()) {
+                                            handleSpecializationAdd(newSpecialization.trim());
+                                            setNewSpecialization('');
+                                        }
+                                    }
+                                }}
+                            />
+                            <button
+                                type="button"
+                                className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 flex items-center"
+                                onClick={() => {
+                                    if (newSpecialization.trim()) {
+                                        handleSpecializationAdd(newSpecialization.trim());
+                                        setNewSpecialization('');
+                                    }
+                                }}
+                            >
+                                <FaPlus />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Certifications */}
                     <div className="bg-white shadow rounded-lg p-6">
-                    <h2 className="font-bold text-xl text-gray-800 mb-2">{t('Certifications')}</h2>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                        {certifications.map((item) => (
-                        <span
-                            key={item}
-                            className="bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1"
-                        >
-                            {t(item)} 
-                            <FaTimes className="cursor-pointer" onClick={() => setCertifications(certifications.filter(c => c !== item))} />
-                        </span>
-                        ))}
-                    </div>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                        {quickCertifications.map((option) => (
-                        <button
-                            key={option}
-                            type="button"
-                            className={`px-3 py-1 rounded border ${certifications.includes(option) ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'}`}
-                            onClick={() => handleCertificationAdd(option)}
-                        >
-                            {t(option)}
-                        </button>
-                        ))}
-                    </div>
-                    <input
-                        type="text"
-                        placeholder={t('Add certification')}
-                        onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            const value = (e.target as HTMLInputElement).value.trim();
-                            if (value) handleCertificationAdd(value);
-                            (e.target as HTMLInputElement).value = '';
-                        }
-                        }}
-                        className="border p-2 rounded w-full mb-2"
-                    />
+                        <h2 className="font-bold text-xl text-gray-800 mb-2">{t('Certifications')}</h2>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {certifications.map((item) => (
+                                <span
+                                    key={item}
+                                    className="bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1"
+                                >
+                                    {t(item)} 
+                                    <FaTimes className="cursor-pointer" onClick={() => setCertifications(certifications.filter(c => c !== item))} />
+                                </span>
+                            ))}
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {quickCertifications.map((option) => (
+                                <button
+                                    key={option}
+                                    type="button"
+                                    className={`px-3 py-1 rounded border ${certifications.includes(option) ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'}`}
+                                    onClick={() => handleCertificationAdd(option)}
+                                >
+                                    {t(option)}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                placeholder={t('Add certification')}
+                                className="border p-2 rounded w-full"
+                                value={newCertification}
+                                onChange={(e) => setNewCertification(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        if (newCertification.trim()) {
+                                            handleCertificationAdd(newCertification.trim());
+                                            setNewCertification('');
+                                        }
+                                    }
+                                }}
+                            />
+                            <button
+                                type="button"
+                                className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 flex items-center"
+                                onClick={() => {
+                                    if (newCertification.trim()) {
+                                        handleCertificationAdd(newCertification.trim());
+                                        setNewCertification('');
+                                    }
+                                }}
+                            >
+                                <FaPlus />
+                            </button>
+                        </div>
                     </div>
 
                     <div className="flex gap-4">

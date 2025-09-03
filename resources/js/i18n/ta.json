@@ -117,6 +117,13 @@
   "ISO 9001": "ISO 9001",
   "Organic Certificate": "உயிரியல் சான்றிதழ்",
   "Quality Certificate": "தரச் சான்றிதழ்",
-  "Test Report": "சோதனை அறிக்கை"
+  "Test Report": "சோதனை அறிக்கை",
+
+  "Advisor Profile Form": "ஆலோசகர் சுயவிவரப் படிவம்",
+  "Advisor Info": "ஆலோசகரின் தகவல்",
+  "Qualifications": "தகுதிகள்",
+  "Cancel": "ரத்து செய்",
+  "Add specialization": "நிபுணத்துவம் சேர்க்கவும்",
+  "Add certification": "சான்றிதழ் சேர்க்கவும்"
 
 }
