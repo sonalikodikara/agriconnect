@@ -21,6 +21,7 @@ class AuthenticatedSessionController extends Controller
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
+            'status_key' => session('status_key'), // Added to pass the translation key
         ]);
     }
 
@@ -36,19 +37,8 @@ class AuthenticatedSessionController extends Controller
         // Get the authenticated user
         $user = Auth::user();
 
-        // Redirect based on role
-        switch ($user->role) {
-            case 'supplier':
-                return redirect()->route('suppliers.profile.show'); // goes to /supplier/profile
-            case 'advisor':
-                return redirect()->route('advisors.profile.show'); // make sure this route exists
-            case 'buyer':
-                return redirect()->route('buyers.profile.show'); // make sure this route exists
-            case 'admin':
-                return redirect()->route('admin.dashboard'); // optional dashboard for admin
-            default:
-                return redirect()->route('dashboard'); // fallback
-        }
+        // Redirect to dashboard for all roles; Dashboard.tsx will render the correct profile
+        return redirect()->route('dashboard');
     }
 
     /**

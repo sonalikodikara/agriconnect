@@ -46,19 +46,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        switch ($user->role) {
-            case 'supplier':
-                return redirect()->route('suppliers.profile.show');
-            case 'advisor':
-                return redirect()->route('dashboard'); // or advisor route
-            case 'buyer':
-                return redirect()->route('dashboard'); // or buyer route
-            case 'admin':
-                return redirect()->route('dashboard'); // or admin route
-            default:
-                return redirect()->route('dashboard');
-        }
+        // Pass a translation key instead of the raw message for frontend translation
+        return redirect()->route('login')->with('status_key', 'registration_success');
     }
 }

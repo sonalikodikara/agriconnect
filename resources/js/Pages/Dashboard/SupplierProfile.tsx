@@ -1,4 +1,5 @@
 import React, { useState } from 'react'; 
+import { usePage } from '@inertiajs/react'; 
 import { useTranslation } from 'react-i18next';
 import { Head, router } from '@inertiajs/react';
 import { FaCamera, FaHome, FaTimes, FaPlus } from 'react-icons/fa';
@@ -6,6 +7,13 @@ import { toast } from "@/hooks/use-toast"; // import toast
 
 export default function SupplierProfile() {
     const { t } = useTranslation();
+    const { auth } = usePage().props; // Get authenticated user
+    
+    // Access control: Redirect if not supplier
+    if (auth.user.role !== 'supplier') {
+        router.visit('/'); // Or appropriate fallback
+        return null;
+    }
 
     // Form States
     const [businessName, setBusinessName] = useState('');
