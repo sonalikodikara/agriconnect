@@ -3,6 +3,7 @@ import { Link, usePage, router } from "@inertiajs/react";
 import { Edit } from "lucide-react";
 import { FaHome } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import AddProduct from './AddProduct';
 
 export default function Profile() {
   const { t } = useTranslation();

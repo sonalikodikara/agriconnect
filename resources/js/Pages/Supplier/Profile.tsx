@@ -1,8 +1,10 @@
 import { useState } from "react"; 
 import { Link, usePage, router } from "@inertiajs/react";
-import { Edit } from "lucide-react";
+import { Edit, Plus } from "lucide-react";
 import { FaHome } from 'react-icons/fa';
+import AddProduct from '../Supplier/AddProduct';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 
 export default function Profile() {
   const { t } = useTranslation();
@@ -10,8 +12,15 @@ export default function Profile() {
     router.visit('/');
   };
 
-  const { supplier } = usePage<{ supplier: any; auth: { user: any } }>().props; // fetch from backend
+  const { supplier, products } = usePage<{ supplier: any; products: any[]; auth: { user: any } }>().props;
+  const tabs = [
+    { key: "overview", label: t("Overview") },
+    { key: "add_products", label: t("Add products") },
+    { key: "orders", label: t("Orders") },
+    { key: "analytics", label: t("Analytics") },
+  ];
   const [activeTab, setActiveTab] = useState("overview");
+  const [showAddProduct, setShowAddProduct] = useState(false);
 
   if (!supplier) {
     return <div className="p-6">{t('No supplier profile found.')}</div>;
@@ -40,25 +49,33 @@ export default function Profile() {
           >
             <Edit size={16} /> {t('Edit')}
           </Link>
+              
+          {/* Language Buttons */}
+          <div className="flex items-center gap-2 ml-4">
+            <button onClick={() => i18n.changeLanguage('en')}>English</button>
+            <button onClick={() => i18n.changeLanguage('si')}>සිංහල</button>
+            <button onClick={() => i18n.changeLanguage('ta')}>தமிழ்</button>
+          </div>
         </div>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-8 px-6 mt-4 border-b">
-        {["overview", "products", "orders", "analytics"].map((tab) => (
+        {tabs.map((tab) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
             className={`pb-2 font-medium ${
-              activeTab === tab
+              activeTab === tab.key
                 ? "border-b-2 border-green-600 text-green-700"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            {t(tab.charAt(0).toUpperCase() + tab.slice(1))}
+            {tab.label}
           </button>
         ))}
       </div>
+
 
       <div className="grid grid-cols-12 gap-6 px-6 py-6">
         {/* Left side */}
@@ -67,7 +84,7 @@ export default function Profile() {
             <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border flex items-center justify-center">
               {supplier.profile_image ? (
                 <img
-                  src={`/storage/${supplier.profile_image}`} // <-- full path
+                  src={`/storage/${supplier.profile_image}`}
                   alt={supplier.business_name}
                   className="w-full h-full object-cover"
                 />
@@ -92,16 +109,20 @@ export default function Profile() {
 
         {/* Right side */}
         <div className="col-span-8 space-y-6">
+          {/* Overview Tab */}
           {activeTab === "overview" && (
-            <div className="bg-white shadow rounded-2xl p-6 space-y-4">
-              <h3 className="text-lg font-semibold">{t('About')} {supplier.business_name}</h3>
-              <p className="text-gray-700">{supplier.description}</p>
+            <div className="grid grid-cols-2 gap-6">
+              {/* About card */}
+              <div className="bg-white shadow rounded-2xl p-6 space-y-4 col-span-2">
+                <h3 className="text-lg font-semibold">{t('About')} {supplier.business_name}</h3>
+                <p className="text-gray-700">{supplier.description}</p>
+              </div>
 
-              {/* Specializations */}
+              {/* Specializations card */}
               {supplier.specialization?.length > 0 && (
-                <div>
+                <div className="bg-white shadow rounded-2xl p-6">
                   <h4 className="font-semibold">{t('Specializations')}</h4>
-                  <div className="flex flex-wrap gap-2 mt-1">
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {supplier.specialization.map((spec: string, idx: number) => (
                       <span key={idx} className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
                         {t(spec)}
@@ -111,11 +132,11 @@ export default function Profile() {
                 </div>
               )}
 
-              {/* Certifications */}
+              {/* Certifications card */}
               {supplier.certifications?.length > 0 && (
-                <div>
+                <div className="bg-white shadow rounded-2xl p-6">
                   <h4 className="font-semibold">{t('Certifications')}</h4>
-                  <div className="flex flex-wrap gap-2 mt-1">
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {supplier.certifications.map((cert: string, idx: number) => (
                       <span key={idx} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
                         {t(cert)}
@@ -126,19 +147,54 @@ export default function Profile() {
               )}
             </div>
           )}
-          
-          {activeTab === "products" && (
-            <div className="bg-white shadow rounded-2xl p-6">
-              <p>{t('Products content goes here.')}</p>
+
+          {/* Add Products Tab */}
+          {activeTab === "add_products" && (
+            <div className="space-y-6">
+              {/* Header with Add Product button */}
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold">{t('Products')}</h3>
+                <button
+                  type="button"
+                  onClick={() => setShowAddProduct(!showAddProduct)}
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2"
+                >
+                  <Plus size={16} /> {t('Add Product')}
+                </button>
+              </div>
+
+              {/* Products List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {products && products.length > 0 ? (
+                  products.map((product) => (
+                    <div key={product.id} className="bg-white shadow rounded-2xl p-4">
+                      <h4 className="font-semibold">{product.name}</h4>
+                      <p className="text-gray-700 text-sm">{product.description}</p>
+                      <p className="text-green-700 font-semibold">{product.price}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-2 text-gray-500">{t('No products found.')}</div>
+                )}
+              </div>
+
+              {/* Show Add Product form */}
+              {showAddProduct && (
+                <div className="mt-6">
+                  <AddProduct />
+                </div>
+              )}
             </div>
           )}
 
+          {/* Orders Tab */}
           {activeTab === "orders" && (
             <div className="bg-white shadow rounded-2xl p-6">
               <p>{t('Orders content goes here.')}</p>
             </div>
           )}
 
+          {/* Analytics Tab */}
           {activeTab === "analytics" && (
             <div className="bg-white shadow rounded-2xl p-6">
               <p>{t('Analytics content goes here.')}</p>
