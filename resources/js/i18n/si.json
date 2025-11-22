@@ -175,7 +175,9 @@
   "Manufacturing Details": "නිෂ්පාදන විස්තර",
   "Soil Type": "මැටි වර්ගය",
   "Instructions": "උපදෙස්",
-  "Safety & Storage": "ආරක්ෂාව සහ ගබඩා කිරීම"
+  "Safety & Storage": "ආරක්ෂාව සහ ගබඩා කිරීම",
+
+  "registration_success": "ඔබ සාර්ථකව ලියාපදිංචි වී ඇත. කරුණාකර ඔබගේ අක්තපත්‍ර සමඟ ලොගින් වන්න."
   
 }
 

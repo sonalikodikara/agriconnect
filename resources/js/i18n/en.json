@@ -66,6 +66,8 @@
   "Experience": "Experience",
   "Specialization": "Specialization",
   "Certifications": "Certifications",
-  "Save": "Save"
+  "Save": "Save",
+
+  "registration_success": "You have successfully registered. Please login with your credentials."
 
 }

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react'; // Added router for redirect
 import { useTranslation } from 'react-i18next';
 import SupplierProfile from '@/Pages/Dashboard/SupplierProfile';
 import AdvisorProfile from './Dashboard/AdvisorProfile';
@@ -10,6 +10,13 @@ export default function Dashboard() {
     const { props } = usePage();
     const user = props.auth.user;
     const { t } = useTranslation();
+
+    // Basic access control: Redirect if role doesn't match expected profiles
+    const allowedRoles = ['supplier', 'advisor', 'admin', 'buyer'];
+    if (!allowedRoles.includes(user.role)) {
+        router.visit('/');
+        return null;
+    }
 
     const renderProfile = () => {
         switch (user.role) {
@@ -27,8 +34,7 @@ export default function Dashboard() {
     };
 
     return (
-        <AuthenticatedLayout
-        >
+        <AuthenticatedLayout>
             <Head title={t('Dashboard')} />
             <div className="py-8 max-w-5xl mx-auto">{renderProfile()}</div>
         </AuthenticatedLayout>

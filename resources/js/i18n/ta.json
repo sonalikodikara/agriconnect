@@ -175,6 +175,8 @@
   "Minimum Order": "குறைந்த பட்ச ஆர்டர்",
   "Optional Images": "விருப்பமான படங்கள்",
   "Certificates & Test Reports": "சான்றிதழ்கள் மற்றும் சோதனை அறிக்கைகள்",
-  "Suitability Information (Soil Type)": "தகுதி தகவல் (மண் வகை)"
+  "Suitability Information (Soil Type)": "தகுதி தகவல் (மண் வகை)",
+
+  "registration_success": "நீங்கள் வெற்றிகரமாக பதிவு செய்துவிட்டீர்கள். உங்கள் சான்றுகளுடன் உள்நுழையவும்."
 
 }
