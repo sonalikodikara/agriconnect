@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Product;
 
 class Supplier extends Model
 {
@@ -39,10 +40,16 @@ class Supplier extends Model
         'rating' => 'decimal:2',
     ];
 
-    // Relationship example (optional)
+    // Relationship with user
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
+    }
+
+    // Relationship with products (assuming products table with supplier_id)
+    public function products()
+    {
+        return $this->hasMany(Product::class); // Replace Product with actual model
     }
 
     // Returns public url for profile image (or null)

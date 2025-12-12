@@ -1,10 +1,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router } from '@inertiajs/react'; // Added router for redirect
 import { useTranslation } from 'react-i18next';
-import SupplierProfile from '@/Pages/Dashboard/SupplierProfile';
-import AdvisorProfile from './Dashboard/AdvisorProfile';
-import AdminProfile from './Dashboard/AdminProfile';
-import BuyerProfile from './Dashboard/BuyerProfile';
+import SupplierProfile from '@/Pages/Supplier/SupplierProfile';
+import AdvisorProfile from './Advisor/AdvisorProfile';
+import AdminProfile from './Admin/AdminProfile';
+import BuyerProfile from './Buyer/BuyerProfile';
 
 export default function Dashboard() {
     const { props } = usePage();

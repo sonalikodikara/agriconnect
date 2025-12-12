@@ -35,6 +35,10 @@ class AdvisorController extends Controller
             'cover_image' => 'nullable|image|max:4096',
         ]);
 
+        // Encode arrays as JSON
+        $validated['specialization'] = json_encode($validated['specialization'] ?? []);
+        $validated['certifications'] = json_encode($validated['certifications'] ?? []);
+
         if ($request->hasFile('profile_image')) {
             $validated['profile_image'] = $request->file('profile_image')->store('advisors', 'public');
         }
@@ -43,9 +47,11 @@ class AdvisorController extends Controller
             $validated['cover_image'] = $request->file('cover_image')->store('advisors', 'public');
         }
 
-        Advisor::create($validated);
+        $advisor = Advisor::create($validated);
+        $user->advisor()->save($advisor); // Associate with user if needed
 
-        return back()->with('success', 'Advisor profile saved successfully!');
+        // Redirect to profile after creation
+        return redirect()->route('advisors.profile.show')->with('success', 'Advisor profile created successfully!');
     }
 
     public function profile()
@@ -53,8 +59,13 @@ class AdvisorController extends Controller
         $advisor = auth()->user()->advisor; // assuming each user has one advisor profile
 
         if (!$advisor) {
-            return redirect()->route('advisor.profile.show')->with('error', 'No advisor profile found.');
+            // Render creation form if no profile exists
+            return Inertia::render('Advisor/AdvisorProfile');
         }
+
+        // Prepare image URLs (add accessors to Advisor model if needed)
+        $advisor->profile_image = $advisor->profile_image ? asset('storage/' . $advisor->profile_image) : null;
+        $advisor->cover_image = $advisor->cover_image ? asset('storage/' . $advisor->cover_image) : null;
 
         return Inertia::render('Advisor/Profile', [
             'advisor' => $advisor

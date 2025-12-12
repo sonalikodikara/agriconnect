@@ -123,9 +123,11 @@ export default function Login({
                 </h2>
 
                 {displayMessage && (
-                    <div className="mb-4 text-sm font-medium text-green-600">
+                    // Add green text for status messages and transparent background with border
+                    <div className="mb-4 font-medium text-sm text-green-700 bg-green-100 border border-green-300 rounded-lg p-3">
                         {displayMessage}
                     </div>
+                    
                 )}
 
                 <form onSubmit={submit} className="space-y-5">

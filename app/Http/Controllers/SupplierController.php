@@ -37,10 +37,14 @@ class SupplierController extends Controller
             $data = $request->only([
                 'business_name','contact_person','email','phone',
                 'address','district','province','description',
-                'website','established','experience', 'specialization','certifications'
+                'website','established','experience'
             ]);
 
             $data['user_id'] = auth()->id();
+
+            // Encode arrays as JSON for database storage
+            $data['specialization'] = json_encode($request->input('specialization', []));
+            $data['certifications'] = json_encode($request->input('certifications', []));
 
             if ($request->hasFile('profile_image')) {
                 $data['profile_image'] = $request->file('profile_image')->store('suppliers/profile', 'public');
@@ -53,9 +57,9 @@ class SupplierController extends Controller
 
             DB::commit();
 
-            // correct route name
+            // Redirect to profile after creation
             return redirect()->route('suppliers.profile.show')
-                ->with('success', 'Supplier created successfully.');
+                ->with('success', 'Supplier profile created successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
             return back()->withErrors(['error' => $e->getMessage()]);
@@ -64,88 +68,25 @@ class SupplierController extends Controller
 
     public function show(Supplier $supplier)
     {
-        return Inertia::render('Dashboard/SupplierProfile', [
-            'supplier' => $supplier,
-            'mode'     => 'show',
-        ]);
+        return Inertia::render('Supplier/Profile', ['supplier' => $supplier]);
     }
 
-    public function edit()
+    public function edit(Supplier $supplier)
     {
-        // Fetch the supplier for the logged-in user
-        $supplier = Supplier::where('user_id', auth()->id())->firstOrFail();
-
-        // Fetch districts and provinces for select inputs
-         $districts = [
-            ['key' => 'Colombo', 'label' => 'Colombo'],
-            ['key' => 'Kandy', 'label' => 'Kandy'],
-            ['key' => 'Galle', 'label' => 'Galle'],
-            ['key' => 'Matara', 'label' => 'Matara'],
-            ['key' => 'Jaffna', 'label' => 'Jaffna'],
-            ['key' => 'Anuradhapura', 'label' => 'Anuradhapura'],
-            ['key' => 'Polonnaruwa', 'label' => 'Polonnaruwa'],
-            ['key' => 'Trincomalee', 'label' => 'Trincomalee'],
-            ['key' => 'Batticaloa', 'label' => 'Batticaloa'],
-            ['key' => 'Ampara', 'label' => 'Ampara'],
-            ['key' => 'Badulla', 'label' => 'Badulla'],
-            ['key' => 'Nuwara Eliya', 'label' => 'Nuwara Eliya'],
-            ['key' => 'Ratnapura', 'label' => 'Ratnapura'],
-            ['key' => 'Kegalle', 'label' => 'Kegalle'],
-            ['key' => 'Kurunegala', 'label' => 'Kurunegala'],
-            ['key' => 'Puttalam', 'label' => 'Puttalam'],
-            ['key' => 'Gampaha', 'label' => 'Gampaha'],
-            ['key' => 'Kalutara', 'label' => 'Kalutara'],
-            ['key' => 'Matale', 'label' => 'Matale'],
-            ['key' => 'Kegalle', 'label' => 'Kegalle'],
-            ['key' => 'Hambantota', 'label' => 'Hambantota'],
-            ['key' => 'Monaragala', 'label' => 'Monaragala'],
-            ['key' => 'Mannar', 'label' => 'Mannar'],
-            ['key' => 'Vavuniya', 'label' => 'Vavuniya'],
-            ['key' => 'Mullaitivu', 'label' => 'Mullaitivu'],
-            ['key' => 'Kilinochchi', 'label' => 'Kilinochchi'],
-            ['key' => 'Nuwara Eliya', 'label' => 'Nuwara Eliya'],
-            ['key' => 'Polonnaruwa', 'label' => 'Polonnaruwa'],
-            ['key' => 'Trincomalee', 'label' => 'Trincomalee'],
-            // ... add all districts
-        ];
-
-        $provinces = [
-            ['key' => 'Western', 'label' => 'Western'],
-            ['key' => 'Central', 'label' => 'Central'],
-            ['key' => 'Southern', 'label' => 'Southern'],
-            ['key' => 'Northern', 'label' => 'Northern'],
-            ['key' => 'Eastern', 'label' => 'Eastern'],
-            ['key' => 'North Western', 'label' => 'North Western'],
-            ['key' => 'North Central', 'label' => 'North Central'],
-            ['key' => 'Uva', 'label' => 'Uva'],
-            ['key' => 'Sabaragamuwa', 'label' => 'Sabaragamuwa'],
-        ];
-
-        // Decode JSON fields for Inertia
-        $supplier->specialization = $supplier->specialization ? json_decode($supplier->specialization) : [];
-        $supplier->certifications = $supplier->certifications ? json_decode($supplier->certifications) : [];
-
-        return Inertia::render('Supplier/Edit', [
-            'supplier' => $supplier,
-            'districts' => $districts,
-            'provinces' => $provinces,
-        ]);
+        return Inertia::render('Supplier/SupplierProfile', ['supplier' => $supplier]);
     }
 
-
-    public function update(UpdateSupplierRequest $request)
+    public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
-        $supplier = Supplier::where('user_id', auth()->id())->firstOrFail();
-
         $data = $request->only([
             'business_name','contact_person','email','phone',
             'address','district','province','description',
-            'website','established','experience', 'specialization','certifications' 
+            'website','established','experience'
         ]);
 
+        // Normalize and encode arrays
         $data['specialization'] = json_encode($this->normalizeArrayInput($request->input('specialization', [])));
         $data['certifications'] = json_encode($this->normalizeArrayInput($request->input('certifications', [])));
-
 
         if ($request->hasFile('profile_image')) {
             if ($supplier->profile_image) {
@@ -161,9 +102,9 @@ class SupplierController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('suppliers/cover', 'public');
         }
 
-        $supplier->update($data);
+       $supplier->update($data);
 
-        return redirect()->route('suppliers.profile.show')->with('success', 'Supplier updated successfully.');
+        return redirect()->route('suppliers.profile.show')->with('status_key', 'supplier.updated_successfully');
     }
 
     public function destroy(Supplier $supplier)
@@ -200,22 +141,22 @@ class SupplierController extends Controller
         return [];
     }
 
-
-    public function profile()
+     public function profile()
     {
         $supplier = Supplier::where('user_id', auth()->id())->first();
-
         if ($supplier) {
-            $supplier->specialization = $supplier->specialization ? json_decode($supplier->specialization) : [];
-            $supplier->certifications = $supplier->certifications ? json_decode($supplier->certifications) : [];
+            // No need to decode if model has casts (they are already arrays)
             $supplier->profile_image = $supplier->profile_image ? asset('storage/' . $supplier->profile_image) : null;
             $supplier->cover_image = $supplier->cover_image ? asset('storage/' . $supplier->cover_image) : null;
         }
-
+        // Assuming you have a products relationship; adjust if not
+        $products = $supplier ? $supplier->products : [];
+        // Pass flash message from session to Inertia props
+        $flash = session()->has('status_key') ? ['status_key' => session('status_key')] : null;
         return Inertia::render('Supplier/Profile', [
             'supplier' => $supplier,
+            'products' => $products,
+            'flash' => $flash,
         ]);
     }
-
-
 }
