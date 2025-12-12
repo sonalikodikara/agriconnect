@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import BuyerNavbar from '@/Components/BuyerNavbar';
+import BuyerNavbar from '@/components/BuyerNavbar';
 import { CreditCard, Check } from 'lucide-react';
 
 export default function Checkout() {

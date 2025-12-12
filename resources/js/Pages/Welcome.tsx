@@ -27,11 +27,12 @@ export default function Welcome() {
     };
 
     const services = [
-        { key: "seeds", img: "/images/seeds.png", products: ["Paddy", "Maize", "Vegetables"], route: "/list/seeds" },
-        { key: "fertilizer", img: "/images/fertilizer.png", products: ["Urea", "Organic Compost", "NPK Mix"], route: "/list/fertilizer" },
-        { key: "equipment", img: "/images/tools.png", products: ["Sprayers", "Harvest Tools", "Water Pumps"], route: "/list/equipment" },
-        { key: "vehicles", img: "/images/tractors.png", products: ["Tractors", "Mini Trucks", "Transport Vans"], route: "/list/vehicles" },
-        { key: "advisors", img: "/images/advisor.png", products: ["Farming Advisors", "Soil Experts", "Crop Doctors"], route: "/list/advisors" },
+        { key: "seeds", img: "/images/seeds.png", products: ["Paddy", "Maize", "Vegetables"], route: route('list.seeds') },
+        { key: "fertilizer", img: "/images/fertilizer.png", products: ["Urea", "Organic Compost", "NPK Mix"], route: route('list.fertilizer') },
+        { key: "equipment", img: "/images/tools.png", products: ["Sprayers", "Harvest Tools", "Water Pumps"], route: route('list.equipment') },
+        { key: "vehicles", img: "/images/tractors.png", products: ["Tractors", "Mini Trucks", "Transport Vans"], route: route('list.vehicles') },
+        { key: "pesticides", img: "/images/pesticide.png", products: ["Insecticide", "Fungicide"], route: route('list.pesticides') }, // Fixed route
+        { key: "advisors", img: "/images/advisor.png", products: ["Farming Advisors", "Soil Experts", "Crop Doctors"], route: route('list.advisors') },
     ];
 
     const filteredServices = services.filter(service =>

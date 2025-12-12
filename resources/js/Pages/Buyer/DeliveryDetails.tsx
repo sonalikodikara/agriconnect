@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import BuyerNavbar from '@/Components/BuyerNavbar';
+import BuyerNavbar from '@/components/BuyerNavbar';
 import { MapPin, Phone } from 'lucide-react';
 
 export default function DeliveryDetails() {
