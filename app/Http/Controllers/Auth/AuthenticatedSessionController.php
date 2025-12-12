@@ -37,8 +37,19 @@ class AuthenticatedSessionController extends Controller
         // Get the authenticated user
         $user = Auth::user();
 
-        // Redirect to dashboard for all roles; Dashboard.tsx will render the correct profile
-        return redirect()->route('dashboard');
+        // Redirect based on role
+        switch ($user->role) {
+            case 'supplier':
+                return redirect()->route('suppliers.profile.show');
+            case 'advisor':
+                return redirect()->route('advisors.profile.show');
+            case 'buyer':
+                return redirect()->route('buyers.profile.show');
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            default:
+                return redirect()->route('dashboard');
+        }
     }
 
     /**

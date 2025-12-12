@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdvisorController;
+use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -40,12 +43,26 @@ Route::get('/dashboard', function () {
         Route::post('/', [SupplierController::class, 'store'])->name('store');
         Route::get('/{supplier}', [SupplierController::class, 'show'])->name('show');
         Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
+
+        // Product routes (nested under supplier)
+        Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
     });
 
     // Buyer routes
     Route::prefix('buyer')->name('buyers.')->middleware('auth')->group(function () {
         Route::get('/profile', [BuyerController::class, 'profile'])->name('profile.show');
+         Route::get('/cart', [BuyerController::class, 'cart'])->name('cart');
+        Route::get('/checkout', [BuyerController::class, 'checkout'])->name('checkout');
+        Route::post('/delivery-details', [BuyerController::class, 'saveDelivery'])->name('delivery.save');
+        Route::get('/orders', [BuyerController::class, 'orders'])->name('orders');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     });
+
+    Route::prefix('buyer')->name('buyers.')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [BuyerController::class, 'dashboard'])->name('dashboard');
+   
+});
 
     // Advisor routes
     Route::prefix('advisor')->name('advisors.')->middleware('auth')->group(function () {

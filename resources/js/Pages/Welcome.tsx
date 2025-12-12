@@ -127,13 +127,18 @@ export default function Welcome() {
             <section className="bg-white py-6 md:py-10 px-4 md:px-6 max-w-6xl mx-auto rounded-lg shadow-md -mt-10 relative z-10">
                 <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">{t('find_products')}</h2>
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <input
-                        type="text"
-                        placeholder={t("search_placeholder")}
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="w-full md:w-2/3 px-4 py-2 border rounded-lg shadow text-base"
-                    />
+                    <div className="flex w-full md:w-2/3">
+                        <input
+                            type="text"
+                            placeholder={t("search_placeholder")}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="flex-1 px-4 py-2 border rounded-l-lg shadow text-base"
+                        />
+                        <button className="px-4 py-2 bg-green-600 text-white rounded-r-lg hover:bg-green-700">
+                            {t('search')}
+                        </button>
+                    </div>
                     <select
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}

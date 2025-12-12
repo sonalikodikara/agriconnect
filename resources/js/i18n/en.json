@@ -68,6 +68,56 @@
   "Certifications": "Certifications",
   "Save": "Save",
 
-  "registration_success": "You have successfully registered. Please login with your credentials."
+  
+  "Fertilizer": "Fertilizer",
+  "Seeds": "Seeds",
+  "Pesticides": "Pesticides",
+  "Herbicides": "Herbicides",
+  "Fungicides": "Fungicides",
+  "Insecticides": "Insecticides",
+  "Organic Fertilizer": "Organic Fertilizer",
+  "Compost": "Compost",
+  "Bio Fertilizer": "Bio Fertilizer",
+  "Plant Growth Regulator": "Plant Growth Regulator",
+  "Animal Feed": "Animal Feed",
+  "Poultry Feed": "Poultry Feed",
+  "Livestock Medicine": "Livestock Medicine",
+  "Irrigation Equipment": "Irrigation Equipment",
+  "Farm Tools": "Farm Tools",
+  "Greenhouse Materials": "Greenhouse Materials",
+  "Nursery Plants": "Nursery Plants",
+  "Coconut Products": "Coconut Products",
+  "Tea Fertilizer": "Tea Fertilizer",
+  "Rice Seeds": "Rice Seeds",
+  "Vegetable Seeds": "Vegetable Seeds",
+  "Fruit Plants": "Fruit Plants",
+
+  "Premium Grade": "Premium Grade",
+  "Grade A": "Grade A",
+  "Grade B": "Grade B",
+  "Grade C": "Grade C",
+  "Organic Certified": "Organic Certified",
+  "SLS Certified": "SLS Certified",
+  "Export Quality": "Export Quality",
+  "Local Market": "Local Market",
+  "First Class": "First Class",
+  "Second Class": "Second Class",
+  "Farm Fresh": "Farm Fresh",
+  "Non-GMO": "Non-GMO",
+
+  "kg": "kg",
+  "Liter": "Liter",
+  "Tons": "Tons",
+  "Packets": "Packets",
+  "Bags": "Bags",
+
+  "registration_success": "You have successfully registered. Please login with your credentials.",
+
+  "product.saved_successfully": "Product saved successfully!",
+  "Success": "Success",
+  "Error": "Error",
+  "Please fix the errors below.": "Please fix the errors below.",
+  "supplier.updated_successfully": "Profile updated successfully!"
+
 
 }
