@@ -229,7 +229,12 @@
   "product.saved_successfully": "නිෂ්පාදනය සාර්ථකව සුරැකිණි!",
   "Success": "සාර්ථකයි",
   "Error": "දෝෂයකි",
-  "supplier.updated_successfully": "ව්‍යාපාර තොරතුරු සාර්ථකව යාවත්කාලීන කරන ලදී!"
-  
+  "supplier.updated_successfully": "ව්‍යාපාර තොරතුරු සාර්ථකව යාවත්කාලීන කරන ලදී!",
+
+  "Equipment & Tools": "උපකරණ සහ මෙවලම්",
+  "Pesticides & Chemicals": "පළිබෝධනාශක",
+  "Other Products": "වෙනත් නිෂ්පාදන",
+  "View Supplier": "සැපයුම්කරු බලන්න"
+    
 }
 

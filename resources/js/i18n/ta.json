@@ -230,6 +230,11 @@
   "product.saved_successfully": "பொருள் வெற்றிகரமாக சேமிக்கப்பட்டது!",
   "Success": "வெற்றி",
   "Error": "பிழை",
-  "supplier.updated_successfully": "வணிக தகவல்கள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன!"
+  "supplier.updated_successfully": "வணிக தகவல்கள் வெற்றிகரமாக புதுப்பிக்கப்பட்டன!",
+
+  "Equipment & Tools": "உபகரணங்கள் மற்றும் கருவிகள்",
+  "Pesticides & Chemicals": "பூச்சிக்கொல்லிகள்",
+  "Other Products": "மற்ற பொருட்கள்",
+  "View Supplier": "விற்பனையாளரைப் பார்க்கவும்"
 
 }

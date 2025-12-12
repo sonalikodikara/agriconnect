@@ -117,7 +117,15 @@
   "Success": "Success",
   "Error": "Error",
   "Please fix the errors below.": "Please fix the errors below.",
-  "supplier.updated_successfully": "Profile updated successfully!"
+  "supplier.updated_successfully": "Profile updated successfully!",
 
+  
+  "Equipment & Tools": "Equipment & Tools",
+  "Pesticides & Chemicals": "Pesticides & Chemicals",
+  "Other Products": "Other Products",
+
+  "View Supplier": "View Supplier",
+  "No products found in this category yet.": "No products in this category yet.",
+  "Back to Home": "Back to Home"
 
 }

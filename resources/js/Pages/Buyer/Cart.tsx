@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import BuyerNavbar from '@/Components/BuyerNavbar';
+import BuyerNavbar from '@/components/BuyerNavbar';
 import { Trash2, Plus, Minus } from 'lucide-react';
 
 export default function Cart() {
