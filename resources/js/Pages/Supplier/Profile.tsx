@@ -10,7 +10,7 @@ import i18n from "../../i18n";
 
 export default function Profile() {
   const { t } = useTranslation();
-  const goHome = () => router.visit("/");
+  const goHome = () => router.visit("/home");
 
   const { supplier, products, auth, flash } = usePage<{
     supplier: any;
@@ -205,7 +205,7 @@ export default function Profile() {
               className={`px-4 py-3 rounded-xl font-bold text-lg transition ${
                 activeTab === tab.key
                   ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-gray-300 text-gray-700 hover:bg-gray-200"
               }`}
             >
               {tab.label}
@@ -348,7 +348,7 @@ export default function Profile() {
                   <p className="text-3xl text-gray-500 mb-8">{t("No products yet.")}</p>
                   <button
                     onClick={() => setActiveTab("add_product")}
-                    className="bg-green-600 hover:bg-green-700 text-white text-3xl font-bold px-12 py-6 rounded-full shadow-2xl"
+                    className="bg-green-600 hover:bg-green-700 text-white text-2xl font-bold px-12 py-6 rounded-full shadow-2xl"
                   >
                     {t("Add Your First Product")}
                   </button>
