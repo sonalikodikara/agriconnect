@@ -145,6 +145,7 @@
   "Show Add Product Form": "නිෂ්පාදන පෝරමය පෙන්වන්න",
   "Hide Form": "පෝරමය සඟවන්න",
   "No description yet.": "තවම විස්තරයක් නැත.",
+  "Go to Dashboard": "ඩැෂ්බෝඩ් වෙත යන්න",
 
   "Basic Information": "මූලික තොරතුරු",
   "Nutritional Info": "පෝෂක තොරතුරු",
@@ -234,7 +235,13 @@
   "Equipment & Tools": "උපකරණ සහ මෙවලම්",
   "Pesticides & Chemicals": "පළිබෝධනාශක",
   "Other Products": "වෙනත් නිෂ්පාදන",
-  "View Supplier": "සැපයුම්කරු බලන්න"
-    
+  "View Supplier": "සැපයුම්කරු බලන්න",
+  "Find the best for your farming needs.": "ඔබේ කෘෂිකාර්මික අවශ්‍යතා සඳහා හොඳම සොයන්න.",
+
+  "added_to_cart": "නිෂ්පාදනය සාර්ථකව සැපයුම් කරණයට එකතු විය!",
+  "cart_updated": "සැපයුම්කරණය සාර්ථකව යාවත්කලන ලදී!",
+  "item_removed": "අයිතමය සැපයුම් කරණයෙන් ඉවත් කරන ලදී."
+  
+  
 }
 

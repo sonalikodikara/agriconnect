@@ -21,7 +21,7 @@ class ProductController extends Controller
             'quality' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'quantity' => 'nullable|numeric|min:0',
-            'quantity_unit' => 'required|string|in:kg,ltr,tons,packets',
+            'quantity_unit' => 'nullable|string|in:kg,ltr,tons,packets',
             'description' => 'required|string',
             'minimum_order' => 'nullable|integer|min:1',
             'packaging_size' => 'nullable|string',
@@ -89,6 +89,29 @@ class ProductController extends Controller
                 $paths[] = $file->store('products/certificates', 'public');
             }
             $data['certificates'] = $paths;
+        }
+
+        // Add new fields
+        $data['product_type'] = $request->product_type;
+
+        if ($request->product_type === 'vehicle') {
+            $data['vehicle_type'] = $request->vehicle_type;
+            $data['brand_model'] = $request->brand_model;
+            $data['year'] = $request->year;
+            $data['engine_power_hp'] = $request->engine_power_hp;
+            $data['condition'] = $request->condition;
+            $data['for_rent'] = $request->has('for_rent');
+            $data['rental_price_per_day'] = $request->rental_price_per_day;
+            $data['vehicle_features'] = $request->description;
+        }
+
+        if ($request->product_type === 'tool') {
+            $data['tool_name'] = $request->tool_name;
+            $data['tool_type'] = $request->tool_type;
+            $data['power_source'] = $request->power_source;
+            $data['working_width'] = $request->working_width;
+            $data['is_modern'] = in_array($request->tool_type, ['battery', 'tractor_mounted', 'power_tiller']);
+            $data['tool_features'] = $request->description;
         }
 
         Product::create($data);

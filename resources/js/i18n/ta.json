@@ -144,6 +144,7 @@
   "Show Add Product Form": "பொருள் சேர்க்கும் படிவத்தை காட்டு",
   "Hide Form": "படிவத்தை மறை",
   "No description yet.": "இன்னும் விளக்கம் இல்லை.",
+  "Go to Dashboard": "டாஷ்போர்டுக்கு செல்லவும்",
 
   "Basic Information": "அடிப்படை தகவல்",
   "Nutritional Info": "போஷண தகவல்",
@@ -235,6 +236,11 @@
   "Equipment & Tools": "உபகரணங்கள் மற்றும் கருவிகள்",
   "Pesticides & Chemicals": "பூச்சிக்கொல்லிகள்",
   "Other Products": "மற்ற பொருட்கள்",
-  "View Supplier": "விற்பனையாளரைப் பார்க்கவும்"
+  "View Supplier": "விற்பனையாளரைப் பார்க்கவும்",
+  "Find the best {{category}} for your farming needs.": "உங்கள் விவசாய தேவைகளுக்கான சிறந்த {{category}} ஐ கண்டுபிடிக்கவும்.",
+
+  "added_to_cart": "பொருள் வெற்றிகரமாக வண்டியில் சேர்க்கப்பட்டது!",
+  "cart_updated": "வண்டி வெற்றிகரமாக புதுப்பிக்கப்பட்டது!",
+  "item_removed": "பொருள் வண்டியிலிருந்து நீக்கப்பட்டது."
 
 }

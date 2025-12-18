@@ -45,7 +45,7 @@ export default function Advisors({ advisors, category_name }) {
           {advisors.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-3xl shadow-xl">
               <p className="text-3xl text-gray-600 mb-8">{t('No advisors registered yet.')}</p>
-              <Link href="/" className="bg-green-600 text-white px-10 py-4 rounded-2xl text-xl font-bold hover:bg-green-700">
+              <Link href="/home" className="bg-green-600 text-white px-10 py-4 rounded-2xl text-xl font-bold hover:bg-green-700">
                 {t('Back to Home')}
               </Link>
             </div>

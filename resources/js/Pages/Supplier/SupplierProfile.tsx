@@ -11,7 +11,7 @@ export default function SupplierProfile() {
     
     // Access control: Redirect if not supplier
     if (auth.user.role !== 'supplier') {
-        router.visit('/'); // Or appropriate fallback
+        router.visit('/home'); // Or appropriate fallback
         return null;
     }
 
@@ -142,7 +142,7 @@ export default function SupplierProfile() {
     ];
 
     const goHome = () => {
-        router.visit('/');
+        router.visit('/home');
     };
 
     return (

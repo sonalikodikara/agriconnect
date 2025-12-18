@@ -126,6 +126,13 @@
 
   "View Supplier": "View Supplier",
   "No products found in this category yet.": "No products in this category yet.",
-  "Back to Home": "Back to Home"
+  "Back to Home": "Back to Home",
+  "Find the best {{category}} for your farming needs.": "Find the best {{category}} for your farming needs.",
+
+  
+  "added_to_cart": "Product added to cart successfully!",
+  "cart_updated": "Cart updated successfully!",
+  "item_removed": "Item removed from cart."
+
 
 }

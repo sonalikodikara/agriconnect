@@ -30,7 +30,7 @@ export default function BuyerNavbar({ cartCount = 0 }: BuyerNavbarProps) {
     router.post(route("logout"));
   };
 
-  const goHome = () => router.visit("/");
+  const goHome = () => router.visit("/home");
 
   return (
     <>
