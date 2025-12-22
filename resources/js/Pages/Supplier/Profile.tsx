@@ -5,18 +5,19 @@ import { Link, usePage, router } from "@inertiajs/react";
 import { Edit, Plus, LogOut, Settings, Menu, X, ChevronDown } from "lucide-react";
 import { FaHome } from "react-icons/fa";
 import AddProduct from "../Supplier/AddProduct";
-import { useTranslation } from "react-i18next";
-import i18n from "../../i18n";
+import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 
 export default function Profile() {
   const { t } = useTranslation();
   const goHome = () => router.visit("/home");
 
-  const { supplier, products, auth, flash } = usePage<{
+  const { supplier, products, auth, flash, orders } = usePage<{
     supplier: any;
     products: any[];
     auth: { user: { name: string; email: string } };
     flash: { status_key?: string };
+    orders: any[];
   }>().props;
 
   const [activeTab, setActiveTab] = useState("overview");
@@ -40,7 +41,7 @@ export default function Profile() {
   };
 
   const successMessage = flash?.status_key ? t(flash.status_key) : null;
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       {/* Navbar */}
@@ -372,11 +373,40 @@ export default function Profile() {
             </div>
           )}
 
-          {/* Order tab */}
+          {/* Orders Tab - Display supplier-specific orders */}
           {activeTab === "orders" && (
-            <div className="bg-white rounded-3xl shadow-2xl p-10 border-8 border-green-300">
+            <div className="bg-white rounded-3xl shadow-2xl p-10 border-8 border-green-300 space-y-8">
               <h2 className="text-4xl font-bold text-green-800 text-center mb-12">{t("Orders")}</h2>
-              <p className="text-center text-gray-500 text-xl">{t("Orders content goes here.")}</p>
+              {orders.length === 0 ? (
+                <p className="text-center text-gray-500 text-xl">{t("No orders yet.")}</p>
+              ) : (
+                orders.map((order) => (
+                  <div 
+                    key={order.id} 
+                    className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-8 shadow-xl"
+                  >
+                    <h3 className="text-3xl font-bold text-gray-800 mb-4">
+                      {t('Order')} #{order.id} - {order.status_label}
+                    </h3>
+                    <p className="text-lg text-gray-600 mb-6">
+                      {t('Placed on {{date}}', { date: new Date(order.created_at).toLocaleDateString('en-GB') })}
+                    </p>
+                    <ul className="space-y-4">
+                      {order.items.map((item: any) => (
+                        <li key={item.id} className="flex justify-between text-gray-700 text-xl">
+                          <span>{item.product.name} x {item.quantity}</span>
+                          <span>Rs. {(item.price_at_purchase * item.quantity).toLocaleString()}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-6 text-right">
+                      <p className="text-2xl font-bold text-green-700">
+                        Total: Rs. {order.total_amount.toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
 

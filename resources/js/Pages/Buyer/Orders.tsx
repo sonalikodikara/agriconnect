@@ -1,3 +1,4 @@
+// resources/js/Pages/Buyer/Orders.tsx (updated with success message handling)
 import { Head, Link } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import BuyerNavbar from '@/components/BuyerNavbar';
@@ -8,9 +9,22 @@ import {
   Truck,
   CreditCard 
 } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
-export default function Orders({ orders }) {
+export default function Orders() {
   const { t } = useTranslation();
+  const { props } = usePage<{ orders: any[], flash?: { status_key?: string } }>();
+  const orders = props.orders || [];
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (props.flash?.status_key) {
+      setSuccessMessage(t(props.flash.status_key));
+      const timer = setTimeout(() => setSuccessMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [props.flash, t]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -43,6 +57,13 @@ export default function Orders({ orders }) {
       <BuyerNavbar cartCount={0} />
 
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-8">
+        {/* Success Message */}
+        {successMessage && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-center py-4 px-8 rounded-xl shadow-lg z-50 flex items-center justify-center gap-2">
+            {successMessage}
+          </div>
+        )}
+
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-5xl font-bold text-green-800 text-center mb-12">
             {t('My Orders')}
@@ -95,7 +116,7 @@ export default function Orders({ orders }) {
                       <div>
                         <p className="text-lg font-semibold text-gray-700 mb-2">{t('Items')}</p>
                         <ul className="space-y-2">
-                          {order.items.map((item) => (
+                          {order.items.map((item: any) => (
                             <li key={item.id} className="flex justify-between text-gray-600">
                               <span>{item.product.name} × {item.quantity}</span>
                               <span>Rs. {(item.price_at_purchase * item.quantity).toLocaleString()}</span>

@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Advisor;
 use Inertia\Inertia;
-use App\Models\Advisor; // Assuming there's an Advisor model
 
 class ProductListController extends Controller
 {
     public function seeds()
     {
         $products = Product::where('category', 'like', '%seed%')
-            ->orWhere('category', 'like', '%seed%')
             ->with('supplier')
-            ->get();
+            ->get()
+            ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
         return Inertia::render('ListPages/Seed', [
             'products' => $products,
@@ -27,7 +27,8 @@ class ProductListController extends Controller
             ->orWhere('category', 'like', '%පොහොර%')
             ->orWhere('category', 'like', '%உரம்%')
             ->with('supplier')
-            ->get();
+            ->get()
+            ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
         return Inertia::render('ListPages/Fertilizer', [
             'products' => $products,
@@ -39,7 +40,8 @@ class ProductListController extends Controller
     {
         $products = Product::whereIn('category', ['irrigation_equipment', 'farm_tools', 'greenhouse_materials'])
             ->with('supplier')
-            ->get();
+            ->get()
+            ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
         return Inertia::render('ListPages/Equipment', [
             'products' => $products,
@@ -47,10 +49,13 @@ class ProductListController extends Controller
         ]);
     }
 
-    public function vehicles() {
+    public function vehicles()
+    {
         $products = Product::where('category', 'like', '%vehicle%')
             ->orWhere('category', 'like', '%tractor%')
-            ->with('supplier')->get();
+            ->with('supplier')
+            ->get()
+            ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
         return Inertia::render('ListPages/Vehicles', [
             'products' => $products,
@@ -58,25 +63,17 @@ class ProductListController extends Controller
         ]);
     }
 
-   public function advisors()
+    public function pesticides()
     {
-        $advisors = Advisor::all(); // This works now
-
-        return Inertia::render('ListPages/Advisors', [
-            'advisors' => $advisors,         // ← correct name
-            'category_name' => 'Advisors & Consultants',
-        ]);
-    }
-
-    public function pesticides() {
-        $products = Product::where('category', 'like', '%pesticide%') // Fixed matching
+        $products = Product::where('category', 'like', '%pesticide%')
             ->orWhere('category', 'like', '%herbicide%')
             ->orWhere('category', 'like', '%fungicide%')
             ->orWhere('category', 'like', '%insecticide%')
-            ->orWhere('category', 'like', '%පළිබෝධනාශක%') // Sinhala
-            ->orWhere('category', 'like', '%பூச்சிக்கொல்லி%') // Tamil
+            ->orWhere('category', 'like', '%පළිබෝධනාශක%')
+            ->orWhere('category', 'like', '%பூச்சிக்கொல்லி%')
             ->with('supplier')
-            ->get();
+            ->get()
+            ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
         return Inertia::render('ListPages/Pesticides', [
             'products' => $products,
@@ -91,11 +88,24 @@ class ProductListController extends Controller
             foreach ($excluded as $term) {
                 $query->where('category', 'not like', "%{$term}%");
             }
-        })->with('supplier')->get();
+        })
+        ->with('supplier')
+        ->get()
+        ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
         return Inertia::render('ListPages/Others', [
             'products' => $products,
             'category_name' => 'Other Products',
+        ]);
+    }
+
+    public function advisors()
+    {
+        $advisors = Advisor::all();
+
+        return Inertia::render('ListPages/Advisors', [
+            'advisors' => $advisors,
+            'category_name' => 'Advisors & Consultants',
         ]);
     }
 }

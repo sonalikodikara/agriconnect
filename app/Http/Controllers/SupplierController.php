@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supplier;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
@@ -145,18 +146,24 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::where('user_id', auth()->id())->first();
         if ($supplier) {
-            // No need to decode if model has casts (they are already arrays)
             $supplier->profile_image = $supplier->profile_image ? asset('storage/' . $supplier->profile_image) : null;
             $supplier->cover_image = $supplier->cover_image ? asset('storage/' . $supplier->cover_image) : null;
         }
-        // Assuming you have a products relationship; adjust if not
         $products = $supplier ? $supplier->products : [];
-        // Pass flash message from session to Inertia props
         $flash = session()->has('status_key') ? ['status_key' => session('status_key')] : null;
+
+        // Fetch orders containing this supplier's products, with only their items
+        $supplierOrders = Order::whereHas('items', function ($query) use ($supplier) {
+            $query->where('supplier_id', $supplier->id);
+        })->with(['items' => function ($query) use ($supplier) {
+            $query->where('supplier_id', $supplier->id)->with('product');
+        }])->latest()->get();
+
         return Inertia::render('Supplier/Profile', [
             'supplier' => $supplier,
             'products' => $products,
             'flash' => $flash,
+            'orders' => $supplierOrders,
         ]);
     }
 }

@@ -1,7 +1,8 @@
+// resources/js/Pages/Buyer/Cart.tsx (updated with minor checks, but mostly same)
 import { Head, Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import BuyerNavbar from '@/components/BuyerNavbar';
-import { Trash2, Plus, Minus, CheckCircle } from 'lucide-react'; // Added FaCheckCircle if needed, but use lucide if preferred
+import { Trash2, Plus, Minus } from 'lucide-react'; // Removed unused CheckCircle
 import { usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
@@ -34,7 +35,11 @@ export default function Cart() {
   };
 
   const handleCheckout = () => {
-    // Check delivery details
+    if (cartItems.length === 0) {
+      // Optionally show a message, but prevent checkout
+      return;
+    }
+    // Check delivery details (assume from props or always true for sim)
     const hasDelivery = true; // From props
     if (!hasDelivery) {
       router.visit(route('buyers.delivery.edit'));
@@ -52,7 +57,6 @@ export default function Cart() {
         {/* Success Message Banner - Enhanced styles */}
         {successMessage && (
           <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-center py-4 px-8 rounded-xl shadow-lg z-50 flex items-center justify-center gap-2 transition-opacity duration-300 opacity-100">
-            <FaCheckCircle size={20} />
             {successMessage}
           </div>
         )}
