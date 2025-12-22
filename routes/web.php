@@ -9,6 +9,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -57,16 +59,23 @@ Route::prefix('supplier')->name('suppliers.')->group(function () {
 // Buyer routes (including prefixed cart routes)
 Route::prefix('buyer')->name('buyers.')->middleware('auth')->group(function () {
     Route::get('/dashboard', [BuyerController::class, 'dashboard'])->name('dashboard');
-    Route::get('/checkout', [BuyerController::class, 'checkout'])->name('checkout');
     Route::post('/delivery-details', [BuyerController::class, 'saveDelivery'])->name('delivery.save');
     Route::get('/orders', [BuyerController::class, 'orders'])->name('orders');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
-    // Cart routes (prefixed to avoid conflicts)
+    // Cart routes
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+    // Checkout route - FIXED: point to 'index' method
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+
+    // Orders routes (note: you had duplicate '/orders' GET)
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
 });
 
 // Advisor routes
@@ -74,6 +83,13 @@ Route::prefix('advisor')->name('advisors.')->middleware('auth')->group(function 
     Route::get('/profile', [AdvisorController::class, 'profile'])->name('profile.show');
     Route::get('/create', [AdvisorController::class, 'index'])->name('create');
     Route::post('/', [AdvisorController::class, 'store'])->name('store');
+
+    // New routes for specialties and certificates
+    Route::get('/specialties', [AdvisorController::class, 'specialties'])->name('specialties.edit');
+    Route::post('/specialties', [AdvisorController::class, 'updateSpecialties'])->name('specialties.update');
+
+    Route::get('/certifications', [AdvisorController::class, 'certifications'])->name('certifications.edit');
+    Route::post('/certifications', [AdvisorController::class, 'updateCertifications'])->name('certifications.update');
 });
 
 // Admin routes
