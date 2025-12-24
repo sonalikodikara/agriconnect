@@ -362,13 +362,7 @@ export default function Profile() {
           {activeTab === "add_product" && (
             <div className="bg-white rounded-3xl shadow-2xl p-10 border-8 border-green-300">
               {/* Success Message at the very top */}
-              {successMessage && (
-                <div className="mb-10 p-6 bg-green-100 border-4 border-green-400 rounded-2xl text-center animate-pulse">
-                  <p className="text-3xl font-bold text-green-800">{successMessage}</p>
-                </div>
-              )}
-
-              <h2 className="text-4xl font-bold text-green-800 text-center mb-12">{t("Add New Product")}</h2>
+             <h2 className="text-4xl font-bold text-green-800 text-center mb-12">{t("Add New Product")}</h2>
               <AddProduct />
             </div>
           )}
