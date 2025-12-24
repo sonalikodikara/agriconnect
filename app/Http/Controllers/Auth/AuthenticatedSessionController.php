@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
             case 'advisor':
                 return redirect()->route('advisors.profile.show');
             case 'buyer':
-                return redirect()->route('buyers.dashboard');
+                return redirect()->route('dashboard');
             case 'admin':
                 return redirect()->route('admin.dashboard');
             default:

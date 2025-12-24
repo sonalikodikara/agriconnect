@@ -45,7 +45,7 @@ class Product extends Model
     public function getPrimaryImageUrlAttribute()
     {
         return $this->primary_image
-            ? Storage::disk('public')->url($this->primary_image)
+            ? asset('storage/' . $this->primary_image)
             : '/placeholder.jpg'; // fallback
     }
 
@@ -55,7 +55,7 @@ class Product extends Model
             return [];
         }
 
-        return array_map(fn($path) => Storage::disk('public')->url($path), $this->optional_images);
+        return array_map(fn($path) => asset('storage/' . $path), $this->optional_images);
     }
 
     public function getCertificatesUrlsAttribute()
@@ -64,6 +64,6 @@ class Product extends Model
             return [];
         }
 
-        return array_map(fn($path) => Storage::disk('public')->url($path), $this->certificates);
+        return array_map(fn($path) => asset('storage/' . $path), $this->certificates);
     }
 }

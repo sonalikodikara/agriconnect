@@ -15,12 +15,17 @@ export default function AddProduct() {
   const editor = useEditor({
     extensions: [StarterKit],
     content: "",
+    editorProps: {
+      attributes: {
+        class: "prose prose-sm sm:prose lg:prose-lg focus:outline-none min-h-40",
+      },
+    },
   });
 
-  // === MAIN PRODUCT TYPE TAB ===
+  // Product Type
   const [productType, setProductType] = useState<"general" | "vehicle" | "tool">("general");
 
-  // === SHARED IMAGE STATES (used by all forms) ===
+  // Shared Image States
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
   const [primaryPreview, setPrimaryPreview] = useState<string | null>(null);
   const [optionalImages, setOptionalImages] = useState<File[]>([]);
@@ -28,7 +33,10 @@ export default function AddProduct() {
   const [certificates, setCertificates] = useState<File[]>([]);
   const [certificatePreviews, setCertificatePreviews] = useState<string[]>([]);
 
-  // === GENERAL PRODUCT STATES (YOUR ORIGINAL — 100% UNCHANGED) ===
+  // Validation Errors
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // General Product States
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
@@ -53,25 +61,25 @@ export default function AddProduct() {
 
   const [activeTab, setActiveTab] = useState<"basic" | "nutrition" | "images" | "advanced">("basic");
 
-  // === VEHICLE STATES ===
+  // Vehicle States
   const [vehicleType, setVehicleType] = useState("");
   const [brandModel, setBrandModel] = useState("");
-  const [vehiclePublishedDate, setVehiclePublishedDate] = useState(""); // NEW: instead of year
+  const [vehiclePublishedDate, setVehiclePublishedDate] = useState("");
   const [enginePower, setEnginePower] = useState("");
   const [condition, setCondition] = useState("new");
   const [forRent, setForRent] = useState(false);
   const [rentalPrice, setRentalPrice] = useState("");
   const [vehicleQuantity, setVehicleQuantity] = useState("1");
 
-  // === TOOL STATES ===
+  // Tool States
   const [toolName, setToolName] = useState("");
   const [toolType, setToolType] = useState("manual");
   const [powerSource, setPowerSource] = useState("manual");
   const [workingWidth, setWorkingWidth] = useState("");
   const [toolQuantity, setToolQuantity] = useState("1");
-  const [toolPublishedDate, setToolPublishedDate] = useState(""); // NEW: instead of year
+  const [toolPublishedDate, setToolPublishedDate] = useState("");
 
-  // === CATEGORIES & QUALITY (unchanged) ===
+  // Categories & Quality
   const categories = [
     "Fertilizer", "Seeds", "Pesticides", "Herbicides", "Fungicides", "Insecticides",
     "Organic Fertilizer", "Compost", "Bio Fertilizer", "Plant Growth Regulator",
@@ -86,17 +94,19 @@ export default function AddProduct() {
     "Farm Fresh", "Non-GMO",
   ];
 
-  // Clear editor content when product type changes
+  // Clear editor when product type changes
   useEffect(() => {
     editor?.commands.clearContent();
+    setErrors({});
   }, [productType, editor]);
 
-  // === IMAGE HANDLERS (same for all forms) ===
+  // Image Handlers
   const handlePrimaryImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setPrimaryImage(file);
       setPrimaryPreview(URL.createObjectURL(file));
+      setErrors(prev => ({ ...prev, primary_image: "" }));
     }
   };
 
@@ -128,33 +138,79 @@ export default function AddProduct() {
     setCertificatePreviews(p => p.filter((_, x) => x !== i));
   };
 
-  // === SUBMIT HANDLER ===
+  // Client-side validation
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    // Common required fields
+    if (!primaryImage) newErrors.primary_image = t("Primary image is required");
+    if (!price || Number(price) <= 0) newErrors.price = t("Valid price is required");
+
+    const descriptionHTML = editor?.getHTML().trim() || "";
+    if (!descriptionHTML || descriptionHTML === "<p></p>") {
+      newErrors.description = t("Description is required");
+    }
+
+    if (productType === "general") {
+      if (!name.trim()) newErrors.name = t("Product name is required");
+      if (!category) newErrors.category = t("Category is required");
+      if (!quality) newErrors.quality = t("Quality grade is required");
+      if (!quantity || Number(quantity) <= 0) newErrors.quantity = t("Valid quantity is required");
+    }
+
+    if (productType === "vehicle") {
+      if (!brandModel.trim()) newErrors.brand_model = t("Vehicle name/model is required");
+      if (!vehicleType) newErrors.vehicle_type = t("Vehicle type is required");
+      if (!vehiclePublishedDate) newErrors.published_date = t("Published date is required");
+      if (!vehicleQuantity || Number(vehicleQuantity) < 1) newErrors.quantity = t("Quantity must be at least 1");
+    }
+
+    if (productType === "tool") {
+      if (!toolName.trim()) newErrors.tool_name = t("Tool name is required");
+      if (!toolType) newErrors.tool_type = t("Tool type is required");
+      if (!powerSource) newErrors.power_source = t("Power source is required");
+      if (!toolPublishedDate) newErrors.published_date = t("Published date is required");
+      if (!toolQuantity || Number(toolQuantity) < 1) newErrors.quantity = t("Quantity must be at least 1");
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Submit handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) {
+      // Scroll to first error
+      const firstErrorKey = Object.keys(errors)[0];
+      if (firstErrorKey) {
+        document.querySelector(`[name="${firstErrorKey}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
+    }
 
     const formData = new FormData();
-
     formData.append("product_type", productType);
 
-    // Common fields
+    // Common
     formData.append("name", name || toolName || brandModel || "Unnamed Item");
     formData.append("brand", brand || brandModel || "");
     formData.append("price", price);
+    formData.append("description", editor?.getHTML() || "");
 
     // Images
     if (primaryImage) formData.append("primary_image", primaryImage);
     optionalImages.forEach((f, i) => formData.append(`optional_images[${i}]`, f));
     certificates.forEach((f, i) => formData.append(`certificates[${i}]`, f));
 
-    // General Product
+    // General
     if (productType === "general") {
       formData.append("category", category);
-      formData.append("quality", quality || "");
-      formData.append("quantity", quantity || "");
+      formData.append("quality", quality);
+      formData.append("quantity", quantity);
       formData.append("quantity_unit", quantityUnit);
-      formData.append("description", editor?.getHTML() || "");
       formData.append("minimum_order", minimumOrder.toString());
-      formData.append("packaging_size", packagingSize || "");
+      formData.append("packaging_size", packagingSize);
 
       formData.append("npk[nitrogen]", npk.nitrogen);
       formData.append("npk[phosphorous]", npk.phosphorous);
@@ -207,9 +263,8 @@ export default function AddProduct() {
     });
   };
 
-  // === RICH TEXT TOOLBAR ===
   const RichTextToolbar = () => (
-    <div className="flex gap-2 mb-4">
+    <div className="flex gap-2 mb-4 flex-wrap">
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBold().run()}
@@ -227,23 +282,25 @@ export default function AddProduct() {
     </div>
   );
 
-  // === IMAGE UPLOAD COMPONENT (used by all forms) ===
   const ImageUploadSection = () => (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* Primary Image */}
       <div>
-        <label className="block font-bold text-lg text-gray-800 mb-3">{t("Primary Image")} *</label>
+        <label className="block font-bold text-base sm:text-lg mb-3">
+          {t("Primary Image")} <span className="text-red-600">*</span>
+        </label>
         <input
           type="file"
           accept="image/*"
           onChange={handlePrimaryImageChange}
-          className="block w-full text-sm text-gray-700 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700"
+          className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-green-600 file:text-white hover:file:bg-green-700"
         />
+        {errors.primary_image && <p className="text-red-600 text-sm mt-1">{errors.primary_image}</p>}
         {primaryPreview && (
           <div className="mt-4 relative inline-block">
-            <img src={primaryPreview} alt="Primary" className="w-64 h-64 object-cover rounded-xl shadow-lg border-4 border-green-300" />
-            <button type="button" onClick={removePrimaryImage} className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700">
-              <X size={20} />
+            <img src={primaryPreview} alt="Primary" className="max-w-full h-auto max-h-80 rounded-lg shadow-lg" />
+            <button type="button" onClick={removePrimaryImage} className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full">
+              <X size={18} />
             </button>
           </div>
         )}
@@ -251,20 +308,20 @@ export default function AddProduct() {
 
       {/* Optional Images */}
       <div>
-        <label className="block font-bold text-lg text-gray-800 mb-3">{t("Optional Images")}</label>
+        <label className="block font-bold text-base sm:text-lg mb-3">{t("Optional Images")}</label>
         <input
           type="file"
           multiple
           accept="image/*"
           onChange={handleOptionalImagesChange}
-          className="block w-full text-sm text-gray-700 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+          className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-blue-600 file:text-white hover:file:bg-blue-700"
         />
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
           {optionalPreviews.map((src, i) => (
             <div key={i} className="relative">
-              <img src={src} alt={`Optional ${i + 1}`} className="w-full h-48 object-cover rounded-xl shadow" />
-              <button type="button" onClick={() => removeOptionalImage(i)} className="absolute top-1 right-1 bg-red-600 text-white p-2 rounded-full hover:bg-red-700">
-                <X size={18} />
+              <img src={src} alt={`Optional ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+              <button type="button" onClick={() => removeOptionalImage(i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
+                <X size={16} />
               </button>
             </div>
           ))}
@@ -273,25 +330,25 @@ export default function AddProduct() {
 
       {/* Certificates */}
       <div>
-        <label className="block font-bold text-lg text-gray-800 mb-3">{t("Certificates & Test Reports")}</label>
+        <label className="block font-bold text-base sm:text-lg mb-3">{t("Certificates & Test Reports")}</label>
         <input
           type="file"
           multiple
           onChange={handleCertificatesChange}
-          className="block w-full text-sm text-gray-700 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+          className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-purple-600 file:text-white hover:file:bg-purple-700"
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
           {certificatePreviews.map((src, i) => (
             <div key={i} className="relative">
               {certificates[i]?.type.includes("image") ? (
-                <img src={src} alt={`Cert ${i + 1}`} className="w-full h-48 object-cover rounded-xl shadow" />
+                <img src={src} alt={`Cert ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
               ) : (
-                <div className="bg-gray-100 border-2 border-dashed rounded-xl p-8 text-center">
-                  <p className="text-gray-600 font-medium">{certificates[i]?.name}</p>
+                <div className="bg-gray-100 border-2 border-dashed rounded-lg p-6 text-center">
+                  <p className="text-gray-600 font-medium text-sm break-all">{certificates[i]?.name}</p>
                 </div>
               )}
-              <button type="button" onClick={() => removeCertificate(i)} className="absolute top-1 right-1 bg-red-600 text-white p-2 rounded-full hover:bg-red-700">
-                <X size={18} />
+              <button type="button" onClick={() => removeCertificate(i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
+                <X size={16} />
               </button>
             </div>
           ))}
@@ -301,147 +358,124 @@ export default function AddProduct() {
   );
 
   return (
-    <div className="bg-white shadow-2xl rounded-3xl p-6 md:p-12 max-w-7xl mx-auto my-10 border-8 border-green-200">
-      {/* SUCCESS MESSAGE */}
+    <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 max-w-6xl mx-auto my-10">
+      {/* Success Message */}
       {successMessage && (
-        <div className="mb-12 p-8 bg-green-100 border-4 border-green-500 rounded-3xl text-center shadow-2xl animate-pulse">
-          <p className="text-4xl font-bold text-green-800">{successMessage}</p>
+        <div className="mb-10 p-6 bg-green-100 border-4 border-green-500 rounded-2xl text-center shadow-lg">
+          <p className="text-2xl sm:text-3xl font-bold text-green-800">{successMessage}</p>
         </div>
       )}
 
-      {/* PRODUCT TYPE TABS */}
-      <div className="flex flex-wrap justify-center gap-6 mb-12">
+      {/* Product Type Tabs */}
+      <div className="flex flex-wrap justify-center gap-4 mb-10">
         {[
-          { id: "general", label: t("Farming Procts") },
-          { id: "vehicle", label: t("Machinery Item") },
+          { id: "general", label: t("Farming Products") },
+          { id: "vehicle", label: t("Machinery") },
           { id: "tool", label: t("Farming Tools") },
         ].map((tab) => (
           <button
             key={tab.id}
+            type="button"
             onClick={() => setProductType(tab.id as any)}
-            className={`px-10 py-4 rounded-3xl font-bold text-xl shadow-xl transition-all transform hover:scale-105 ${productType === tab.id
-                ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white"
-                : "bg-gray-300 text-gray-700 hover:bg-gray-200"
-              }`}
+            className={`px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition ${
+              productType === tab.id
+                ? "bg-green-600 text-white shadow-lg"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
           >
             {tab.label}
           </button>
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-12">
+      <form onSubmit={handleSubmit} className="space-y-10">
 
-        {/* ====================== 1. GENERAL PRODUCT (YOUR ORIGINAL FORM) ====================== */}
+        {/* General Product */}
         {productType === "general" && (
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-10 border-4 border-green-300">
-            {/* Your original tabs */}
-            <div className="flex flex-wrap gap-2 mb-8 border-b-2 border-gray-200 pb-4 overflow-x-auto">
+          <div className="bg-green-50 rounded-3xl p-6 sm:p-8">
+            <div className="flex flex-wrap gap-3 mb-8 overflow-x-auto pb-2">
               {["basic", "nutrition", "images", "advanced"].map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-3 rounded-lg font-semibold transition ${activeTab === tab
-                      ? "bg-green-600 text-white shadow-lg"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                  type="button"
+                  onClick={() => setActiveTab(tab as any)}
+                  className={`px-5 py-2 rounded-lg font-medium text-sm sm:text-base transition ${
+                    activeTab === tab
+                      ? "bg-green-600 text-white shadow"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
                 >
-                  {t(
-                    tab === "basic" ? "Basic Information" :
-                      tab === "nutrition" ? "Nutritional Info" :
-                        tab === "images" ? "Images & Docs" : "Advanced"
-                  )}
+                  {t(tab === "basic" ? "Basic Information" : tab === "nutrition" ? "Nutritional Info" : tab === "images" ? "Images & Docs" : "Advanced")}
                 </button>
               ))}
             </div>
 
-            {/* Basic Info */}
             {activeTab === "basic" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Product Name")} *</label>
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Product Name")} <span className="text-red-600">*</span></label>
                   <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="border border-gray-300 p-3 rounded-lg w-full focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    required
-                    placeholder={t("Enter product name")}
+                    onChange={e => setName(e.target.value)}
+                    className={`w-full p-3 border rounded-lg ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
                 </div>
-
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Brand Name")}</label>
-                  <input
-                    type="text"
-                    value={brand}
-                    onChange={(e) => setBrand(e.target.value)}
-                    className="border border-gray-300 p-3 rounded-lg w-full"
-                    placeholder={t("Optional brand")}
-                  />
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Brand Name")}</label>
+                  <input type="text" value={brand} onChange={e => setBrand(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" />
                 </div>
-
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Category")} *</label>
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Category")} <span className="text-red-600">*</span></label>
                   <select
                     value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="border border-gray-300 p-3 rounded-lg w-full"
-                    required
+                    onChange={e => setCategory(e.target.value)}
+                    className={`w-full p-3 border rounded-lg ${errors.category ? 'border-red-500' : 'border-gray-300'}`}
                   >
                     <option value="">{t("Select category")}</option>
                     {categories.map(cat => (
-                      <option key={cat} value={cat.toLowerCase().replace(/\s+/g, "_")}>
-                        {t(cat)}
-                      </option>
+                      <option key={cat} value={cat.toLowerCase().replace(/\s+/g, "_")}>{t(cat)}</option>
                     ))}
                   </select>
+                  {errors.category && <p className="text-red-600 text-sm mt-1">{errors.category}</p>}
                 </div>
-
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Quality Grade")} *</label>
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Quality Grade")} <span className="text-red-600">*</span></label>
                   <select
                     value={quality}
-                    onChange={(e) => setQuality(e.target.value)}
-                    className="border border-gray-300 p-3 rounded-lg w-full"
-                    required
+                    onChange={e => setQuality(e.target.value)}
+                    className={`w-full p-3 border rounded-lg ${errors.quality ? 'border-red-500' : 'border-gray-300'}`}
                   >
                     <option value="">{t("Select quality")}</option>
-                    {qualityGrades.map(grade => (
-                      <option key={grade} value={grade}>
-                        {t(grade)}
-                      </option>
-                    ))}
+                    {qualityGrades.map(grade => <option key={grade} value={grade}>{t(grade)}</option>)}
                   </select>
+                  {errors.quality && <p className="text-red-600 text-sm mt-1">{errors.quality}</p>}
                 </div>
-
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Price (LKR)")} *</label>
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Price (LKR)")} <span className="text-red-600">*</span></label>
                   <input
                     type="number"
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    className="border border-gray-300 p-3 rounded-lg w-full"
-                    required
+                    onChange={e => setPrice(e.target.value)}
                     min="0"
                     step="0.01"
+                    className={`w-full p-3 border rounded-lg ${errors.price ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
                 </div>
-
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Quantity")} *</label>
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Quantity")} <span className="text-red-600">*</span></label>
                   <div className="flex gap-3">
                     <input
                       type="number"
                       value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                      className="border border-gray-300 p-3 rounded-lg flex-1"
-                      required
+                      onChange={e => setQuantity(e.target.value)}
+                      min="0"
+                      step="0.01"
+                      className={`flex-1 p-3 border rounded-lg ${errors.quantity ? 'border-red-500' : 'border-gray-300'}`}
                     />
-                    <select
-                      value={quantityUnit}
-                      onChange={(e) => setQuantityUnit(e.target.value)}
-                      className="border border-gray-300 p-3 rounded-lg"
-                    >
+                    <select value={quantityUnit} onChange={e => setQuantityUnit(e.target.value)} className="p-3 border border-gray-300 rounded-lg">
                       <option value="kg">{t("kg")}</option>
                       <option value="ltr">{t("Liter")}</option>
                       <option value="tons">{t("Tons")}</option>
@@ -449,34 +483,25 @@ export default function AddProduct() {
                       <option value="bags">{t("Bags")}</option>
                     </select>
                   </div>
+                  {errors.quantity && <p className="text-red-600 text-sm mt-1">{errors.quantity}</p>}
                 </div>
 
-                <div className="col-span-1 md:col-span-2">
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Description")} *</label>
+                <div className="sm:col-span-2">
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Description")} <span className="text-red-600">*</span></label>
                   <RichTextToolbar />
-                  <EditorContent editor={editor} className="border border-gray-300 rounded-lg min-h-32 p-3 bg-white" />
+                  <div className={`border rounded-lg p-3 bg-white min-h-40 ${errors.description ? 'border-red-500' : 'border-gray-300'}`}>
+                    <EditorContent editor={editor} />
+                  </div>
+                  {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Minimum Order")}</label>
-                  <input
-                    type="number"
-                    value={minimumOrder}
-                    onChange={(e) => setMinimumOrder(Number(e.target.value))}
-                    className="border border-gray-300 p-3 rounded-lg w-full"
-                    min="1"
-                  />
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Minimum Order")}</label>
+                  <input type="number" value={minimumOrder} onChange={e => setMinimumOrder(Number(e.target.value) || 1)} min="1" className="w-full p-3 border border-gray-300 rounded-lg" />
                 </div>
-
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-2">{t("Packaging Size")}</label>
-                  <input
-                    type="text"
-                    value={packagingSize}
-                    onChange={(e) => setPackagingSize(e.target.value)}
-                    className="border border-gray-300 p-3 rounded-lg w-full"
-                    placeholder="e.g., 25kg, 50kg, 1L"
-                  />
+                  <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Packaging Size")}</label>
+                  <input type="text" value={packagingSize} onChange={e => setPackagingSize(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg" placeholder="e.g., 25kg" />
                 </div>
               </div>
             )}
@@ -523,7 +548,7 @@ export default function AddProduct() {
                             setNewIngredient("");
                           }
                         }}
-                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold"
+                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-3 rounded-lg font-bold"
                       >
                         {t("Add")}
                       </button>
@@ -558,7 +583,7 @@ export default function AddProduct() {
                             setNewMicronutrient("");
                           }
                         }}
-                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold"
+                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-3 rounded-lg font-bold"
                       >
                         {t("Add")}
                       </button>
@@ -765,11 +790,10 @@ export default function AddProduct() {
           </div>
         )}
 
-        {/* ====================== SUBMIT BUTTON ====================== */}
-        <div className="text-center pt-16">
+       <div className="text-center pt-8">
           <button
             type="submit"
-            className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 to-emerald-700 text-white font-bold text-3xl px-24 py-8 rounded-3xl shadow-2xl transform hover:scale-105 transition"
+            className="bg-green-600 hover:bg-green-700 text-white font-bold text-xl sm:text-2xl px-12 sm:px-16 py-5 sm:py-6 rounded-2xl shadow-xl transition"
           >
             {t("Save Product")}
           </button>
