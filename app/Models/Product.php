@@ -11,11 +11,45 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'supplier_id', 'name', 'brand', 'category', 'quality', 'price', 'quantity',
-        'quantity_unit', 'description', 'minimum_order', 'packaging_size',
-        'npk', 'other_nutrition', 'ingredients', 'micronutrients',
-        'manufacturing_details', 'soil_type', 'instructions', 'safety_storage',
-        'primary_image', 'optional_images', 'certificates',
+        'supplier_id',
+        'product_type',
+        'name',
+        'brand',
+        'category',
+        'quality',
+        'price',
+        'quantity',
+        'quantity_unit',
+        'description',
+        'minimum_order',
+        'packaging_size',
+        'npk',
+        'other_nutrition',
+        'ingredients',
+        'micronutrients',
+        'manufacturing_details',
+        'soil_type',
+        'instructions',
+        'safety_storage',
+        'primary_image',
+        'optional_images',
+        'certificates',
+        // Vehicle
+        'vehicle_type',
+        'brand_model',
+        'year',
+        'engine_power_hp',
+        'condition',
+        'for_rent',
+        'rental_price_per_day',
+        'vehicle_features',
+        // Tool
+        'tool_type',
+        'tool_name',
+        'power_source',
+        'working_width',
+        'is_modern',
+        'tool_features',
     ];
 
     protected $casts = [
@@ -28,6 +62,10 @@ class Product extends Model
         'micronutrients'  => 'array',
         'optional_images' => 'array',
         'certificates'    => 'array',
+        'for_rent'        => 'boolean',
+        'is_modern'       => 'boolean',
+        'rental_price_per_day' => 'decimal:2',
+        'year'            => 'integer',
     ];
 
     // Always include image URLs

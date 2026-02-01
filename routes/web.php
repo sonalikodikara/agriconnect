@@ -53,7 +53,12 @@ Route::prefix('supplier')->name('suppliers.')->group(function () {
     Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
 
     // Product routes (nested under supplier)
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 });
 
 // Buyer routes (including prefixed cart routes)
@@ -75,7 +80,6 @@ Route::prefix('buyer')->name('buyers.')->middleware('auth')->group(function () {
     // Orders routes (note: you had duplicate '/orders' GET)
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-
 });
 
 // Advisor routes
@@ -109,4 +113,4 @@ Route::prefix('list')->name('list.')->group(function () {
 });
 Route::get('/advisor/{advisor}', [AdvisorController::class, 'show'])->name('advisor.show');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
