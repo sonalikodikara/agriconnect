@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Advisor;
+use App\Models\ConsultationAvailability;
+use App\Models\ConsultationTimeSlot;
+use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class AdvisorController extends Controller
 {
@@ -75,8 +79,13 @@ class AdvisorController extends Controller
             ? asset('storage/' . $advisor->cover_image)
             : null;
 
+        $advisor->load([
+            'consultationAvailabilities.timeSlots'
+        ]);
+
         return Inertia::render('Advisor/Profile', [
             'advisor' => $advisor,
+            'availabilities' => $advisor->consultationAvailabilities,
         ]);
     }
 
@@ -177,4 +186,116 @@ class AdvisorController extends Controller
         return redirect()->route('advisors.profile.show')
             ->with('status_key', 'certifications.updated_successfully');
     }
+
+    public function storeAvailability(Request $request)
+{
+    $advisor = auth()->user()->advisor;
+
+    $validated = $request->validate([
+        'type' => 'required|in:date,week,month',
+        'specific_date' => 'nullable|required_if:type,date|date',
+        'weekdays' => 'nullable|array',
+        'weekdays.*' => 'string',
+        'months' => 'nullable|required_if:type,month|array',
+        'months.*' => 'string',
+        'time_slots' => 'required|array|min:1',
+        'time_slots.*.start' => 'required|date_format:H:i',
+        'time_slots.*.end' => 'required|date_format:H:i',
+    ]);
+
+    // Manual same-day time validation
+    foreach ($validated['time_slots'] as $index => $slot) {
+        $start = \Carbon\Carbon::createFromFormat('H:i', $slot['start']);
+        $end   = \Carbon\Carbon::createFromFormat('H:i', $slot['end']);
+
+        if ($end->lessThanOrEqualTo($start)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                "time_slots.$index.end" => "End time must be after start time."
+            ]);
+        }
+    }
+
+    $availability = ConsultationAvailability::create([
+        'advisor_id' => $advisor->id,
+        'type' => $validated['type'],
+        'specific_date' => $validated['specific_date'] ?? null,
+        'weekdays' => $validated['weekdays'] ?? null,
+        'months' => $validated['months'] ?? [],
+    ]);
+
+    foreach ($validated['time_slots'] as $slot) {
+        $availability->timeSlots()->create([
+            'start_time' => $slot['start'],
+            'end_time' => $slot['end'],
+        ]);
+    }
+
+    return redirect()
+        ->route('advisors.profile.show')
+        ->with('status_key', 'Availability Saved Successfully');
+}
+
+public function updateAvailability(Request $request, $id)
+{
+    $availability = ConsultationAvailability::where('advisor_id', auth()->user()->advisor->id)
+        ->findOrFail($id);
+
+    $validated = $request->validate([
+        'type' => 'required|in:date,week,month',
+        'specific_date' => 'nullable|required_if:type,date|date',
+        'weekdays' => 'nullable|array',
+        'months' => 'nullable|array',
+        'time_slots' => 'required|array|min:1',
+        'time_slots.*.start' => 'required|date_format:H:i',
+        'time_slots.*.end' => 'required|date_format:H:i',
+    ]);
+
+    // Manual same-day validation
+    foreach ($validated['time_slots'] as $i => $slot) {
+        $start = \Carbon\Carbon::createFromFormat('H:i', $slot['start']);
+        $end = \Carbon\Carbon::createFromFormat('H:i', $slot['end']);
+
+        if ($end->lessThanOrEqualTo($start)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                "time_slots.$i.end" => "End time must be after start time."
+            ]);
+        }
+    }
+
+    $availability->update([
+        'type' => $validated['type'],
+        'specific_date' => $validated['specific_date'] ?? null,
+        'weekdays' => $validated['weekdays'] ?? null,
+        'months' => $validated['months'] ?? null,
+    ]);
+
+    // Replace slots
+    $availability->timeSlots()->delete();
+    foreach ($validated['time_slots'] as $slot) {
+        $availability->timeSlots()->create($slot);
+    }
+
+    return redirect()
+        ->route('advisors.profile.show')
+        ->with('status_key', 'Availability Updated Successfully');
+}
+
+public function destroyAvailability($id)
+{
+    $availability = ConsultationAvailability::where(
+        'advisor_id',
+        auth()->user()->advisor->id
+    )->findOrFail($id);
+
+    $availability->timeSlots()->delete();
+    $availability->delete();
+
+    return redirect()
+        ->route('advisors.profile.show')
+        ->with('status_key', 'Availability Deleted Successfully');
+}
+
+
+
+
 }

@@ -69,6 +69,9 @@
   "Certifications": "සහතික පත්",
   "Save": "පැතිකඩ සුරකින්න",
   "Add": "එක් කරන්න",
+  "Account Settings": "ගිණුම් සැකසුම්",
+  "Edit Supplier Profile": "පැතිකඩ සංස්කරණය කරන්න",
+  "Logout": "ඉවත් වන්න",
 
   
   "Western Province": "බස්නාහිර පළාත",
@@ -139,6 +142,9 @@
   "Overview": "සමාලෝචනය",
   "Add products": "නිෂ්පාදන",
   "My Products": "මගේ නිෂ්පාදන",
+  "Update Product": "නිෂ්පාදනය යාවත්කාලීන කරන්න",
+  "Delete": "ඉවත් කරන්න",
+  "Are you sure you want to delete this product?": "ඔබට විශ්වාසද මෙම නිෂ්පාදනය මකන ලෙසට?",
   "Orders": "ඇණවුම්",
   "Analytics": "විශ්ලේෂණ",
   "Edit Profile": "පැතිකඩ සංස්කරණය කරන්න",
@@ -185,6 +191,37 @@
   "Instructions": "උපදෙස්",
   "Safety & Storage": "ආරක්ෂාව සහ ගබඩා කිරීම",
   "Save Product": "නිෂ්පාදනය සුරකින්න",
+  "Back to My Products": "මගේ නිෂ්පාදන වෙත පිටවන්න",
+  "Farming Products": "ගොවි උපකරණ හා නිෂ්පාදන",
+  "Machinery": "යන්ත්‍රෝපකරණ",
+  "Farming Tools": "ගොවි මෙවලම්",
+  "Vehicle Name / Model": "වාහන නාමය / ආදර්ශය",
+  "Vehicle Type": "වාහන වර්ගය",
+  "Date Published / Listed": "හඳුන්වාදුන් දිනය",
+  "Engine Power (HP)": "එන්ජින් බලය (HP)",
+  "Condition": "පන්දනය",
+  "Available Quantity": "ලබා ගත හැකි ප්‍රමාණය",
+  "Available for Rent": "භාරයට ලබා ගැනීමට ඇත",
+  "Rental Price per Day (LKR)": "දිනකට කුලී මිල (LKR)",
+  "Tool Name": "මෙවලම් නාමය",
+  "Tool Type": "මෙවලම් වර්ගය",
+  "Power Source": "බල මූලාශ්‍රය",
+  "Working Width (cm)": "වැඩි පළල (සෙ.මී)",
+  "Primary image is required": "ප්‍රධාන පින්තූරය අවශ්‍යයි",
+  "Valid price is required": "වලංගු මිලක් අවශ්‍යයි",
+  "Description is required": "විස්තරයක් අවශ්‍යයි",
+  "Product name is required": "නිෂ්පාදන නාමය අවශ්‍යයි",
+  "Category is required": "කාණ්ඩය අවශ්‍යයි",
+  "Quality grade is required": "ගුණාත්මක ශ්‍රේණිය අවශ්‍යයි",
+  "Valid quantity is required": "වලංගු ප්‍රමාණයක් අවශ්‍යයි",
+  "Vehicle name/model is required": "වාහන නාමය/මොඩලය අවශ්‍යයි",
+  "Vehicle type is required": "වාහන වර්ගය අවශ්‍යයි",
+  "Published date is required": "ප්‍රකාශන දිනය අවශ්‍යයි",
+  "Quantity must be at least 1": "ප්‍රමාණය අවම වශයෙන් 1 විය යුතුය",
+  "Tool name is required": "මෙවලම් නාමය අවශ්‍යයි",
+  "Tool type is required": "මෙවලම් වර්ගය අවශ්‍යයි",
+  "Power source is required": "බල මූලාශ්‍රය අවශ්‍යයි",
+  "My Products": "මගේ නිෂ්පාදන",
 
   "Fertilizer": "පොහොර",
   "Seeds": "බීජ",
@@ -243,8 +280,39 @@
   "cart_updated": "සැපයුම්කරණය සාර්ථකව යාවත්කලන ලදී!",
   "item_removed": "අයිතමය සැපයුම් කරණයෙන් ඉවත් කරන ලදී.",
 
-  "Specializations": "විශේෂීකරණ"
-  
-  
+  "Specializations": "විශේෂීකරණ",
+  "Availability Saved Successfully": "ලබා ගැනීම සාර්ථකව සුරැකිණි",
+  "Availability Updated Successfully": "ලබා ගැනීම සාර්ථකව යාවත්කාලීන කරන ලදී",
+ 
+  "Saved Availability": "සුරක්ෂිත කළ කාල වකවානු",
+  "date": "දිනය",
+  "week": "සතිපතා",
+  "month": "මාසික",
+
+  "weekday": {
+    "mon": "සඳුදා",
+    "tue": "අඟහරුවාදා",
+    "wed": "බදාදා",
+    "thu": "බ්‍රහස්පතින්දා",
+    "fri": "සිකුරාදා",
+    "sat": "සෙනසුරාදා",
+    "sun": "ඉරිදා"
+  },
+  "month": {
+    "jan": "ජනවාරි",
+    "feb": "පෙබරවාරි",
+    "mar": "මාර්තු",
+    "apr": "අප්‍රේල්",
+    "may": "මැයි",
+    "jun": "ජූනි",
+    "jul": "ජූලි",
+    "aug": "අගෝස්තු",
+    "sep": "සැප්තැම්බර්",
+    "oct": "ඔක්තෝබර්",
+    "nov": "නොවැම්බර්",
+    "dec": "දෙසැම්බර්"
+  }
+
 }
+
 

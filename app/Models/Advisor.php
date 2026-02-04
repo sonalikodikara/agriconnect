@@ -54,4 +54,10 @@ class Advisor extends Model
             ? asset('storage/' . $this->cover_image)
             : null;
     }
+
+    public function consultationAvailabilities()
+    {
+        return $this->hasMany(\App\Models\ConsultationAvailability::class);
+    }
+
 }

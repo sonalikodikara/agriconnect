@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { router, usePage } from "@inertiajs/react";
-import { X, Bold, List } from "lucide-react";
+import { X, Bold, List, ArrowLeft } from "lucide-react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
 export default function AddProduct() {
   const { t } = useTranslation();
-  const { flash } = usePage().props;
+  const { flash, product } = usePage().props as any;
+  const isEdit = !!product;
   const successMessage = flash?.status_key ? t(flash.status_key) : null;
 
   const editor = useEditor({
@@ -28,10 +29,22 @@ export default function AddProduct() {
   // Shared Image States
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
   const [primaryPreview, setPrimaryPreview] = useState<string | null>(null);
+  const [removedPrimary, setRemovedPrimary] = useState(false);
+
+  // New uploads
   const [optionalImages, setOptionalImages] = useState<File[]>([]);
   const [optionalPreviews, setOptionalPreviews] = useState<string[]>([]);
+
+  // Existing (for edit mode)
+  const [existingOptionalPaths, setExistingOptionalPaths] = useState<string[]>([]);
+  const [existingOptionalPreviews, setExistingOptionalPreviews] = useState<string[]>([]);
+  const [removedExistingOptional, setRemovedExistingOptional] = useState<string[]>([]);
+
   const [certificates, setCertificates] = useState<File[]>([]);
   const [certificatePreviews, setCertificatePreviews] = useState<string[]>([]);
+  const [existingCertificatePaths, setExistingCertificatePaths] = useState<string[]>([]);
+  const [existingCertificatePreviews, setExistingCertificatePreviews] = useState<string[]>([]);
+  const [removedExistingCertificates, setRemovedExistingCertificates] = useState<string[]>([]);
 
   // Validation Errors
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -94,11 +107,66 @@ export default function AddProduct() {
     "Farm Fresh", "Non-GMO",
   ];
 
-  // Clear editor when product type changes
+  // Populate when editing; clear editor when product type changes
   useEffect(() => {
-    editor?.commands.clearContent();
     setErrors({});
-  }, [productType, editor]);
+    if (product) {
+      setProductType(product.product_type || 'general');
+      setName(product.name || '');
+      setBrand(product.brand || '');
+      setCategory(product.category || '');
+      setQuality(product.quality || '');
+      setPrice(product.price ? String(product.price) : '');
+      setQuantity(product.quantity ? String(product.quantity) : '');
+      setQuantityUnit(product.quantity_unit || 'kg');
+      setMinimumOrder(product.minimum_order || 1);
+      setPackagingSize(product.packaging_size || '');
+
+      // Nutrition
+      setNpk(product.npk || { nitrogen: '', phosphorous: '', potassium: '' });
+      setOtherNutrition(product.other_nutrition || { organicMatter: '', moisture: '', ph: '' });
+      setIngredients(product.ingredients || []);
+      setMicronutrients(product.micronutrients || []);
+
+      setManufacturingDetails(product.manufacturing_details || '');
+      setSoilType(product.soil_type || '');
+      setInstructions(product.instructions || '');
+      setSafetyStorage(product.safety_storage || '');
+
+      // Vehicle
+      setVehicleType(product.vehicle_type || '');
+      setBrandModel(product.brand_model || '');
+      setVehiclePublishedDate(product.year ? String(product.year) + '-01-01' : '');
+      setEnginePower(product.engine_power_hp || '');
+      setCondition(product.condition || 'new');
+      setForRent(Boolean(product.for_rent));
+      setRentalPrice(product.rental_price_per_day ? String(product.rental_price_per_day) : '');
+      setVehicleQuantity(product.quantity ? String(product.quantity) : '1');
+
+      // Tool
+      setToolName(product.tool_name || '');
+      setToolType(product.tool_type || 'manual');
+      setPowerSource(product.power_source || 'manual');
+      setWorkingWidth(product.working_width || '');
+      setToolQuantity(product.quantity ? String(product.quantity) : '1');
+      setToolPublishedDate(product.year ? String(product.year) + '-01-01' : '');
+
+      // Images & certificates
+      setPrimaryPreview(product.primary_image_url || null);
+      setExistingOptionalPaths(product.optional_images || []);
+      setExistingOptionalPreviews(product.optional_images_urls || []);
+      setExistingCertificatePaths(product.certificates || []);
+      setExistingCertificatePreviews(product.certificates_urls || []);
+
+      // Description
+      if (product.description) {
+        editor?.commands.setContent(product.description);
+      }
+    } else {
+      // New product: clear editor when productType changes
+      editor?.commands.clearContent();
+    }
+  }, [product, productType, editor]);
 
   // Image Handlers
   const handlePrimaryImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +174,7 @@ export default function AddProduct() {
     if (file) {
       setPrimaryImage(file);
       setPrimaryPreview(URL.createObjectURL(file));
+      setRemovedPrimary(false);
       setErrors(prev => ({ ...prev, primary_image: "" }));
     }
   };
@@ -128,14 +197,45 @@ export default function AddProduct() {
     }
   };
 
-  const removePrimaryImage = () => { setPrimaryImage(null); setPrimaryPreview(null); };
-  const removeOptionalImage = (i: number) => {
-    setOptionalImages(p => p.filter((_, x) => x !== i));
-    setOptionalPreviews(p => p.filter((_, x) => x !== i));
+  const removePrimaryImage = () => {
+    if (primaryPreview && isEdit && !primaryImage) {
+      // removing existing primary
+      setRemovedPrimary(true);
+    }
+    setPrimaryImage(null);
+    setPrimaryPreview(null);
   };
+
+  const removeOptionalImage = (i: number) => {
+    // if it's a newly added image
+    if (i < optionalPreviews.length) {
+      setOptionalImages(p => p.filter((_, x) => x !== i));
+      setOptionalPreviews(p => p.filter((_, x) => x !== i));
+      return;
+    }
+    // otherwise it's an existing image (index shifted by new previews length)
+    const existingIndex = i - optionalPreviews.length;
+    const path = existingOptionalPaths[existingIndex];
+    if (path) {
+      setRemovedExistingOptional(prev => [...prev, path]);
+      setExistingOptionalPaths(p => p.filter((_, x) => x !== existingIndex));
+      setExistingOptionalPreviews(p => p.filter((_, x) => x !== existingIndex));
+    }
+  };
+
   const removeCertificate = (i: number) => {
-    setCertificates(p => p.filter((_, x) => x !== i));
-    setCertificatePreviews(p => p.filter((_, x) => x !== i));
+    if (i < certificatePreviews.length) {
+      setCertificates(p => p.filter((_, x) => x !== i));
+      setCertificatePreviews(p => p.filter((_, x) => x !== i));
+      return;
+    }
+    const existingIndex = i - certificatePreviews.length;
+    const path = existingCertificatePaths[existingIndex];
+    if (path) {
+      setRemovedExistingCertificates(prev => [...prev, path]);
+      setExistingCertificatePaths(p => p.filter((_, x) => x !== existingIndex));
+      setExistingCertificatePreviews(p => p.filter((_, x) => x !== existingIndex));
+    }
   };
 
   // Client-side validation
@@ -143,7 +243,7 @@ export default function AddProduct() {
     const newErrors: Record<string, string> = {};
 
     // Common required fields
-    if (!primaryImage) newErrors.primary_image = t("Primary image is required");
+    if (!primaryImage && !primaryPreview) newErrors.primary_image = t("Primary image is required");
     if (!price || Number(price) <= 0) newErrors.price = t("Valid price is required");
 
     const descriptionHTML = editor?.getHTML().trim() || "";
@@ -174,18 +274,32 @@ export default function AddProduct() {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
   // Submit handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) {
-      // Scroll to first error
-      const firstErrorKey = Object.keys(errors)[0];
-      if (firstErrorKey) {
-        document.querySelector(`[name="${firstErrorKey}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const newErrors = validateForm();
+    if (Object.keys(newErrors).length > 0) {
+      // Scroll to first error (and switch tabs if needed so the element exists)
+      const firstErrorKey = Object.keys(newErrors)[0];
+
+      const vehicleKeys = ['brand_model', 'vehicle_type', 'published_date', 'engine_power', 'condition', 'quantity'];
+      const toolKeys = ['tool_name', 'power_source', 'published_date', 'quantity'];
+
+      let el = document.querySelector(`[name="${firstErrorKey}"]`);
+      if (!el) {
+        if (vehicleKeys.includes(firstErrorKey)) {
+          setProductType('vehicle');
+          setActiveTab('basic');
+        } else if (toolKeys.includes(firstErrorKey)) {
+          setProductType('tool');
+          setActiveTab('basic');
+        }
+        el = document.querySelector(`[name="${firstErrorKey}"]`);
       }
+      if (el) (el as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -200,8 +314,19 @@ export default function AddProduct() {
 
     // Images
     if (primaryImage) formData.append("primary_image", primaryImage);
+    if (removedPrimary) formData.append('remove_primary', '1');
+
     optionalImages.forEach((f, i) => formData.append(`optional_images[${i}]`, f));
+    // include removed existing optional image paths
+    removedExistingOptional.forEach((p, i) => formData.append(`remove_optional_images[${i}]`, p));
+
     certificates.forEach((f, i) => formData.append(`certificates[${i}]`, f));
+    removedExistingCertificates.forEach((p, i) => formData.append(`remove_certificates[${i}]`, p));
+
+    // if editing, mark method and product id
+    if (isEdit && product) {
+      formData.append('_method', 'put');
+    }
 
     // General
     if (productType === "general") {
@@ -256,11 +381,21 @@ export default function AddProduct() {
       formData.append("tool_features", editor?.getHTML() || "");
     }
 
-    router.post(route('suppliers.products.store'), formData, {
-      forceFormData: true,
-      preserveState: true,
-      preserveScroll: true,
-    });
+    if (isEdit && product) {
+      // Update
+      router.post(route('suppliers.products.update', product.id), formData, {
+        forceFormData: true,
+        preserveState: true,
+        preserveScroll: true,
+      });
+    } else {
+      // Create
+      router.post(route('suppliers.products.store'), formData, {
+        forceFormData: true,
+        preserveState: true,
+        preserveScroll: true,
+      });
+    }
   };
 
   const RichTextToolbar = () => (
@@ -291,6 +426,7 @@ export default function AddProduct() {
         </label>
         <input
           type="file"
+          name="primary_image"
           accept="image/*"
           onChange={handlePrimaryImageChange}
           className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-green-600 file:text-white hover:file:bg-green-700"
@@ -317,10 +453,21 @@ export default function AddProduct() {
           className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-blue-600 file:text-white hover:file:bg-blue-700"
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+          {/* New uploads first */}
           {optionalPreviews.map((src, i) => (
-            <div key={i} className="relative">
-              <img src={src} alt={`Optional ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+            <div key={`n-${i}`} className="relative">
+              <img src={src} alt={`Optional new ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
               <button type="button" onClick={() => removeOptionalImage(i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
+                <X size={16} />
+              </button>
+            </div>
+          ))}
+
+          {/* Existing images (edit mode) */}
+          {existingOptionalPreviews.map((src, i) => (
+            <div key={`e-${i}`} className="relative">
+              <img src={src} alt={`Optional existing ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+              <button type="button" onClick={() => removeOptionalImage(optionalPreviews.length + i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
                 <X size={16} />
               </button>
             </div>
@@ -338,8 +485,9 @@ export default function AddProduct() {
           className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-purple-600 file:text-white hover:file:bg-purple-700"
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+          {/* New upload certificates */}
           {certificatePreviews.map((src, i) => (
-            <div key={i} className="relative">
+            <div key={`n-cert-${i}`} className="relative">
               {certificates[i]?.type.includes("image") ? (
                 <img src={src} alt={`Cert ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
               ) : (
@@ -352,17 +500,37 @@ export default function AddProduct() {
               </button>
             </div>
           ))}
+
+          {/* Existing certificates */}
+          {existingCertificatePreviews.map((src, i) => (
+            <div key={`e-cert-${i}`} className="relative">
+              <img src={src} alt={`Cert existing ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+              <button type="button" onClick={() => removeCertificate(certificatePreviews.length + i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
+                <X size={16} />
+              </button>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 max-w-6xl mx-auto my-10">
+    <div className="bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-10 max-w-4xl w-full mx-auto my-6">
       {/* Success Message */}
       {successMessage && (
         <div className="mb-10 p-6 bg-green-100 border-4 border-green-500 rounded-2xl text-center shadow-lg">
           <p className="text-2xl sm:text-3xl font-bold text-green-800">{successMessage}</p>
+        </div>
+      )}
+
+      {/* Back button when editing */}
+      {isEdit && product && (
+        <div className="mb-4">
+          <button type="button" onClick={() => router.visit(route('suppliers.products.index'))} className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-green-600">
+            <ArrowLeft size={18} />
+            <span>{t('Back to My Products')}</span>
+          </button>
         </div>
       )}
 
@@ -377,11 +545,10 @@ export default function AddProduct() {
             key={tab.id}
             type="button"
             onClick={() => setProductType(tab.id as any)}
-            className={`px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition ${
-              productType === tab.id
-                ? "bg-green-600 text-white shadow-lg"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className={`px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition ${productType === tab.id
+              ? "bg-green-600 text-white shadow-lg"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
           >
             {tab.label}
           </button>
@@ -399,11 +566,10 @@ export default function AddProduct() {
                   key={tab}
                   type="button"
                   onClick={() => setActiveTab(tab as any)}
-                  className={`px-5 py-2 rounded-lg font-medium text-sm sm:text-base transition ${
-                    activeTab === tab
-                      ? "bg-green-600 text-white shadow"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
+                  className={`px-5 py-2 rounded-lg font-medium text-sm sm:text-base transition ${activeTab === tab
+                    ? "bg-green-600 text-white shadow"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
                 >
                   {t(tab === "basic" ? "Basic Information" : tab === "nutrition" ? "Nutritional Info" : tab === "images" ? "Images & Docs" : "Advanced")}
                 </button>
@@ -416,6 +582,7 @@ export default function AddProduct() {
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Product Name")} <span className="text-red-600">*</span></label>
                   <input
                     type="text"
+                    name="name"
                     value={name}
                     onChange={e => setName(e.target.value)}
                     className={`w-full p-3 border rounded-lg ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
@@ -429,6 +596,7 @@ export default function AddProduct() {
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Category")} <span className="text-red-600">*</span></label>
                   <select
+                    name="category"
                     value={category}
                     onChange={e => setCategory(e.target.value)}
                     className={`w-full p-3 border rounded-lg ${errors.category ? 'border-red-500' : 'border-gray-300'}`}
@@ -443,6 +611,7 @@ export default function AddProduct() {
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Quality Grade")} <span className="text-red-600">*</span></label>
                   <select
+                    name="quality"
                     value={quality}
                     onChange={e => setQuality(e.target.value)}
                     className={`w-full p-3 border rounded-lg ${errors.quality ? 'border-red-500' : 'border-gray-300'}`}
@@ -456,12 +625,14 @@ export default function AddProduct() {
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Price (LKR)")} <span className="text-red-600">*</span></label>
                   <input
                     type="number"
+                    name="price"
                     value={price}
                     onChange={e => setPrice(e.target.value)}
                     min="0"
                     step="0.01"
                     className={`w-full p-3 border rounded-lg ${errors.price ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  <input type="hidden" name="description" value={editor?.getHTML() || ""} />
                   {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
                 </div>
                 <div>
@@ -469,6 +640,7 @@ export default function AddProduct() {
                   <div className="flex gap-3">
                     <input
                       type="number"
+                      name="quantity"
                       value={quantity}
                       onChange={e => setQuantity(e.target.value)}
                       min="0"
@@ -667,11 +839,11 @@ export default function AddProduct() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Vehicle Name / Model")} *</label>
-                  <input value={brandModel} onChange={e => setBrandModel(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <input name="brand_model" value={brandModel} onChange={e => setBrandModel(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Vehicle Type")} *</label>
-                  <select value={vehicleType} onChange={e => setVehicleType(e.target.value)} required className="vehicle_type w-full p-5 border-2 border-orange-400 rounded-xl">
+                  <select name="vehicle_type" value={vehicleType} onChange={e => setVehicleType(e.target.value)} required className="vehicle_type w-full p-5 border-2 border-orange-400 rounded-xl">
                     <option value="">{t("Select Type")}</option>
                     <option value="tractor">{t("Tractor")}</option>
                     <option value="harvester">{t("Harvester")}</option>
@@ -680,14 +852,16 @@ export default function AddProduct() {
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Date Published / Listed")} *</label>
-                  <input type="date" value={vehiclePublishedDate} onChange={e => setVehiclePublishedDate(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <input name="published_date" type="date" value={vehiclePublishedDate} onChange={e => setVehiclePublishedDate(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  ...
+                  <input type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Engine Power (HP)")}</label>
                   <input value={enginePower} onChange={e => setEnginePower(e.target.value)} className="w-full p-5 border-2 border-orange-400 rounded-xl" />
                 </div>
                 <div>
-                  
+
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Condition")} *</label>
                   <select value={condition} onChange={e => setCondition(e.target.value)} className="w-full p-5 border-2 border-orange-400 rounded-xl">
                     <option value="new">{t("Brand New")}</option>
@@ -696,11 +870,11 @@ export default function AddProduct() {
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Available Quantity")} *</label>
-                  <input type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <input name="quantity" type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Price (LKR)")} *</label>
-                  <input type="number" value={price} onChange={e => setPrice(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
                 </div>
                 <div className="flex items-center gap-4">
                   <input type="checkbox" checked={forRent} onChange={e => setForRent(e.target.checked)} className="w-6 h-6" />
@@ -744,11 +918,11 @@ export default function AddProduct() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Tool Name")} *</label>
-                  <input value={toolName} onChange={e => setToolName(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <input name="tool_name" value={toolName} onChange={e => setToolName(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Tool Type")} *</label>
-                  <select value={toolType} onChange={e => setToolType(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
+                  <select name="tool_type" value={toolType} onChange={e => setToolType(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
                     <option value="manual">{t("Hand Tool")}</option>
                     <option value="battery">{t("Battery")}</option>
                     <option value="tractor_mounted">{t("Tractor Mounted")}</option>
@@ -756,11 +930,11 @@ export default function AddProduct() {
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Date Published / Listed")} *</label>
-                  <input type="date" value={toolPublishedDate} onChange={e => setToolPublishedDate(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <input name="published_date" type="date" value={toolPublishedDate} onChange={e => setToolPublishedDate(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Power Source")} *</label>
-                  <select value={powerSource} onChange={e => setPowerSource(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
+                  <select name="power_source" value={powerSource} onChange={e => setPowerSource(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
                     <option value="manual">{t("Manual")}</option>
                     <option value="petrol">{t("Petrol")}</option>
                     <option value="battery">{t("Battery")}</option>
@@ -772,11 +946,11 @@ export default function AddProduct() {
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Available Quantity")} *</label>
-                  <input type="number" value={toolQuantity} onChange={e => setToolQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <input name="quantity" type="number" value={toolQuantity} onChange={e => setToolQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Price (LKR)")} *</label>
-                  <input type="number" value={price} onChange={e => setPrice(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
                 </div>
                 <div className="md:col-span-2">
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Description")}</label>
@@ -790,13 +964,27 @@ export default function AddProduct() {
           </div>
         )}
 
-       <div className="text-center pt-8">
+        <div className="text-center pt-8 flex flex-col sm:flex-row sm:justify-center gap-4 items-center">
           <button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white font-bold text-xl sm:text-2xl px-12 sm:px-16 py-5 sm:py-6 rounded-2xl shadow-xl transition"
+            className="bg-green-600 hover:bg-green-700 text-white font-bold text-xl sm:text-2xl px-12 sm:px-16 py-4 sm:py-5 rounded-2xl shadow-xl transition w-full sm:w-auto"
           >
-            {t("Save Product")}
+            {isEdit ? t("Update Product") : t("Save Product")}
           </button>
+
+          {isEdit && product && (
+            <button
+              type="button"
+              onClick={() => {
+                if (confirm(t('Are you sure you want to delete this product?'))) {
+                  router.delete(route('suppliers.products.destroy', product.id));
+                }
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-6 py-3 rounded-2xl shadow"
+            >
+              {t('Delete')}
+            </button>
+          )}
         </div>
       </form>
     </div>
