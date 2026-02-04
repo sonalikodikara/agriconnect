@@ -94,6 +94,15 @@ Route::prefix('advisor')->name('advisors.')->middleware('auth')->group(function 
 
     Route::get('/certifications', [AdvisorController::class, 'certifications'])->name('certifications.edit');
     Route::post('/certifications', [AdvisorController::class, 'updateCertifications'])->name('certifications.update');
+
+    // Consultation availability routes
+    Route::get('/profile', [AdvisorController::class, 'profile'])->name('profile.show');
+    Route::post('/consultation-availability', [AdvisorController::class, 'storeAvailability'])->name('availability.store');
+    Route::put('/consultation-availability/{id}', [AdvisorController::class, 'updateAvailability'])->name('availability.update');
+    Route::delete('/consultation-availability/{id}', [AdvisorController::class, 'destroyAvailability']
+    )->name('availability.destroy');
+
+
 });
 
 // Admin routes
