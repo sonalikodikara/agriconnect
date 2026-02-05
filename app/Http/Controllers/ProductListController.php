@@ -99,13 +99,38 @@ class ProductListController extends Controller
         ]);
     }
 
-    public function advisors()
-    {
-        $advisors = Advisor::all();
+public function advisors()
+{
+    $advisors = Advisor::all()->map(function ($advisor) {
+        // Decode specialization if it's a string, otherwise use as-is
+        if (is_string($advisor->specialization)) {
+            $advisor->specialization = json_decode($advisor->specialization, true) ?? [];
+        } elseif (!is_array($advisor->specialization)) {
+            $advisor->specialization = [];
+        }
 
-        return Inertia::render('ListPages/Advisors', [
-            'advisors' => $advisors,
-            'category_name' => 'Advisors & Consultants',
-        ]);
-    }
+        // Decode certifications if it's a string, otherwise use as-is
+        if (is_string($advisor->certifications)) {
+            $advisor->certifications = json_decode($advisor->certifications, true) ?? [];
+        } elseif (!is_array($advisor->certifications)) {
+            $advisor->certifications = [];
+        }
+
+        // Add full URL for profile image if exists
+        $advisor->profile_image_url = $advisor->profile_image
+            ? asset('storage/' . $advisor->profile_image)
+            : null;
+
+        $advisor->cover_image_url = $advisor->cover_image
+            ? asset('storage/' . $advisor->cover_image)
+            : null;
+
+        return $advisor;
+    });
+
+    return Inertia::render('ListPages/Advisors', [
+        'advisors' => $advisors,
+        'category_name' => 'Advisors & Consultants',
+    ]);
+}
 }

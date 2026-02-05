@@ -107,7 +107,12 @@ export default function AddProduct() {
     "Farm Fresh", "Non-GMO",
   ];
 
-  // Populate when editing; clear editor when product type changes
+  useEffect(() => {
+    if (product) {
+      setProductType(product.product_type || 'general');
+    }
+  }, [product]);
+
   useEffect(() => {
     setErrors({});
     if (product) {
@@ -163,7 +168,6 @@ export default function AddProduct() {
         editor?.commands.setContent(product.description);
       }
     } else {
-      // New product: clear editor when productType changes
       editor?.commands.clearContent();
     }
   }, [product, productType, editor]);
@@ -237,6 +241,27 @@ export default function AddProduct() {
       setExistingCertificatePreviews(p => p.filter((_, x) => x !== existingIndex));
     }
   };
+  // Success message timeout
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (successMessage) {
+      setShowSuccess(true);
+
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000); // 5 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (showSuccess) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [showSuccess]);
+
 
   // Client-side validation
   const validateForm = () => {
@@ -365,7 +390,7 @@ export default function AddProduct() {
       formData.append("condition", condition);
       formData.append("for_rent", forRent ? "1" : "0");
       if (forRent) formData.append("rental_price_per_day", rentalPrice);
-      formData.append("vehicle_features", editor?.getHTML() || "");
+      if (enginePower) formData.append("engine_power", enginePower);
     }
 
     // Tool
@@ -378,7 +403,6 @@ export default function AddProduct() {
       formData.append("power_source", powerSource);
       formData.append("working_width", workingWidth);
       formData.append("published_date", toolPublishedDate);
-      formData.append("tool_features", editor?.getHTML() || "");
     }
 
     if (isEdit && product) {
@@ -403,14 +427,14 @@ export default function AddProduct() {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBold().run()}
-        className={`p-3 rounded-lg ${editor?.isActive('bold') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
+        className={`p-2 sm:p-3 rounded-lg ${editor?.isActive('bold') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
       >
         <Bold size={20} />
       </button>
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        className={`p-3 rounded-lg ${editor?.isActive('bulletList') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
+        className={`p-2 sm:p-3 rounded-lg ${editor?.isActive('bulletList') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
       >
         <List size={20} />
       </button>
@@ -456,7 +480,7 @@ export default function AddProduct() {
           {/* New uploads first */}
           {optionalPreviews.map((src, i) => (
             <div key={`n-${i}`} className="relative">
-              <img src={src} alt={`Optional new ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+              <img src={src} alt={`Optional new ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
               <button type="button" onClick={() => removeOptionalImage(i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
                 <X size={16} />
               </button>
@@ -466,7 +490,7 @@ export default function AddProduct() {
           {/* Existing images (edit mode) */}
           {existingOptionalPreviews.map((src, i) => (
             <div key={`e-${i}`} className="relative">
-              <img src={src} alt={`Optional existing ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+              <img src={src} alt={`Optional existing ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
               <button type="button" onClick={() => removeOptionalImage(optionalPreviews.length + i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
                 <X size={16} />
               </button>
@@ -489,7 +513,7 @@ export default function AddProduct() {
           {certificatePreviews.map((src, i) => (
             <div key={`n-cert-${i}`} className="relative">
               {certificates[i]?.type.includes("image") ? (
-                <img src={src} alt={`Cert ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+                <img src={src} alt={`Cert ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
               ) : (
                 <div className="bg-gray-100 border-2 border-dashed rounded-lg p-6 text-center">
                   <p className="text-gray-600 font-medium text-sm break-all">{certificates[i]?.name}</p>
@@ -504,7 +528,7 @@ export default function AddProduct() {
           {/* Existing certificates */}
           {existingCertificatePreviews.map((src, i) => (
             <div key={`e-cert-${i}`} className="relative">
-              <img src={src} alt={`Cert existing ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
+              <img src={src} alt={`Cert existing ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
               <button type="button" onClick={() => removeCertificate(certificatePreviews.length + i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
                 <X size={16} />
               </button>
@@ -516,20 +540,26 @@ export default function AddProduct() {
   );
 
   return (
-    <div className="bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-10 max-w-4xl w-full mx-auto my-6">
+    <div className="bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-10 max-w-full sm:max-w-4xl w-full mx-auto my-6">
       {/* Success Message */}
-      {successMessage && (
-        <div className="mb-10 p-6 bg-green-100 border-4 border-green-500 rounded-2xl text-center shadow-lg">
-          <p className="text-2xl sm:text-3xl font-bold text-green-800">{successMessage}</p>
+      {showSuccess && successMessage && (
+        <div className="mb-10 p-4 bg-green-100 border-l-8 border-green-600 rounded-xl shadow-lg">
+          <p className="text-lg sm:text-xl font-semibold text-green-800">
+            {successMessage}
+          </p>
         </div>
       )}
 
       {/* Back button when editing */}
       {isEdit && product && (
         <div className="mb-4">
-          <button type="button" onClick={() => router.visit(route('suppliers.products.index'))} className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-green-600">
+          <button
+            type="button"
+            onClick={() => window.history.back()}
+            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-green-600"
+          >
             <ArrowLeft size={18} />
-            <span>{t('Back to My Products')}</span>
+            <span>{t('Back')}</span>
           </button>
         </div>
       )}
@@ -821,7 +851,7 @@ export default function AddProduct() {
 
         {/* ====================== VEHICLE FORM ====================== */}
         {productType === "vehicle" && (
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-10 border-4 border-yellow-400">
+          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-4 sm:p-8 lg:p-10 border-4 border-yellow-400">
             <div className="flex flex-wrap gap-2 mb-8 border-b-2 border-gray-200 pb-4 overflow-x-auto">
               {["basic", "images"].map((tab) => (
                 <button
@@ -836,60 +866,65 @@ export default function AddProduct() {
             </div>
 
             {activeTab === "basic" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
                 <div>
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Vehicle Name / Model")} *</label>
-                  <input name="brand_model" value={brandModel} onChange={e => setBrandModel(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Vehicle Name / Model")} *</label>
+                  <input name="brand_model" value={brandModel} onChange={e => setBrandModel(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.brand_model ? 'border-red-500' : 'border-orange-400'}`} />
+                  {errors.brand_model && <p className="text-red-600 text-sm mt-1">{errors.brand_model}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Vehicle Type")} *</label>
-                  <select name="vehicle_type" value={vehicleType} onChange={e => setVehicleType(e.target.value)} required className="vehicle_type w-full p-5 border-2 border-orange-400 rounded-xl">
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Vehicle Type")} *</label>
+                  <select name="vehicle_type" value={vehicleType} onChange={e => setVehicleType(e.target.value)} required className={`vehicle_type w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.vehicle_type ? 'border-red-500' : 'border-orange-400'}`}>
                     <option value="">{t("Select Type")}</option>
                     <option value="tractor">{t("Tractor")}</option>
                     <option value="harvester">{t("Harvester")}</option>
                     <option value="rotavator">{t("Rotavator")}</option>
                   </select>
+                  {errors.vehicle_type && <p className="text-red-600 text-sm mt-1">{errors.vehicle_type}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Date Published / Listed")} *</label>
-                  <input name="published_date" type="date" value={vehiclePublishedDate} onChange={e => setVehiclePublishedDate(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
-                  ...
-                  <input type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Date Published / Listed")} *</label>
+                  <input name="published_date" type="date" value={vehiclePublishedDate} onChange={e => setVehiclePublishedDate(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.published_date ? 'border-red-500' : 'border-orange-400'}`} />
+                  {errors.published_date && <p className="text-red-600 text-sm mt-1">{errors.published_date}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Engine Power (HP)")}</label>
-                  <input value={enginePower} onChange={e => setEnginePower(e.target.value)} className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Engine Power (HP)")}</label>
+                  <input value={enginePower} onChange={e => setEnginePower(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-orange-400 rounded-lg sm:rounded-xl" />
                 </div>
                 <div>
-
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Condition")} *</label>
-                  <select value={condition} onChange={e => setCondition(e.target.value)} className="w-full p-5 border-2 border-orange-400 rounded-xl">
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Condition")} *</label>
+                  <select value={condition} onChange={e => setCondition(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-orange-400 rounded-lg sm:rounded-xl">
                     <option value="new">{t("Brand New")}</option>
                     <option value="used">{t("Used")}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Available Quantity")} *</label>
-                  <input name="quantity" type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Available Quantity")} *</label>
+                  <input name="quantity" type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.quantity ? 'border-red-500' : 'border-orange-400'}`} />
+                  {errors.quantity && <p className="text-red-600 text-sm mt-1">{errors.quantity}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Price (LKR)")} *</label>
-                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Price (LKR)")} *</label>
+                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.price ? 'border-red-500' : 'border-orange-400'}`} />
+                  {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
                 </div>
-                <div className="flex items-center gap-4">
-                  <input type="checkbox" checked={forRent} onChange={e => setForRent(e.target.checked)} className="w-6 h-6" />
-                  <label className="text-xl">{t("Available for Rent")}</label>
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <input type="checkbox" checked={forRent} onChange={e => setForRent(e.target.checked)} className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <label className="text-base sm:text-lg lg:text-xl">{t("Available for Rent")}</label>
                 </div>
                 {forRent && (
                   <div>
-                    <label className="block font-bold text-xl text-orange-800 mb-3">{t("Rental Price per Day (LKR)")}</label>
-                    <input type="number" value={rentalPrice} onChange={e => setRentalPrice(e.target.value)} className="w-full p-5 border-2 border-orange-400 rounded-xl" />
+                    <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Rental Price per Day (LKR)")}</label>
+                    <input type="number" value={rentalPrice} onChange={e => setRentalPrice(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-orange-400 rounded-lg sm:rounded-xl" />
                   </div>
                 )}
-                <div className="md:col-span-2">
-                  <label className="block font-bold text-xl text-orange-800 mb-3">{t("Description")}</label>
+                <div className="sm:col-span-2">
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Description")} <span className="text-red-600">*</span></label>
                   <RichTextToolbar />
-                  <EditorContent editor={editor} className="border-2 border-orange-400 rounded-xl min-h-64 p-4 bg-white" />
+                  <div className={`border-2 rounded-lg sm:rounded-xl min-h-40 sm:min-h-64 p-3 sm:p-4 bg-white ${errors.description ? 'border-red-500' : 'border-orange-400'}`}>
+                    <EditorContent editor={editor} />
+                  </div>
+                  {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
                 </div>
               </div>
             )}
@@ -900,7 +935,7 @@ export default function AddProduct() {
 
         {/* ====================== TOOL FORM ====================== */}
         {productType === "tool" && (
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-10 border-4 border-blue-400">
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-4 sm:p-8 lg:p-10 border-4 border-blue-400">
             <div className="flex flex-wrap gap-2 mb-8 border-b-2 border-gray-200 pb-4 overflow-x-auto">
               {["basic", "images"].map((tab) => (
                 <button
@@ -915,47 +950,56 @@ export default function AddProduct() {
             </div>
 
             {activeTab === "basic" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
                 <div>
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Tool Name")} *</label>
-                  <input name="tool_name" value={toolName} onChange={e => setToolName(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Tool Name")} *</label>
+                  <input name="tool_name" value={toolName} onChange={e => setToolName(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.tool_name ? 'border-red-500' : 'border-blue-400'}`} />
+                  {errors.tool_name && <p className="text-red-600 text-sm mt-1">{errors.tool_name}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Tool Type")} *</label>
-                  <select name="tool_type" value={toolType} onChange={e => setToolType(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Tool Type")} *</label>
+                  <select name="tool_type" value={toolType} onChange={e => setToolType(e.target.value)} className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.tool_type ? 'border-red-500' : 'border-blue-400'}`}>
                     <option value="manual">{t("Hand Tool")}</option>
                     <option value="battery">{t("Battery")}</option>
                     <option value="tractor_mounted">{t("Tractor Mounted")}</option>
                   </select>
+                  {errors.tool_type && <p className="text-red-600 text-sm mt-1">{errors.tool_type}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Date Published / Listed")} *</label>
-                  <input name="published_date" type="date" value={toolPublishedDate} onChange={e => setToolPublishedDate(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Date Published / Listed")} *</label>
+                  <input name="published_date" type="date" value={toolPublishedDate} onChange={e => setToolPublishedDate(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.published_date ? 'border-red-500' : 'border-blue-400'}`} />
+                  {errors.published_date && <p className="text-red-600 text-sm mt-1">{errors.published_date}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Power Source")} *</label>
-                  <select name="power_source" value={powerSource} onChange={e => setPowerSource(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Power Source")} *</label>
+                  <select name="power_source" value={powerSource} onChange={e => setPowerSource(e.target.value)} className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.power_source ? 'border-red-500' : 'border-blue-400'}`}>
                     <option value="manual">{t("Manual")}</option>
                     <option value="petrol">{t("Petrol")}</option>
                     <option value="battery">{t("Battery")}</option>
                   </select>
+                  {errors.power_source && <p className="text-red-600 text-sm mt-1">{errors.power_source}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Working Width (cm)")}</label>
-                  <input value={workingWidth} onChange={e => setWorkingWidth(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Working Width (cm)")}</label>
+                  <input value={workingWidth} onChange={e => setWorkingWidth(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-blue-400 rounded-lg sm:rounded-xl" />
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Available Quantity")} *</label>
-                  <input name="quantity" type="number" value={toolQuantity} onChange={e => setToolQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Available Quantity")} *</label>
+                  <input name="quantity" type="number" value={toolQuantity} onChange={e => setToolQuantity(e.target.value)} min="1" required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.quantity ? 'border-red-500' : 'border-blue-400'}`} />
+                  {errors.quantity && <p className="text-red-600 text-sm mt-1">{errors.quantity}</p>}
                 </div>
                 <div>
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Price (LKR)")} *</label>
-                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className="w-full p-5 border-2 border-blue-400 rounded-xl" />
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Price (LKR)")} *</label>
+                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.price ? 'border-red-500' : 'border-blue-400'}`} />
+                  {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block font-bold text-xl text-blue-800 mb-3">{t("Description")}</label>
+                <div className="sm:col-span-2">
+                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Description")} <span className="text-red-600">*</span></label>
                   <RichTextToolbar />
-                  <EditorContent editor={editor} className="border-2 border-blue-400 rounded-xl min-h-64 p-4 bg-white" />
+                  <div className={`border-2 rounded-lg sm:rounded-xl min-h-40 sm:min-h-64 p-3 sm:p-4 bg-white ${errors.description ? 'border-red-500' : 'border-blue-400'}`}>
+                    <EditorContent editor={editor} />
+                  </div>
+                  {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
                 </div>
               </div>
             )}

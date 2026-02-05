@@ -14,13 +14,16 @@ class Order extends Model
         'supplier_id',
         'total_amount',
         'status',
-        'delivery_address',
-        'delivery_phone',
+        'payment_method',
         'delivery_name',
+        'delivery_phone',
+        'delivery_address',
+        'card_expiry',
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
+        'card_expiry' => 'date',
     ];
 
     public function user()
@@ -60,5 +63,10 @@ class Order extends Model
             'delivered' => 'bg-green-100 text-green-800',
             default => 'bg-gray-100 text-gray-800',
         };
+    }
+
+    public function buyer()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

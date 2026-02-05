@@ -1,11 +1,14 @@
 // resources/js/Pages/ListPages/Advisors.tsx
 
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate } from 'react-icons/fa';
 
-export default function Advisors({ advisors, category_name }) {
+export default function Advisors() {
   const { t } = useTranslation();
+  const { props } = usePage<any>();
+  const advisors = props.advisors || [];
+  const category_name = props.category_name || 'Advisors & Consultants';
 
   return (
     <>
