@@ -52,6 +52,7 @@ Route::prefix('supplier')->name('suppliers.')->group(function () {
     Route::get('/{supplier}', [SupplierController::class, 'show'])->name('show');
     Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
 
+
     // Product routes (nested under supplier)
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -76,6 +77,9 @@ Route::prefix('buyer')->name('buyers.')->middleware('auth')->group(function () {
 
     // Checkout route - FIXED: point to 'index' method
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('orders.store');
+
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 
     // Orders routes (note: you had duplicate '/orders' GET)
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
@@ -99,10 +103,10 @@ Route::prefix('advisor')->name('advisors.')->middleware('auth')->group(function 
     Route::get('/profile', [AdvisorController::class, 'profile'])->name('profile.show');
     Route::post('/consultation-availability', [AdvisorController::class, 'storeAvailability'])->name('availability.store');
     Route::put('/consultation-availability/{id}', [AdvisorController::class, 'updateAvailability'])->name('availability.update');
-    Route::delete('/consultation-availability/{id}', [AdvisorController::class, 'destroyAvailability']
+    Route::delete(
+        '/consultation-availability/{id}',
+        [AdvisorController::class, 'destroyAvailability']
     )->name('availability.destroy');
-
-
 });
 
 // Admin routes
@@ -120,6 +124,10 @@ Route::prefix('list')->name('list.')->group(function () {
     Route::get('/pesticides', [ProductListController::class, 'pesticides'])->name('pesticides');
     Route::get('/others', [ProductListController::class, 'others'])->name('others');
 });
+
+// Product detail page
+Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+
 Route::get('/advisor/{advisor}', [AdvisorController::class, 'show'])->name('advisor.show');
 
 require __DIR__ . '/auth.php';

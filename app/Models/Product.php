@@ -50,6 +50,9 @@ class Product extends Model
         'working_width',
         'is_modern',
         'tool_features',
+        
+        // PRODUCT TYPE
+        'product_type',
     ];
 
     protected $casts = [
@@ -82,26 +85,32 @@ class Product extends Model
 
     public function getPrimaryImageUrlAttribute()
     {
-        return $this->primary_image
-            ? asset('storage/' . $this->primary_image)
-            : '/placeholder.jpg'; // fallback
+        if (!$this->primary_image) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->primary_image);
     }
 
     public function getOptionalImagesUrlsAttribute()
     {
-        if (!$this->optional_images || !is_array($this->optional_images)) {
+        if (!$this->optional_images) {
             return [];
         }
 
-        return array_map(fn($path) => asset('storage/' . $path), $this->optional_images);
+        return collect($this->optional_images)->map(function ($path) {
+            return Storage::disk('public')->url($path);
+        });
     }
 
-    public function getCertificatesUrlsAttribute()
+     public function getCertificatesUrlsAttribute()
     {
-        if (!$this->certificates || !is_array($this->certificates)) {
+        if (!$this->certificates) {
             return [];
         }
 
-        return array_map(fn($path) => asset('storage/' . $path), $this->certificates);
+        return collect($this->certificates)->map(function ($path) {
+            return Storage::disk('public')->url($path);
+        });
     }
 }

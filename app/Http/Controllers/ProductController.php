@@ -283,6 +283,9 @@ class ProductController extends Controller
         }
         $data['certificates'] = $remainingCerts;
 
+        // Product Type
+        $data['product_type'] = $request->product_type;
+
         // Vehicle
         $data['product_type'] = $request->product_type;
         if ($request->product_type === 'vehicle') {
@@ -325,5 +328,12 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('suppliers.profile.show')->with('status_key', 'product.deleted_successfully');
+    }
+
+    // Public product detail
+    public function show(Product $product)
+    {
+        $product->load('supplier');
+        return Inertia::render('Product/Show', ['product' => $product->append(['primary_image_url', 'optional_images_urls', 'certificates_urls'])]);
     }
 }

@@ -48,6 +48,7 @@
   "Log Out": "ඉවත් වන්න",
   "Dashboard": "ඩැෂ්බෝඩ්",
   "Welcome": "ආයුබෝවන්",
+  "Profile Overview": "පැතිකඩ සමාලෝචනය",
 
   
   
@@ -130,6 +131,12 @@
   "Advisor Info": "උපදේශකයාගේ තොරතුරු",
   "Qualifications": "සුදුසුකම්",
   "Cancel": "අවලංගු කරන්න",
+  "Add Your First Product": "ඔබේ පළමු නිෂ්පාදනය එක් කරන්න",
+  "No products yet.": "තවම නිෂ්පාදන නැත.",
+  "No orders yet.": "තවම ඇණවුම් නැත.",
+  "View Details": "විස්තර බලන්න",
+  "Add to Cart": "සැපයුම් කරණයට එක් කරන්න",
+
 
   "No supplier profile found.": "සැපයුම්කරුවන්ගේ පැතිකඩක් සොයාගත නොහැක.",
   "Add Product": "නිෂ්පාදනයක් එක් කරන්න",
@@ -311,7 +318,35 @@
     "oct": "ඔක්තෝබර්",
     "nov": "නොවැම්බර්",
     "dec": "දෙසැම්බර්"
-  }
+  },
+
+
+  "Checkout": "පරීක්ෂා කිරීම",
+  "Order Summary": "ඇණවුම් සාරාංශය",
+  "Delivery": "බෙදාහැරීම",
+  "Free": "නොමිලේ",
+  "Total": "මුළු ගණන",
+  "Delivery Information": "බෙදාහැරීමේ තොරතුරු",
+  "Full Name": "සම්පූර්ණ නම",
+  "John Doe": "ජෝන් ඩෝ",
+  "WhatsApp Number": "WhatsApp අංකය",
+  "0712345678": "0712345678",
+  "Delivery Address": "බෙදාහැරීමේ ලිපිනය",
+  "123, Main Street, Colombo": "123, ප්‍රධාන වීදිය, කොළඹ",
+  "Payment Method": "ගෙවීම් ක්‍රමය",
+  "Credit/Debit Card": "ණය/ඩෙබිට් කාඩ්පත",
+  "Cash on Delivery": "බෙදාහැරීමේදී මුදල් ගෙවීම",
+  "Card Details": "කාඩ්පත් විස්තර",
+  "Card Holder Name": "කාඩ්පත හිමිකරුගේ නම",
+  "Card Number": "කාඩ්පත් අංකය",
+  "1234567890123456": "1234567890123456",
+  "Expiry (MM/YY)": "කල් ඉකුත් වීම (MM/YY)",
+  "12/25": "12/25",
+  "CVV": "CVV",
+  "123": "123",
+  "Processing...": "සැකසෙමින් පවතී...",
+  "Place Order": "ඇණවුම තැබීම"
+
 
 }
 

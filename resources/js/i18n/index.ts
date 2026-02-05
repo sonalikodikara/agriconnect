@@ -14,6 +14,11 @@ i18n.use(initReactI18next).init({
     lng: 'en', // default language
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
+
+
+    // THIS LINE FIXES THE ERROR 
+    ns: ["translation"],
+    defaultNS: "translation",
 });
 
 export default i18n;

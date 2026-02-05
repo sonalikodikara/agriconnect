@@ -49,6 +49,8 @@
   "Log Out": "வெளியேறு",
   "Dashboard": "டாஷ்போர்டு",
   "Welcome": "வணக்கம்",
+  "Profile Overview": "சுயவிவர கண்ணோட்டம்",
+
 
   "Profile Image": "பிரொஃபைல் படம்",
   "Cover Image": "கவர் படம்",
@@ -178,7 +180,12 @@
   "Soil Type": "மண் வகை",
   "Instructions": "வழிகாட்டல்கள்",
   "Safety & Storage": "பாதுகாப்பு மற்றும் சேமிப்பு",
-
+  "Add Your First Product": "உங்கள் முதல் தயாரிப்பைச் சேர்க்கவும்",
+  "No products yet.": "இன்னும் பொருட்கள் இல்லை.",
+  "No orders yet.": "இன்னும் ஆர்டர்கள் இல்லை.",
+  "View Details": "விவரங்களைப் பார்க்கவும்",
+  "Add to Cart": "வண்டியில் சேர்க்கவும்",  
+  
   "Product Name": "தயாரிப்பு பெயர்",
   "Category": "வகை",
   "Price (LKR)": "விலை (LKR)",
@@ -217,7 +224,6 @@
   "Tool name is required": "கருவியின் பெயர் தேவை",
   "Tool type is required": "கருவி வகை தேவை",
   "Power source is required": "மின்சாரம் மூலதனம் தேவை",
-  "My Products": "என் பொருட்கள்",
 
   
   "Fertilizer": "உரம்",
@@ -314,6 +320,33 @@
     "oct": "அக்டோபர்",
     "nov": "நவம்பர்",
     "dec": "டிசம்பர்"
-  }
+  }, 
+
+  "Checkout": "செக்அவுட்",
+  "Order Summary": "ஆர்டர் சுருக்கம்",
+  "Delivery": "விநியோகம்",
+  "Free": "இலவசம்",
+  "Total": "மொத்தம்",
+  "Delivery Information": "விநியோக தகவல்",
+  "Full Name": "முழு பெயர்",
+  "John Doe": "ஜான் டோ",
+  "WhatsApp Number": "வாட்ஸ்அப் எண்",
+  "0712345678": "0712345678",
+  "Delivery Address": "விநியோக முகவரி",
+  "123, Main Street, Colombo": "123, மெயின் தெரு, கொழும்பு",
+  "Payment Method": "பணம் செலுத்தும் முறை",
+  "Credit/Debit Card": "கிரெடிட்/டெபிட் கார்டு",
+  "Cash on Delivery": "டெலிவரியில் பணம்",
+  "Card Details": "கார்டு விவரங்கள்",
+  "Card Holder Name": "கார்டு வைத்திருப்பவரின் பெயர்",
+  "Card Number": "கார்டு எண்",
+  "1234567890123456": "1234567890123456",
+  "Expiry (MM/YY)": "காலாவதியாகும் தேதி (MM/YY)",
+  "12/25": "12/25",
+  "CVV": "CVV",
+  "123": "123",
+  "Processing...": "செயலாக்கப்படுகிறது...",
+  "Place Order": "ஆர்டர் செய்"
+
 
 }

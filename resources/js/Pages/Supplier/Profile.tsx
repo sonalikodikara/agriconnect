@@ -39,14 +39,17 @@ export default function Profile() {
     router.post(route("logout"));
   };
 
+  // Languages available (use `code` for i18n)
+  const languages = [
+    { code: 'en', label: 'English', short: 'English' },
+    { code: 'si', label: 'සිංහල', short: 'සිංහල' },
+    { code: 'ta', label: 'தமிழ்', short: 'தமிழ்' },
+  ];
+
   // Helper to get short language label
-  const getLangLabel = (lang: string) => {
-    switch (lang) {
-      case 'en': return 'EN';
-      case 'si': return 'සිං';
-      case 'ta': return 'த';
-      default: return lang.toUpperCase();
-    }
+  const getLangLabel = (langCode: string) => {
+    const found = languages.find(l => l.code === langCode);
+    return found ? found.short : langCode.toUpperCase();
   };
 
   return (
@@ -118,17 +121,16 @@ export default function Profile() {
 
               {/* Language Switcher - Desktop */}
               <div className="flex gap-2 bg-gray-100 p-1 rounded-xl">
-                {["English", "සිංහල", "தமிழ்"].map((lang) => (
+                {languages.map((lang) => (
                   <button
-                    key={lang}
-                    onClick={() => i18n.changeLanguage(lang)}
-                    className={`px-4 py-2 rounded-lg font-bold transition min-w-[60px] ${
-                      i18n.language === lang
+                    key={lang.code}
+                    onClick={() => i18n.changeLanguage(lang.code)}
+                    className={`px-4 py-2 rounded-lg font-bold transition min-w-[60px] ${(i18n.language || '').startsWith(lang.code)
                         ? "bg-green-600 text-white shadow"
                         : "text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                   >
-                    {getLangLabel(lang)}
+                    {lang.short}
                   </button>
                 ))}
               </div>
@@ -183,20 +185,19 @@ export default function Profile() {
 
             {/* Language Switcher - Mobile */}
             <div className="flex justify-center gap-4 pt-4 border-t">
-              {["English", "සිංහල", "தமிழ்"].map((lang) => (
+              {languages.map((lang) => (
                 <button
-                  key={lang}
+                  key={lang.code}
                   onClick={() => {
-                    i18n.changeLanguage(lang);
-                    // setMobileMenuOpen(false);
+                    i18n.changeLanguage(lang.code);
+                    setMobileMenuOpen(false);
                   }}
-                  className={`px-6 py-3 rounded-lg font-bold text-lg min-w-[80px] ${
-                    i18n.language === lang
+                  className={`px-6 py-3 rounded-lg font-bold text-lg min-w-[80px] ${(i18n.language || '').startsWith(lang.code)
                       ? "bg-green-600 text-white shadow-md"
                       : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                  }`}
+                    }`}
                 >
-                  {getLangLabel(lang)}
+                  {lang.short}
                 </button>
               ))}
             </div>
@@ -222,11 +223,10 @@ export default function Profile() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-5 py-3 rounded-xl font-bold text-base sm:text-lg transition flex-shrink-0 ${
-                activeTab === tab.key
+              className={`px-5 py-3 rounded-xl font-bold text-base sm:text-lg transition flex-shrink-0 ${activeTab === tab.key
                   ? "bg-green-600 text-white shadow-lg"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+                }`}
             >
               {tab.label}
             </button>
@@ -362,22 +362,18 @@ export default function Profile() {
                         </div>
 
                         <div className="p-6 sm:p-8">
-                          <h3 className="text-xl sm:text-2xl font-bold text-green-800 mb-3 sm:mb-4">
-                            {product.name} {product.brand && `(${product.brand})`}
-                          </h3>
-
-                            <div className="flex justify-between items-start mb-3">
-                              <h3 className="text-xl sm:text-2xl font-bold text-green-800">
-                                {product.name} {product.brand && `(${product.brand})`}
-                              </h3>
-                              <button
-                                onClick={() => router.visit(route('suppliers.products.edit', product.id))}
-                                className="bg-amber-100 hover:bg-amber-200 text-amber-800 p-3 rounded-full transition"
-                                title={t("Edit Product")}
-                              >
-                                <Edit size={20} />
-                              </button>
-                            </div>
+                          <div className="flex justify-between items-start mb-3">
+                            <h3 className="text-xl sm:text-2xl font-bold text-green-800">
+                              {product.name} {product.brand && `(${product.brand})`}
+                            </h3>
+                            <button
+                              onClick={() => router.visit(route('suppliers.products.edit', product.id))}
+                              className="bg-amber-100 hover:bg-amber-200 text-amber-800 p-3 rounded-full transition"
+                              title={t("Edit Product")}
+                            >
+                              <Edit size={20} />
+                            </button>
+                          </div>
 
                           {/* Render description with HTML support */}
                           <div
