@@ -25,6 +25,11 @@ export default function AdvisorProfile() {
   const [newCertification, setNewCertification] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [coverImage, setCoverImage] = useState<File | null>(null);
+<<<<<<< HEAD
+=======
+  const [availableTime, setAvailableTime] = useState<{ day: string; start: string; end: string }[]>([]);
+  const [newTimeSlot, setNewTimeSlot] = useState({ day: '', start: '', end: '' });
+>>>>>>> AG-26
 
   const [errors, setErrors] = useState<any>({});
 
@@ -82,6 +87,30 @@ export default function AdvisorProfile() {
     }
   };
 
+<<<<<<< HEAD
+=======
+  const handleAddTimeSlot = () => {
+    if (newTimeSlot.day && newTimeSlot.start && newTimeSlot.end) {
+      setAvailableTime([...availableTime, { ...newTimeSlot }]);
+      setNewTimeSlot({ day: '', start: '', end: '' });
+    }
+  };
+
+  const handleRemoveTimeSlot = (index: number) => {
+    setAvailableTime(availableTime.filter((_, i) => i !== index));
+  };
+
+  const weekdays = [
+    { key: 'Monday', label: t('Monday') },
+    { key: 'Tuesday', label: t('Tuesday') },
+    { key: 'Wednesday', label: t('Wednesday') },
+    { key: 'Thursday', label: t('Thursday') },
+    { key: 'Friday', label: t('Friday') },
+    { key: 'Saturday', label: t('Saturday') },
+    { key: 'Sunday', label: t('Sunday') },
+  ];
+
+>>>>>>> AG-26
   const validateForm = () => {
     const newErrors: any = {};
 
@@ -102,10 +131,21 @@ export default function AdvisorProfile() {
     return Object.keys(newErrors).length === 0;
   };
 
+<<<<<<< HEAD
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+=======
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      console.log('Validation failed:', errors);
+      return;
+    }
+
+    console.log('Submitting form...');
+>>>>>>> AG-26
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
@@ -120,6 +160,7 @@ export default function AdvisorProfile() {
 
     specialization.forEach((spec, i) => formData.append(`specialization[${i}]`, spec));
     certifications.forEach((cert, i) => formData.append(`certifications[${i}]`, cert));
+<<<<<<< HEAD
 
     if (profileImage) formData.append('profile_image', profileImage);
     if (coverImage) formData.append('cover_image', coverImage);
@@ -133,6 +174,65 @@ export default function AdvisorProfile() {
         setErrors(err);
         toast({ title: t('Error'), description: t('Please fix the errors below') });
       },
+=======
+    
+    // Add available_time as array
+    availableTime.forEach((slot, i) => {
+      formData.append(`available_time[${i}][day]`, slot.day);
+      formData.append(`available_time[${i}][start]`, slot.start);
+      formData.append(`available_time[${i}][end]`, slot.end);
+    });
+
+    // Only append images if they are actual File objects
+    if (profileImage && profileImage instanceof File) {
+      formData.append('profile_image', profileImage);
+      console.log('Profile image:', profileImage.name, profileImage.type, profileImage.size);
+    }
+    if (coverImage && coverImage instanceof File) {
+      formData.append('cover_image', coverImage);
+      console.log('Cover image:', coverImage.name, coverImage.type, coverImage.size);
+    }
+
+    // Log FormData contents for debugging
+    console.log('FormData entries:');
+    for (let pair of formData.entries()) {
+      if (pair[1] instanceof File) {
+        console.log(pair[0], 'File:', pair[1].name, pair[1].type, pair[1].size);
+      } else {
+        console.log(pair[0], pair[1]);
+      }
+    }
+
+    router.post('/advisor', formData, {
+      forceFormData: true,
+      preserveScroll: true,
+      preserveState: false,
+      onStart: () => {
+        console.log('Request started...');
+      },
+      onProgress: (progress) => {
+        console.log('Upload progress:', progress);
+      },
+      onSuccess: () => {
+        console.log('Success!');
+        toast({ title: t('Success'), description: t('Advisor profile created successfully!') });
+        router.visit('/advisor/profile');
+      },
+      onError: (err) => {
+        console.error('Form errors:', err);
+        if (err.errors) {
+          setErrors(err.errors);
+        } else if (err.message) {
+          setErrors({ general: err.message });
+        } else {
+          setErrors(err);
+        }
+        toast({ title: t('Error'), description: t('Please fix the errors below') });
+      },
+      onFinish: () => {
+        console.log('Request finished');
+      },
+>>>>>>> AG-26
     });
   };
 
@@ -165,11 +265,36 @@ export default function AdvisorProfile() {
                   )}
                   <input
                     type="file"
+<<<<<<< HEAD
                     accept="image/*"
                     onChange={(e) => setProfileImage(e.target.files?.[0] || null)}
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
                 </div>
+=======
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        // Validate file type
+                        if (!file.type.startsWith('image/')) {
+                          setErrors({ ...errors, profile_image: t('Please select a valid image file') });
+                          return;
+                        }
+                        // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+                        if (file.size > 2 * 1024 * 1024) {
+                          setErrors({ ...errors, profile_image: t('Image size must be less than 2MB') });
+                          return;
+                        }
+                        setProfileImage(file);
+                        setErrors({ ...errors, profile_image: undefined });
+                      }
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </div>
+                {errors.profile_image && <p className="text-red-600 text-sm mt-2">{errors.profile_image}</p>}
+>>>>>>> AG-26
               </div>
 
               <div className="bg-gray-50 rounded-2xl p-6 text-center">
@@ -182,11 +307,36 @@ export default function AdvisorProfile() {
                   )}
                   <input
                     type="file"
+<<<<<<< HEAD
                     accept="image/*"
                     onChange={(e) => setCoverImage(e.target.files?.[0] || null)}
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
                 </div>
+=======
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        // Validate file type
+                        if (!file.type.startsWith('image/')) {
+                          setErrors({ ...errors, cover_image: t('Please select a valid image file') });
+                          return;
+                        }
+                        // Validate file size (4MB = 4 * 1024 * 1024 bytes)
+                        if (file.size > 4 * 1024 * 1024) {
+                          setErrors({ ...errors, cover_image: t('Image size must be less than 4MB') });
+                          return;
+                        }
+                        setCoverImage(file);
+                        setErrors({ ...errors, cover_image: undefined });
+                      }
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </div>
+                {errors.cover_image && <p className="text-red-600 text-sm mt-2">{errors.cover_image}</p>}
+>>>>>>> AG-26
               </div>
             </div>
 
@@ -379,6 +529,64 @@ export default function AdvisorProfile() {
               </div>
             </div>
 
+<<<<<<< HEAD
+=======
+            {/* Available Time */}
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-6 border-4 border-blue-200">
+              <label className="block text-xl font-semibold mb-4 text-blue-800">{t("Available Time")}</label>
+              <div className="space-y-4 mb-4">
+                {availableTime.map((slot, index) => (
+                  <div key={index} className="bg-white rounded-xl p-4 flex items-center justify-between shadow-md">
+                    <div className="flex items-center gap-4">
+                      <span className="font-bold text-blue-800">{slot.day}</span>
+                      <span className="text-gray-700">{slot.start} - {slot.end}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTimeSlot(index)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <select
+                  value={newTimeSlot.day}
+                  onChange={(e) => setNewTimeSlot({ ...newTimeSlot, day: e.target.value })}
+                  className="px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="">{t("Select Day")}</option>
+                  {weekdays.map((day) => (
+                    <option key={day.key} value={day.key}>{day.label}</option>
+                  ))}
+                </select>
+                <input
+                  type="time"
+                  value={newTimeSlot.start}
+                  onChange={(e) => setNewTimeSlot({ ...newTimeSlot, start: e.target.value })}
+                  placeholder={t("Start Time")}
+                  className="px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none"
+                />
+                <input
+                  type="time"
+                  value={newTimeSlot.end}
+                  onChange={(e) => setNewTimeSlot({ ...newTimeSlot, end: e.target.value })}
+                  placeholder={t("End Time")}
+                  className="px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddTimeSlot}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+                >
+                  <FaPlus /> {t("Add")}
+                </button>
+              </div>
+            </div>
+
+>>>>>>> AG-26
             <div className="flex justify-center gap-6 pt-8">
               <button
                 type="button"

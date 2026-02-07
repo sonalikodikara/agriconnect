@@ -1,5 +1,6 @@
 // resources/js/Pages/ListPages/Advisors.tsx
 
+<<<<<<< HEAD
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate } from 'react-icons/fa';
@@ -9,6 +10,59 @@ export default function Advisors() {
   const { props } = usePage<any>();
   const advisors = props.advisors || [];
   const category_name = props.category_name || 'Advisors & Consultants';
+=======
+import { useState } from 'react';
+import { Head, Link, router } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate, FaWhatsapp, FaFilter } from 'react-icons/fa';
+
+interface Advisor {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  district: string;
+  province: string;
+  description?: string;
+  experience?: number;
+  specialization?: string[];
+  certifications?: string[];
+  profile_image?: string;
+  available_time?: any;
+}
+
+interface Props {
+  advisors: Advisor[];
+  category_name: string;
+  filters?: {
+    specialties: string[];
+    provinces: string[];
+  };
+  currentFilters?: {
+    specialty: string;
+    province: string;
+  };
+}
+
+export default function Advisors({ advisors = [], category_name, filters = { specialties: [], provinces: [] }, currentFilters = { specialty: '', province: '' } }: Props) {
+  const { t } = useTranslation();
+  const [selectedSpecialty, setSelectedSpecialty] = useState(currentFilters.specialty || '');
+  const [selectedProvince, setSelectedProvince] = useState(currentFilters.province || '');
+
+  // Debug logging
+  console.log('Advisors component received:', {
+    advisorsCount: advisors?.length || 0,
+    advisors: advisors,
+    filters: filters,
+  });
+
+  // Debug logging
+  console.log('Advisors component received:', {
+    advisorsCount: advisors?.length || 0,
+    advisors: advisors,
+    filters: filters,
+  });
+>>>>>>> AG-26
 
   return (
     <>
@@ -43,9 +97,86 @@ export default function Advisors() {
           </p>
         </div>
 
+<<<<<<< HEAD
         {/* Advisors Grid */}
         <div className="max-w-7xl mx-auto px-4 py-12">
           {advisors.length === 0 ? (
+=======
+        {/* Filters */}
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border-4 border-green-100">
+            <div className="flex items-center gap-4 mb-4">
+              <FaFilter className="text-green-600 text-2xl" />
+              <h2 className="text-2xl font-bold text-green-800">{t('Filter Advisors')}</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Specialty Filter */}
+              <div>
+                <label className="block text-lg font-semibold text-gray-700 mb-2">
+                  {t('Specialty')}
+                </label>
+                <select
+                  value={selectedSpecialty}
+                  onChange={(e) => {
+                    setSelectedSpecialty(e.target.value);
+                    router.get(route('list.advisors'), {
+                      specialty: e.target.value || undefined,
+                      province: selectedProvince || undefined,
+                    }, { preserveState: true });
+                  }}
+                  className="w-full px-4 py-3 border-2 border-green-300 rounded-xl focus:border-green-600 focus:outline-none text-lg"
+                >
+                  <option value="">{t('All Specialties')}</option>
+                  {filters.specialties.map((spec, index) => (
+                    <option key={index} value={spec}>{spec}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Province Filter */}
+              <div>
+                <label className="block text-lg font-semibold text-gray-700 mb-2">
+                  {t('Province')}
+                </label>
+                <select
+                  value={selectedProvince}
+                  onChange={(e) => {
+                    setSelectedProvince(e.target.value);
+                    router.get(route('list.advisors'), {
+                      specialty: selectedSpecialty || undefined,
+                      province: e.target.value || undefined,
+                    }, { preserveState: true });
+                  }}
+                  className="w-full px-4 py-3 border-2 border-green-300 rounded-xl focus:border-green-600 focus:outline-none text-lg"
+                >
+                  <option value="">{t('All Provinces')}</option>
+                  {filters.provinces.map((province, index) => (
+                    <option key={index} value={province}>{province}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {(selectedSpecialty || selectedProvince) && (
+              <div className="mt-4">
+                <button
+                  onClick={() => {
+                    setSelectedSpecialty('');
+                    setSelectedProvince('');
+                    router.get(route('list.advisors'));
+                  }}
+                  className="text-green-600 hover:text-green-800 font-semibold text-lg underline"
+                >
+                  {t('Clear Filters')}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Advisors Grid */}
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          {!advisors || advisors.length === 0 ? (
+>>>>>>> AG-26
             <div className="text-center py-20 bg-white rounded-3xl shadow-xl">
               <p className="text-3xl text-gray-600 mb-8">{t('No advisors registered yet.')}</p>
               <Link href="/home" className="bg-green-600 text-white px-10 py-4 rounded-2xl text-xl font-bold hover:bg-green-700">
@@ -76,7 +207,26 @@ export default function Advisors() {
                     )}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                       <h3 className="text-3xl font-bold text-white">{advisor.name}</h3>
+<<<<<<< HEAD
                       <p className="text-xl text-yellow-300">{t(advisor.specialization?.[0] || 'Expert')}</p>
+=======
+                      <p className="text-xl text-yellow-300">
+                        {(() => {
+                          const specs = Array.isArray(advisor.specialization) 
+                            ? advisor.specialization 
+                            : (typeof advisor.specialization === 'string' 
+                                ? (() => {
+                                    try {
+                                      return JSON.parse(advisor.specialization);
+                                    } catch {
+                                      return [];
+                                    }
+                                  })()
+                                : []);
+                          return t(Array.isArray(specs) && specs.length > 0 ? specs[0] : 'Expert');
+                        })()}
+                      </p>
+>>>>>>> AG-26
                     </div>
                   </div>
 
@@ -115,6 +265,7 @@ export default function Advisors() {
                     )}
 
                     {/* Specializations */}
+<<<<<<< HEAD
                     {advisor.specialization && advisor.specialization.length > 0 && (
                       <div className="mb-6">
                         <p className="font-bold text-green-800 mb-2">{t('Specializations')}:</p>
@@ -135,6 +286,101 @@ export default function Advisors() {
                     >
                       {t('View Profile & Contact')}
                     </Link>
+=======
+                    {(() => {
+                      const specs = Array.isArray(advisor.specialization) 
+                        ? advisor.specialization 
+                        : (typeof advisor.specialization === 'string' 
+                            ? (() => {
+                                try {
+                                  return JSON.parse(advisor.specialization);
+                                } catch {
+                                  return [];
+                                }
+                              })()
+                            : []);
+                      return specs && specs.length > 0 && (
+                        <div className="mb-6">
+                          <p className="font-bold text-green-800 mb-2">{t('Specializations')}:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {specs.map((spec: any, i: number) => (
+                              <span key={i} className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                                {typeof spec === 'string' ? spec : String(spec)}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Certifications */}
+                    {(() => {
+                      const certs = Array.isArray(advisor.certifications) 
+                        ? advisor.certifications 
+                        : (typeof advisor.certifications === 'string' 
+                            ? (() => {
+                                try {
+                                  return JSON.parse(advisor.certifications);
+                                } catch {
+                                  return [];
+                                }
+                              })()
+                            : []);
+                      return certs && certs.length > 0 && (
+                        <div className="mb-6">
+                          <p className="font-bold text-blue-800 mb-2">{t('Certifications')}:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {certs.map((cert: any, i: number) => (
+                              <span key={i} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                                {typeof cert === 'string' ? cert : String(cert)}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Contact Buttons */}
+                    <div className="flex flex-col gap-3">
+                      <button
+                        onClick={() => {
+                          try {
+                            const url = route('advisor.show', advisor.id);
+                            console.log('Navigating to advisor profile:', url, 'Advisor ID:', advisor.id);
+                            router.visit(url);
+                          } catch (error) {
+                            console.error('Error navigating to advisor profile:', error);
+                            // Fallback to direct URL
+                            router.visit(`/advisor/${advisor.id}`);
+                          }
+                        }}
+                        className="block text-center bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 to-emerald-700 text-white font-bold text-xl py-4 rounded-2xl transition shadow-lg w-full"
+                      >
+                        {t('View Full Profile')}
+                      </button>
+                      
+                      <div className="flex gap-3">
+                        {advisor.phone && (
+                          <button
+                            className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition shadow-md"
+                            title={t('WhatsApp')}
+                          >
+                            <FaWhatsapp className="text-xl" />
+                            <span className="hidden sm:inline">{t('WhatsApp')}</span>
+                          </button>
+                        )}
+                        {advisor.email && (
+                          <button
+                            className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl transition shadow-md"
+                            title={t('Email')}
+                          >
+                            <FaEnvelope className="text-xl" />
+                            <span className="hidden sm:inline">{t('Email')}</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+>>>>>>> AG-26
                   </div>
                 </div>
               ))}

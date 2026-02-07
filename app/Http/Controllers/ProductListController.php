@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Advisor;
+<<<<<<< HEAD
+=======
+use Illuminate\Support\Facades\Log;
+>>>>>>> AG-26
 use Inertia\Inertia;
 
 class ProductListController extends Controller
@@ -11,7 +15,11 @@ class ProductListController extends Controller
     public function seeds()
     {
         $products = Product::where('category', 'like', '%seed%')
+<<<<<<< HEAD
             ->with('supplier')
+=======
+            ->with('supplier.ratings')
+>>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -26,7 +34,11 @@ class ProductListController extends Controller
         $products = Product::where('category', 'like', '%fertilizer%')
             ->orWhere('category', 'like', '%පොහොර%')
             ->orWhere('category', 'like', '%உரம்%')
+<<<<<<< HEAD
             ->with('supplier')
+=======
+            ->with('supplier.ratings')
+>>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -39,7 +51,11 @@ class ProductListController extends Controller
     public function equipment()
     {
         $products = Product::whereIn('category', ['irrigation_equipment', 'farm_tools', 'greenhouse_materials'])
+<<<<<<< HEAD
             ->with('supplier')
+=======
+            ->with('supplier.ratings')
+>>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -53,7 +69,11 @@ class ProductListController extends Controller
     {
         $products = Product::where('category', 'like', '%vehicle%')
             ->orWhere('category', 'like', '%tractor%')
+<<<<<<< HEAD
             ->with('supplier')
+=======
+            ->with('supplier.ratings')
+>>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -71,7 +91,11 @@ class ProductListController extends Controller
             ->orWhere('category', 'like', '%insecticide%')
             ->orWhere('category', 'like', '%පළිබෝධනාශක%')
             ->orWhere('category', 'like', '%பூச்சிக்கொல்லி%')
+<<<<<<< HEAD
             ->with('supplier')
+=======
+            ->with('supplier.ratings')
+>>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -89,9 +113,15 @@ class ProductListController extends Controller
                 $query->where('category', 'not like', "%{$term}%");
             }
         })
+<<<<<<< HEAD
         ->with('supplier')
         ->get()
         ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
+=======
+            ->with('supplier.ratings')
+            ->get()
+            ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
+>>>>>>> AG-26
 
         return Inertia::render('ListPages/Others', [
             'products' => $products,
@@ -99,6 +129,7 @@ class ProductListController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 public function advisors()
 {
     $advisors = Advisor::all()->map(function ($advisor) {
@@ -134,3 +165,81 @@ public function advisors()
     ]);
 }
 }
+=======
+    public function advisors()
+    {
+        $query = Advisor::query();
+
+        // Filter by specialty
+        if (request()->has('specialty') && request()->specialty) {
+            $specialty = request()->specialty;
+            $query->where(function ($q) use ($specialty) {
+                $q->whereJsonContains('specialization', $specialty)
+                    ->orWhere('specialization', 'like', '%' . $specialty . '%');
+            });
+        }
+
+        // Filter by province
+        if (request()->has('province') && request()->province) {
+            $query->where('province', request()->province);
+        }
+
+        $advisors = $query->get()->map(function ($advisor) {
+            // Ensure profile_image_url is set if profile_image exists
+            if ($advisor->profile_image && !$advisor->profile_image_url) {
+                $advisor->profile_image_url = asset('storage/' . $advisor->profile_image);
+            }
+
+            // Parse JSON strings to arrays if needed
+            if (is_string($advisor->specialization)) {
+                $advisor->specialization = json_decode($advisor->specialization, true) ?? [];
+            }
+            if (is_string($advisor->certifications)) {
+                $advisor->certifications = json_decode($advisor->certifications, true) ?? [];
+            }
+            if (is_string($advisor->available_time)) {
+                $advisor->available_time = json_decode($advisor->available_time, true) ?? [];
+            }
+
+            return $advisor;
+        });
+
+        // Get unique specialties and provinces for filter dropdowns
+        $allAdvisors = Advisor::all();
+        $specialties = collect();
+        $provinces = collect();
+
+        foreach ($allAdvisors as $advisor) {
+            if ($advisor->specialization) {
+                $specs = is_array($advisor->specialization)
+                    ? $advisor->specialization
+                    : json_decode($advisor->specialization, true) ?? [];
+                if (is_array($specs)) {
+                    $specialties = $specialties->merge($specs);
+                }
+            }
+            if ($advisor->province) {
+                $provinces->push($advisor->province);
+            }
+        }
+
+        Log::info('Advisors listing', [
+            'count' => $advisors->count(),
+            'advisors' => $advisors->pluck('id', 'name')->toArray(),
+        ]);
+
+        return Inertia::render('ListPages/Advisors', [
+            'advisors' => $advisors,
+            'category_name' => 'Advisors & Consultants',
+            'filters' => [
+                'specialties' => $specialties->unique()->filter()->values()->all(),
+                'provinces' => $provinces->unique()->filter()->values()->all(),
+            ],
+            'currentFilters' => [
+                'specialty' => request()->specialty ?? '',
+                'province' => request()->province ?? '',
+            ],
+        ]);
+    }
+}
+>>>>>>> AG-26

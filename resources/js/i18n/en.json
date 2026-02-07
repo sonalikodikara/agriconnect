@@ -114,6 +114,7 @@
   "registration_success": "You have successfully registered. Please login with your credentials.",
 
   "product.saved_successfully": "Product saved successfully!",
+<<<<<<< HEAD
   "product.updated_successfully": "Product updated successfully!",
   "product.deleted_successfully": "Product deleted successfully!",
   "Update Product": "Update Product",
@@ -150,6 +151,8 @@
   "Tool type is required": "Tool type is required",
   "Power source is required": "Power source is required",
   "My Products": "My Products",
+=======
+>>>>>>> AG-26
   "Success": "Success",
   "Error": "Error",
   "Please fix the errors below.": "Please fix the errors below.",
@@ -170,6 +173,7 @@
   "cart_updated": "Cart updated successfully!",
   "item_removed": "Item removed from cart.",
 
+<<<<<<< HEAD
 
   "weekday": {
     "mon": "Monday",
@@ -195,5 +199,65 @@
     "dec": "December"
   }
 
+=======
+  "My Orders": "My Orders",
+  "Order": "Order",
+  "Placed on {{date}}": "Placed on {{date}}",
+  "Updated": "Updated",
+  "Items": "Items",
+  "Delivery Address": "Delivery Address",
+  "Total Amount": "Total Amount",
+  "Contact via WhatsApp": "Contact via WhatsApp",
+  "No orders yet": "No orders yet",
+  "Start Shopping": "Start Shopping",
+  "Refreshing...": "Refreshing...",
+  "Refresh": "Refresh",
+  "Last updated": "Last updated",
+  "Order status updated: {{status}}": "Order status updated: {{status}}",
+  "Pending": "Pending",
+  "Accepted": "Accepted",
+  "Packed": "Packed",
+  "Dispatched": "Dispatched",
+  "Out for Delivery": "Out for Delivery",
+  "Delivered": "Delivered",
+  "Cancelled": "Cancelled",
+  "Please select a rating": "Please select a rating",
+  "rating.submitted_successfully": "Rating submitted successfully!",
+  "Rate this Order": "Rate this Order",
+  "Rate Your Experience": "Rate Your Experience",
+  "Rating": "Rating",
+  "Selected": "Selected",
+  "stars": "stars",
+  "Review": "Review",
+  "Optional": "Optional",
+  "Share your experience with this order...": "Share your experience with this order...",
+  "Submit Rating": "Submit Rating",
+  "You have rated this order": "You have rated this order",
+  "Your rating": "Your rating",
+  "reviews": "reviews",
+  "Advisors & Consultants": "Advisors & Consultants",
+  "Agricultural Advisors": "Agricultural Advisors",
+  "Connect with experienced farming experts in your area": "Connect with experienced farming experts in your area",
+  "Filter Advisors": "Filter Advisors",
+  "All Specialties": "All Specialties",
+  "All Provinces": "All Provinces",
+  "Clear Filters": "Clear Filters",
+  "Expert": "Expert",
+  "Experienced agricultural consultant": "Experienced agricultural consultant",
+  "View Full Profile": "View Full Profile",
+  "WhatsApp": "WhatsApp",
+  "Email": "Email",
+  "Not specified": "Not specified",
+  "Advisor Profile": "Advisor Profile",
+  "Back to Advisors": "Back to Advisors",
+  "years of experience": "years of experience",
+  "Available Time": "Available Time",
+  "About": "About",
+  "Send Email": "Send Email",
+  "Login": "Login",
+  "years experience": "years experience",
+  "Buyer Details": "Buyer Details",
+  "N/A": "N/A"
+>>>>>>> AG-26
 
 }

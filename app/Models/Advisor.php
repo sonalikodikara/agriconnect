@@ -26,12 +26,20 @@ class Advisor extends Model
         'experience',
         'profile_image',
         'cover_image',
+<<<<<<< HEAD
+=======
+        'available_time',
+>>>>>>> AG-26
     ];
 
     protected $casts = [
         'specialization' => 'array',
         'certifications' => 'array',
         'established' => 'date',
+<<<<<<< HEAD
+=======
+        'available_time' => 'array',
+>>>>>>> AG-26
     ];
 
     protected $appends = ['profile_image_url', 'cover_image_url'];
@@ -54,6 +62,7 @@ class Advisor extends Model
             ? asset('storage/' . $this->cover_image)
             : null;
     }
+<<<<<<< HEAD
 
     public function consultationAvailabilities()
     {
@@ -61,3 +70,6 @@ class Advisor extends Model
     }
 
 }
+=======
+}
+>>>>>>> AG-26

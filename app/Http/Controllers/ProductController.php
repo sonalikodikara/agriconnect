@@ -7,6 +7,7 @@ use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+<<<<<<< HEAD
 use Carbon\Carbon;
 
 class ProductController extends Controller
@@ -33,11 +34,17 @@ class ProductController extends Controller
         return Inertia::render('Supplier/AddProduct', ['product' => $product->append(['primary_image_url', 'optional_images_urls', 'certificates_urls'])]);
     }
 
+=======
+
+class ProductController extends Controller
+{
+>>>>>>> AG-26
     public function store(Request $request)
     {
         $supplier = Supplier::where('user_id', auth()->id())->firstOrFail();
 
         $validated = $request->validate([
+<<<<<<< HEAD
             'product_type' => 'required|in:general,vehicle,tool',
             'name' => 'required_if:product_type,general|string|max:255',
             'brand' => 'nullable|string|max:255',
@@ -46,10 +53,20 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'quantity' => 'nullable|numeric|min:0',
             'quantity_unit' => 'nullable|string|in:kg,ltr,tons,packets,units',
+=======
+            'name' => 'required|string|max:255',
+            'brand' => 'nullable|string|max:255',
+            'category' => 'required|string',
+            'quality' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'nullable|numeric|min:0',
+            'quantity_unit' => 'nullable|string|in:kg,ltr,tons,packets',
+>>>>>>> AG-26
             'description' => 'required|string',
             'minimum_order' => 'nullable|integer|min:1',
             'packaging_size' => 'nullable|string',
 
+<<<<<<< HEAD
             // Vehicle
             'vehicle_type' => 'nullable|string',
             'brand_model' => 'nullable|string|max:255',
@@ -65,6 +82,8 @@ class ProductController extends Controller
             'power_source' => 'nullable|string',
             'working_width' => 'nullable|string',
 
+=======
+>>>>>>> AG-26
             // NPK & Nutrition
             'npk.nitrogen' => 'nullable|string',
             'npk.phosphorous' => 'nullable|string',
@@ -136,9 +155,13 @@ class ProductController extends Controller
         if ($request->product_type === 'vehicle') {
             $data['vehicle_type'] = $request->vehicle_type;
             $data['brand_model'] = $request->brand_model;
+<<<<<<< HEAD
             if ($request->published_date) {
                 $data['year'] = Carbon::parse($request->published_date)->year;
             }
+=======
+            $data['year'] = $request->year;
+>>>>>>> AG-26
             $data['engine_power_hp'] = $request->engine_power_hp;
             $data['condition'] = $request->condition;
             $data['for_rent'] = $request->has('for_rent');
@@ -157,6 +180,7 @@ class ProductController extends Controller
 
         Product::create($data);
 
+<<<<<<< HEAD
         return redirect()->back()->with('status_key', 'product.saved_successfully');
     }
 
@@ -337,3 +361,8 @@ class ProductController extends Controller
         return Inertia::render('Product/Show', ['product' => $product->append(['primary_image_url', 'optional_images_urls', 'certificates_urls'])]);
     }
 }
+=======
+        return redirect()->back()->with('status_key', 'product.saved_successfully');   
+    }
+}
+>>>>>>> AG-26

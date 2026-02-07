@@ -15,7 +15,10 @@ class Supplier extends Model
         'user_id',
         'business_name',
         'contact_person',
+<<<<<<< HEAD
         'contact_phone',
+=======
+>>>>>>> AG-26
         'email',
         'phone',
         'address',
@@ -53,6 +56,15 @@ class Supplier extends Model
         return $this->hasMany(Product::class); // Replace Product with actual model
     }
 
+<<<<<<< HEAD
+=======
+    // Relationship with ratings
+    public function ratings()
+    {
+        return $this->hasMany(SupplierRating::class);
+    }
+
+>>>>>>> AG-26
     // Returns public url for profile image (or null)
     public function getProfileImageUrlAttribute()
     {

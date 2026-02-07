@@ -49,8 +49,11 @@
   "Log Out": "வெளியேறு",
   "Dashboard": "டாஷ்போர்டு",
   "Welcome": "வணக்கம்",
+<<<<<<< HEAD
   "Profile Overview": "சுயவிவர கண்ணோட்டம்",
 
+=======
+>>>>>>> AG-26
 
   "Profile Image": "பிரொஃபைல் படம்",
   "Cover Image": "கவர் படம்",
@@ -139,9 +142,12 @@
   "Overview": "கண்ணோட்டம்",
   "Add products": "பொருட்கள்",
   "My Products": "என் பொருட்கள்",
+<<<<<<< HEAD
   "Update Product": "பொருளை புதுப்பிக்கவும்",
   "Delete": "தவிர்க்கவும்",
   "Are you sure you want to delete this product?": "இந்த பொருளை நீக்குவது பற்றி̄ நிச்சயமாக இருக்கிறீர்களா?",
+=======
+>>>>>>> AG-26
   "Orders": "ஆர்டர்கள்",
   "Analytics": "பகுப்பாய்வு",
   "Edit Profile": "சுயவிவரத்தைத் திருத்தவும்",
@@ -180,12 +186,16 @@
   "Soil Type": "மண் வகை",
   "Instructions": "வழிகாட்டல்கள்",
   "Safety & Storage": "பாதுகாப்பு மற்றும் சேமிப்பு",
+<<<<<<< HEAD
   "Add Your First Product": "உங்கள் முதல் தயாரிப்பைச் சேர்க்கவும்",
   "No products yet.": "இன்னும் பொருட்கள் இல்லை.",
   "No orders yet.": "இன்னும் ஆர்டர்கள் இல்லை.",
   "View Details": "விவரங்களைப் பார்க்கவும்",
   "Add to Cart": "வண்டியில் சேர்க்கவும்",  
   
+=======
+
+>>>>>>> AG-26
   "Product Name": "தயாரிப்பு பெயர்",
   "Category": "வகை",
   "Price (LKR)": "விலை (LKR)",
@@ -194,6 +204,7 @@
   "Certificates & Test Reports": "சான்றிதழ்கள் மற்றும் சோதனை அறிக்கைகள்",
   "Suitability Information (Soil Type)": "தகுதி தகவல் (மண் வகை)",
   "Save Product": "தயாரிப்பை சேமிக்கவும்",
+<<<<<<< HEAD
   "Back to My Products": "என் பொருட்களுக்கு திரும்பவும்",
   "Farming Products": "விவசாயப் பொருட்கள்",
   "Machinery": "இயந்திரங்கள்",
@@ -224,6 +235,8 @@
   "Tool name is required": "கருவியின் பெயர் தேவை",
   "Tool type is required": "கருவி வகை தேவை",
   "Power source is required": "மின்சாரம் மூலதனம் தேவை",
+=======
+>>>>>>> AG-26
 
   
   "Fertilizer": "உரம்",
@@ -248,9 +261,12 @@
   "Vegetable Seeds": "காய்கறி விதைகள்",
   "Fruit Plants": "பழ மரக்கன்றுகள்",
   "Add": "சேர்க்கவும்",
+<<<<<<< HEAD
   "Account Settings": "கணக்கு அமைப்புகள்",
   "Edit Supplier Profile": "சப்ளையர் پروஃபைலைத் திருத்தவும்",
   "Logout": "வெளியேறு",
+=======
+>>>>>>> AG-26
 
   "Premium Grade": "பிரீமியம் தரம்",
   "Grade A": "A தரம்",
@@ -288,6 +304,7 @@
   "item_removed": "பொருள் வண்டியிலிருந்து நீக்கப்பட்டது.",
 
   "Specializations": "நிபுணத்துவங்கள்",
+<<<<<<< HEAD
   "Availability Saved Successfully": "கிடைக்கும் நேரம் வெற்றிகரமாக சேமிக்கப்பட்டது",
   "Availability Updated Successfully": "கிடைக்கும் நேரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
 
@@ -348,5 +365,64 @@
   "Processing...": "செயலாக்கப்படுகிறது...",
   "Place Order": "ஆர்டர் செய்"
 
+=======
+  "My Orders": "எனது ஆர்டர்கள்",
+  "Order": "ஆர்டர்",
+  "Placed on {{date}}": "{{date}} அன்று வைக்கப்பட்டது",
+  "Updated": "புதுப்பிக்கப்பட்டது",
+  "Items": "பொருட்கள்",
+  "Delivery Address": "விநியோக முகவரி",
+  "Total Amount": "மொத்த தொகை",
+  "Contact via WhatsApp": "WhatsApp மூலம் தொடர்பு கொள்ளவும்",
+  "No orders yet": "இன்னும் ஆர்டர்கள் இல்லை",
+  "Start Shopping": "ஷாப்பிங் தொடங்கவும்",
+  "Refreshing...": "புதுப்பிக்கிறது...",
+  "Refresh": "புதுப்பிக்கவும்",
+  "Last updated": "கடைசியாக புதுப்பிக்கப்பட்டது",
+  "Order status updated: {{status}}": "ஆர்டர் நிலை புதுப்பிக்கப்பட்டது: {{status}}",
+  "Pending": "நிலுவையில்",
+  "Accepted": "ஏற்றுக்கொள்ளப்பட்டது",
+  "Packed": "பேக்கேஜ் செய்யப்பட்டது",
+  "Dispatched": "அனுப்பப்பட்டது",
+  "Out for Delivery": "விநியோகத்திற்கு வெளியே",
+  "Delivered": "விநியோகிக்கப்பட்டது",
+  "Cancelled": "ரத்து செய்யப்பட்டது",
+  "Please select a rating": "தயவுசெய்து மதிப்பீட்டைத் தேர்ந்தெடுக்கவும்",
+  "rating.submitted_successfully": "மதிப்பீடு வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!",
+  "Rate this Order": "இந்த ஆர்டரை மதிப்பிடவும்",
+  "Rate Your Experience": "உங்கள் அனுபவத்தை மதிப்பிடவும்",
+  "Rating": "மதிப்பீடு",
+  "Selected": "தேர்ந்தெடுக்கப்பட்ட",
+  "stars": "நட்சத்திரங்கள்",
+  "Review": "விமர்சனம்",
+  "Optional": "விருப்பமான",
+  "Share your experience with this order...": "இந்த ஆர்டருடன் உங்கள் அனுபவத்தை பகிரவும்...",
+  "Submit Rating": "மதிப்பீட்டை சமர்ப்பிக்கவும்",
+  "You have rated this order": "நீங்கள் இந்த ஆர்டரை மதிப்பிட்டுள்ளீர்கள்",
+  "Your rating": "உங்கள் மதிப்பீடு",
+  "reviews": "விமர்சனங்கள்",
+  "Advisors & Consultants": "ஆலோசகர்கள் மற்றும் ஆலோசகர்கள்",
+  "Agricultural Advisors": "விவசாய ஆலோசகர்கள்",
+  "Connect with experienced farming experts in your area": "உங்கள் பகுதியில் அனுபவமுள்ள விவசாய நிபுணர்களுடன் இணைக்கவும்",
+  "Filter Advisors": "ஆலோசகர்களை வடிகட்டவும்",
+  "All Specialties": "அனைத்து நிபுணத்துவங்கள்",
+  "All Provinces": "அனைத்து மாகாணங்கள்",
+  "Clear Filters": "வடிகட்டல்களை அழிக்கவும்",
+  "Expert": "நிபுணர்",
+  "Experienced agricultural consultant": "அனுபவமுள்ள விவசாய ஆலோசகர்",
+  "View Full Profile": "முழு சுயவிவரத்தைக் காண்க",
+  "WhatsApp": "WhatsApp",
+  "Email": "மின்னஞ்சல்",
+  "Not specified": "குறிப்பிடப்படவில்லை",
+  "Advisor Profile": "ஆலோசகர் சுயவிவரம்",
+  "Back to Advisors": "ஆலோசகர்களுக்குத் திரும்பவும்",
+  "years of experience": "அனுபவ ஆண்டுகள்",
+  "Available Time": "கிடைக்கும் நேரம்",
+  "About": "பற்றி",
+  "Send Email": "மின்னஞ்சல் அனுப்பவும்",
+  "Login": "உள்நுழைய",
+  "Buyer Details": "வாங்குபவர் விவரங்கள்",
+  "N/A": "இல்லை"
+>>>>>>> AG-26
 
 }

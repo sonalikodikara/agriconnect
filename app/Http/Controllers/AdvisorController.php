@@ -3,22 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+<<<<<<< HEAD
 use Inertia\Inertia;
 use App\Models\Advisor;
 use App\Models\ConsultationAvailability;
 use App\Models\ConsultationTimeSlot;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
+=======
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
+use App\Models\Advisor;
+>>>>>>> AG-26
 
 class AdvisorController extends Controller
 {
     public function index()
     {
+<<<<<<< HEAD
         return Inertia::render('Dashboard/AdvisorProfile');
+=======
+        return Inertia::render('Advisor/AdvisorProfile');
+>>>>>>> AG-26
     }
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
         $user = auth()->user();
 
         $validated = $request->validate([
@@ -59,6 +70,79 @@ class AdvisorController extends Controller
 
         return redirect()->route('advisors.profile.show')
             ->with('success', 'Advisor profile created successfully!');
+=======
+        try {
+            $user = auth()->user();
+
+            Log::info('Advisor profile creation started', [
+                'user_id' => $user->id,
+                'has_profile_image' => $request->hasFile('profile_image'),
+                'has_cover_image' => $request->hasFile('cover_image'),
+            ]);
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:advisors,email',
+                'phone' => 'required|string|max:20',
+                'district' => 'required|string',
+                'province' => 'required|string',
+                'address' => 'required|string',
+                'description' => 'nullable|string',
+                'qualifications' => 'nullable|string',
+                'specialization' => 'nullable|array',
+                'certifications' => 'nullable|array',
+                'website' => 'nullable|url',
+                'established' => 'nullable|date',
+                'experience' => 'nullable|integer',
+                'profile_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048',
+                'cover_image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:4096',
+                'available_time' => 'nullable|array',
+            ]);
+
+            // Handle arrays
+            $validated['specialization'] = json_encode($validated['specialization'] ?? []);
+            $validated['certifications'] = json_encode($validated['certifications'] ?? []);
+            $validated['available_time'] = json_encode($validated['available_time'] ?? []);
+
+            // Handle file uploads
+            if ($request->hasFile('profile_image')) {
+                $file = $request->file('profile_image');
+                // Additional validation
+                if ($file->isValid() && $file->getSize() <= 2048 * 1024) {
+                    $validated['profile_image'] = $file->store('advisors', 'public');
+                } else {
+                    return back()->withErrors(['profile_image' => 'Invalid profile image file.']);
+                }
+            }
+
+            if ($request->hasFile('cover_image')) {
+                $file = $request->file('cover_image');
+                // Additional validation
+                if ($file->isValid() && $file->getSize() <= 4096 * 1024) {
+                    $validated['cover_image'] = $file->store('advisors', 'public');
+                } else {
+                    return back()->withErrors(['cover_image' => 'Invalid cover image file.']);
+                }
+            }
+
+            // Add the user_id
+            $validated['user_id'] = $user->id;
+
+            $advisor = Advisor::create($validated);
+
+            Log::info('Advisor profile created successfully', ['advisor_id' => $advisor->id]);
+
+            return redirect()->route('advisors.profile.show')
+                ->with('success', 'Advisor profile created successfully!');
+        } catch (\Exception $e) {
+            Log::error('Advisor profile creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return back()->withErrors(['general' => 'An error occurred: ' . $e->getMessage()]);
+        }
+>>>>>>> AG-26
     }
 
     public function profile()
@@ -79,6 +163,7 @@ class AdvisorController extends Controller
             ? asset('storage/' . $advisor->cover_image)
             : null;
 
+<<<<<<< HEAD
         $advisor->load([
             'consultationAvailabilities.timeSlots'
         ]);
@@ -86,6 +171,10 @@ class AdvisorController extends Controller
         return Inertia::render('Advisor/Profile', [
             'advisor' => $advisor,
             'availabilities' => $advisor->consultationAvailabilities,
+=======
+        return Inertia::render('Advisor/Profile', [
+            'advisor' => $advisor,
+>>>>>>> AG-26
         ]);
     }
 
@@ -187,6 +276,7 @@ class AdvisorController extends Controller
             ->with('status_key', 'certifications.updated_successfully');
     }
 
+<<<<<<< HEAD
     public function storeAvailability(Request $request)
     {
         $advisor = auth()->user()->advisor;
@@ -296,3 +386,49 @@ class AdvisorController extends Controller
     }
 
 }
+=======
+    /**
+     * Display public advisor profile
+     */
+    public function show(Advisor $advisor)
+    {
+        try {
+            // Load user relationship if user_id exists
+            if ($advisor->user_id) {
+                $advisor->load('user');
+            }
+
+            // Ensure image URLs are set
+            if ($advisor->profile_image && !$advisor->profile_image_url) {
+                $advisor->profile_image_url = asset('storage/' . $advisor->profile_image);
+            }
+            if ($advisor->cover_image && !$advisor->cover_image_url) {
+                $advisor->cover_image_url = asset('storage/' . $advisor->cover_image);
+            }
+
+            // Parse JSON fields to arrays if they're strings
+            if (is_string($advisor->specialization)) {
+                $advisor->specialization = json_decode($advisor->specialization, true) ?? [];
+            }
+            if (is_string($advisor->certifications)) {
+                $advisor->certifications = json_decode($advisor->certifications, true) ?? [];
+            }
+            if (is_string($advisor->available_time)) {
+                $advisor->available_time = json_decode($advisor->available_time, true) ?? [];
+            }
+
+            return Inertia::render('Advisor/PublicProfile', [
+                'advisor' => $advisor,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error loading advisor profile', [
+                'advisor_id' => $advisor->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return back()->withErrors(['error' => 'Failed to load advisor profile.']);
+        }
+    }
+}
+>>>>>>> AG-26

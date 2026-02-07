@@ -36,9 +36,23 @@ class SupplierController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->only([
+<<<<<<< HEAD
                 'business_name','contact_person','email','phone',
                 'address','district','province','description',
                 'website','established','experience'
+=======
+                'business_name',
+                'contact_person',
+                'email',
+                'phone',
+                'address',
+                'district',
+                'province',
+                'description',
+                'website',
+                'established',
+                'experience'
+>>>>>>> AG-26
             ]);
 
             $data['user_id'] = auth()->id();
@@ -80,9 +94,23 @@ class SupplierController extends Controller
     public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
         $data = $request->only([
+<<<<<<< HEAD
             'business_name','contact_person','email','phone',
             'address','district','province','description',
             'website','established','experience'
+=======
+            'business_name',
+            'contact_person',
+            'email',
+            'phone',
+            'address',
+            'district',
+            'province',
+            'description',
+            'website',
+            'established',
+            'experience'
+>>>>>>> AG-26
         ]);
 
         // Normalize and encode arrays
@@ -103,7 +131,11 @@ class SupplierController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('suppliers/cover', 'public');
         }
 
+<<<<<<< HEAD
        $supplier->update($data);
+=======
+        $supplier->update($data);
+>>>>>>> AG-26
 
         return redirect()->route('suppliers.profile.show')->with('status_key', 'supplier.updated_successfully');
     }
@@ -142,22 +174,53 @@ class SupplierController extends Controller
         return [];
     }
 
+<<<<<<< HEAD
      public function profile()
+=======
+    public function profile()
+>>>>>>> AG-26
     {
         $supplier = Supplier::where('user_id', auth()->id())->first();
         if ($supplier) {
             $supplier->profile_image = $supplier->profile_image ? asset('storage/' . $supplier->profile_image) : null;
             $supplier->cover_image = $supplier->cover_image ? asset('storage/' . $supplier->cover_image) : null;
+<<<<<<< HEAD
+=======
+
+            // Load ratings with user info
+            $supplier->load(['ratings.user']);
+>>>>>>> AG-26
         }
         $products = $supplier ? $supplier->products : [];
         $flash = session()->has('status_key') ? ['status_key' => session('status_key')] : null;
 
         // Fetch orders containing this supplier's products, with only their items
+<<<<<<< HEAD
         $supplierOrders = Order::whereHas('items', function ($query) use ($supplier) {
             $query->where('supplier_id', $supplier->id);
         })->with(['items' => function ($query) use ($supplier) {
             $query->where('supplier_id', $supplier->id)->with('product');
         }])->latest()->get();
+=======
+        $supplierOrders = collect([]);
+        if ($supplier) {
+            $supplierOrders = Order::whereHas('items', function ($query) use ($supplier) {
+                $query->where('supplier_id', $supplier->id);
+            })->with([
+                'user', // Load buyer/user information
+                'items' => function ($query) use ($supplier) {
+                    $query->where('supplier_id', $supplier->id)->with('product');
+                }
+            ])->latest()->get();
+
+            // Append status_label and status_color to each order
+            $supplierOrders = $supplierOrders->map(function ($order) {
+                $order->status_label = $order->status_label;
+                $order->status_color = $order->status_color;
+                return $order;
+            });
+        }
+>>>>>>> AG-26
 
         return Inertia::render('Supplier/Profile', [
             'supplier' => $supplier,
@@ -166,4 +229,8 @@ class SupplierController extends Controller
             'orders' => $supplierOrders,
         ]);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> AG-26

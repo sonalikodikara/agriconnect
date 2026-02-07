@@ -48,7 +48,10 @@
   "Log Out": "ඉවත් වන්න",
   "Dashboard": "ඩැෂ්බෝඩ්",
   "Welcome": "ආයුබෝවන්",
+<<<<<<< HEAD
   "Profile Overview": "පැතිකඩ සමාලෝචනය",
+=======
+>>>>>>> AG-26
 
   
   
@@ -70,9 +73,12 @@
   "Certifications": "සහතික පත්",
   "Save": "පැතිකඩ සුරකින්න",
   "Add": "එක් කරන්න",
+<<<<<<< HEAD
   "Account Settings": "ගිණුම් සැකසුම්",
   "Edit Supplier Profile": "පැතිකඩ සංස්කරණය කරන්න",
   "Logout": "ඉවත් වන්න",
+=======
+>>>>>>> AG-26
 
   
   "Western Province": "බස්නාහිර පළාත",
@@ -131,12 +137,15 @@
   "Advisor Info": "උපදේශකයාගේ තොරතුරු",
   "Qualifications": "සුදුසුකම්",
   "Cancel": "අවලංගු කරන්න",
+<<<<<<< HEAD
   "Add Your First Product": "ඔබේ පළමු නිෂ්පාදනය එක් කරන්න",
   "No products yet.": "තවම නිෂ්පාදන නැත.",
   "No orders yet.": "තවම ඇණවුම් නැත.",
   "View Details": "විස්තර බලන්න",
   "Add to Cart": "සැපයුම් කරණයට එක් කරන්න",
 
+=======
+>>>>>>> AG-26
 
   "No supplier profile found.": "සැපයුම්කරුවන්ගේ පැතිකඩක් සොයාගත නොහැක.",
   "Add Product": "නිෂ්පාදනයක් එක් කරන්න",
@@ -149,9 +158,12 @@
   "Overview": "සමාලෝචනය",
   "Add products": "නිෂ්පාදන",
   "My Products": "මගේ නිෂ්පාදන",
+<<<<<<< HEAD
   "Update Product": "නිෂ්පාදනය යාවත්කාලීන කරන්න",
   "Delete": "ඉවත් කරන්න",
   "Are you sure you want to delete this product?": "ඔබට විශ්වාසද මෙම නිෂ්පාදනය මකන ලෙසට?",
+=======
+>>>>>>> AG-26
   "Orders": "ඇණවුම්",
   "Analytics": "විශ්ලේෂණ",
   "Edit Profile": "පැතිකඩ සංස්කරණය කරන්න",
@@ -198,6 +210,7 @@
   "Instructions": "උපදෙස්",
   "Safety & Storage": "ආරක්ෂාව සහ ගබඩා කිරීම",
   "Save Product": "නිෂ්පාදනය සුරකින්න",
+<<<<<<< HEAD
   "Back to My Products": "මගේ නිෂ්පාදන වෙත පිටවන්න",
   "Farming Products": "ගොවි උපකරණ හා නිෂ්පාදන",
   "Machinery": "යන්ත්‍රෝපකරණ",
@@ -229,6 +242,8 @@
   "Tool type is required": "මෙවලම් වර්ගය අවශ්‍යයි",
   "Power source is required": "බල මූලාශ්‍රය අවශ්‍යයි",
   "My Products": "මගේ නිෂ්පාදන",
+=======
+>>>>>>> AG-26
 
   "Fertilizer": "පොහොර",
   "Seeds": "බීජ",
@@ -288,6 +303,7 @@
   "item_removed": "අයිතමය සැපයුම් කරණයෙන් ඉවත් කරන ලදී.",
 
   "Specializations": "විශේෂීකරණ",
+<<<<<<< HEAD
   "Availability Saved Successfully": "ලබා ගැනීම සාර්ථකව සුරැකිණි",
   "Availability Updated Successfully": "ලබා ගැනීම සාර්ථකව යාවත්කාලීන කරන ලදී",
  
@@ -351,3 +367,66 @@
 }
 
 
+=======
+  "My Orders": "මගේ ඇණවුම්",
+  "Order": "ඇණවුම",
+  "Placed on {{date}}": "{{date}} දින තබන ලදී",
+  "Updated": "යාවත්කාලීන කරන ලදී",
+  "Items": "අයිතම",
+  "Delivery Address": "බෙදාහැරීමේ ලිපිනය",
+  "Total Amount": "සම්පූර්ණ මුදල",
+  "Contact via WhatsApp": "WhatsApp හරහා සම්බන්ධ වන්න",
+  "No orders yet": "තවමත් ඇණවුම් නැත",
+  "Start Shopping": "සාප්පුවට යන්න",
+  "Refreshing...": "යාවත්කාලීන කරමින්...",
+  "Refresh": "යාවත්කාලීන කරන්න",
+  "Last updated": "අවසන් වරට යාවත්කාලීන කරන ලද්දේ",
+  "Order status updated: {{status}}": "ඇණවුම් තත්ත්වය යාවත්කාලීන කරන ලදී: {{status}}",
+  "Pending": "පොරොත්තුවෙන්",
+  "Accepted": "පිළිගත්",
+  "Packed": "ඇසුරුම් කරන ලදී",
+  "Dispatched": "යවන ලදී",
+  "Out for Delivery": "බෙදාහැරීමට පිටත් වී ඇත",
+  "Delivered": "බෙදාහැරීම සිදු කරන ලදී",
+  "Cancelled": "අවලංගු කරන ලදී",
+  "Please select a rating": "කරුණාකර ශ්‍රේණිගත කිරීමක් තෝරන්න",
+  "rating.submitted_successfully": "ශ්‍රේණිගත කිරීම සාර්ථකව ඉදිරිපත් කරන ලදී!",
+  "Rate this Order": "මෙම ඇණවුම ශ්‍රේණිගත කරන්න",
+  "Rate Your Experience": "ඔබේ අත්දැකීම ශ්‍රේණිගත කරන්න",
+  "Rating": "ශ්‍රේණිගත කිරීම",
+  "Selected": "තෝරාගත්",
+  "stars": "තරු",
+  "Review": "සමාලෝචනය",
+  "Optional": "විකල්ප",
+  "Share your experience with this order...": "මෙම ඇණවුම සමඟ ඔබේ අත්දැකීම බෙදාගන්න...",
+  "Submit Rating": "ශ්‍රේණිගත කිරීම ඉදිරිපත් කරන්න",
+  "You have rated this order": "ඔබ මෙම ඇණවුම ශ්‍රේණිගත කර ඇත",
+  "Your rating": "ඔබේ ශ්‍රේණිගත කිරීම",
+  "reviews": "සමාලෝචන",
+  "Advisors & Consultants": "උපදේශකයින් සහ උපදේශකයින්",
+  "Agricultural Advisors": "කෘෂිකාර්මික උපදේශකයින්",
+  "Connect with experienced farming experts in your area": "ඔබේ ප්‍රදේශයේ අත්දැකීම් සහිත ගොවිතැන් විශේෂඥයින් සමඟ සම්බන්ධ වන්න",
+  "Filter Advisors": "උපදේශකයින් පෙරහන් කරන්න",
+  "All Specialties": "සියලුම විශේෂතා",
+  "All Provinces": "සියලුම පළාත්",
+  "Clear Filters": "පෙරහන් මකන්න",
+  "Expert": "විශේෂඥ",
+  "Experienced agricultural consultant": "අත්දැකීම් සහිත කෘෂිකාර්මික උපදේශක",
+  "View Full Profile": "සම්පූර්ණ පැතිකඩ බලන්න",
+  "WhatsApp": "WhatsApp",
+  "Email": "ඊමේල්",
+  "Not specified": "නිශ්චිතව දක්වා නැත",
+  "Advisor Profile": "උපදේශක පැතිකඩ",
+  "Back to Advisors": "උපදේශකයින් වෙත ආපසු",
+  "years of experience": "අත්දැකීම් වසර",
+  "Available Time": "ලබා ගත හැකි කාලය",
+  "About": "පිළිබඳ",
+  "Send Email": "ඊමේල් යවන්න",
+  "Login": "ඇතුල් වන්න",
+  "Buyer Details": "ගැනුම්කරුගේ තොරතුරු",
+  "N/A": "ලබා ගත නොහැක"
+  
+  
+}
+
+>>>>>>> AG-26

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+<<<<<<< HEAD
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
@@ -14,6 +15,17 @@ use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
+=======
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+
+class CheckoutController extends Controller
+{
+    /**
+     * Show the checkout page with cart items and total.
+     */
+>>>>>>> AG-26
     public function index()
     {
         $cartItems = CartItem::with('product')
@@ -21,11 +33,18 @@ class CheckoutController extends Controller
             ->get();
 
         if ($cartItems->isEmpty()) {
+<<<<<<< HEAD
             return redirect()->route('buyers.cart');
+=======
+            return redirect()
+                ->route('buyers.cart')
+                ->with('error', 'Your cart is empty.');
+>>>>>>> AG-26
         }
 
         $total = $cartItems->sum(fn($item) => $item->quantity * $item->product->price);
 
+<<<<<<< HEAD
         return inertia('Buyer/Checkout', [
             'cartItems' => $cartItems,
             'total' => $total,
@@ -127,3 +146,11 @@ class CheckoutController extends Controller
         }
     }
 }
+=======
+        return Inertia::render('Buyer/Checkout', [
+            'cartItems' => $cartItems,
+            'total'     => $total,
+        ]);
+    }
+}
+>>>>>>> AG-26
