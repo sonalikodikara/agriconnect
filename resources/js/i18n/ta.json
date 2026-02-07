@@ -49,11 +49,6 @@
   "Log Out": "வெளியேறு",
   "Dashboard": "டாஷ்போர்டு",
   "Welcome": "வணக்கம்",
-<<<<<<< HEAD
-  "Profile Overview": "சுயவிவர கண்ணோட்டம்",
-
-=======
->>>>>>> AG-26
 
   "Profile Image": "பிரொஃபைல் படம்",
   "Cover Image": "கவர் படம்",
@@ -142,12 +137,6 @@
   "Overview": "கண்ணோட்டம்",
   "Add products": "பொருட்கள்",
   "My Products": "என் பொருட்கள்",
-<<<<<<< HEAD
-  "Update Product": "பொருளை புதுப்பிக்கவும்",
-  "Delete": "தவிர்க்கவும்",
-  "Are you sure you want to delete this product?": "இந்த பொருளை நீக்குவது பற்றி̄ நிச்சயமாக இருக்கிறீர்களா?",
-=======
->>>>>>> AG-26
   "Orders": "ஆர்டர்கள்",
   "Analytics": "பகுப்பாய்வு",
   "Edit Profile": "சுயவிவரத்தைத் திருத்தவும்",
@@ -186,16 +175,6 @@
   "Soil Type": "மண் வகை",
   "Instructions": "வழிகாட்டல்கள்",
   "Safety & Storage": "பாதுகாப்பு மற்றும் சேமிப்பு",
-<<<<<<< HEAD
-  "Add Your First Product": "உங்கள் முதல் தயாரிப்பைச் சேர்க்கவும்",
-  "No products yet.": "இன்னும் பொருட்கள் இல்லை.",
-  "No orders yet.": "இன்னும் ஆர்டர்கள் இல்லை.",
-  "View Details": "விவரங்களைப் பார்க்கவும்",
-  "Add to Cart": "வண்டியில் சேர்க்கவும்",  
-  
-=======
-
->>>>>>> AG-26
   "Product Name": "தயாரிப்பு பெயர்",
   "Category": "வகை",
   "Price (LKR)": "விலை (LKR)",
@@ -204,39 +183,6 @@
   "Certificates & Test Reports": "சான்றிதழ்கள் மற்றும் சோதனை அறிக்கைகள்",
   "Suitability Information (Soil Type)": "தகுதி தகவல் (மண் வகை)",
   "Save Product": "தயாரிப்பை சேமிக்கவும்",
-<<<<<<< HEAD
-  "Back to My Products": "என் பொருட்களுக்கு திரும்பவும்",
-  "Farming Products": "விவசாயப் பொருட்கள்",
-  "Machinery": "இயந்திரங்கள்",
-  "Farming Tools": "விவசாய கருவிகள்",
-  "Vehicle Name / Model": "வாகன பெயர் / மாதிரி",
-  "Vehicle Type": "வாகன வகை",
-  "Date Published / Listed": "பதிவான தேதி",
-  "Engine Power (HP)": "எஞ்சின் சகதி (HP)",
-  "Condition": "நிலைமை",
-  "Available Quantity": "கிடைக்கும் அளவு",
-  "Available for Rent": "வாடகைக்கு கிடைக்கிறது",
-  "Rental Price per Day (LKR)": "தினத்திற்கு வாடகை (LKR)",
-  "Tool Name": "கருவி பெயர்",
-  "Tool Type": "கருவி வகை",
-  "Power Source": "சக்தி மூலதனம்",
-  "Working Width (cm)": "செயல்பாட்டு அகலம் (cm)",
-  "Primary image is required": "முதன்மை படம் தேவை",
-  "Valid price is required": "சரியான விலை தேவை",
-  "Description is required": "விளக்கம் தேவை",
-  "Product name is required": "பொருள் பெயர் தேவை",
-  "Category is required": "வகை தேவை",
-  "Quality grade is required": "தர வகை தேவை",
-  "Valid quantity is required": "சரியான அளவு தேவை",
-  "Vehicle name/model is required": "வாகன பெயர்/மாடல் தேவை",
-  "Vehicle type is required": "வாகன வகை தேவை",
-  "Published date is required": "பதிவுசெய்யப்பட்ட தேதி தேவை",
-  "Quantity must be at least 1": "அளவு குறைந்தது 1 இருக்க வேண்டும்",
-  "Tool name is required": "கருவியின் பெயர் தேவை",
-  "Tool type is required": "கருவி வகை தேவை",
-  "Power source is required": "மின்சாரம் மூலதனம் தேவை",
-=======
->>>>>>> AG-26
 
   
   "Fertilizer": "உரம்",
@@ -261,12 +207,6 @@
   "Vegetable Seeds": "காய்கறி விதைகள்",
   "Fruit Plants": "பழ மரக்கன்றுகள்",
   "Add": "சேர்க்கவும்",
-<<<<<<< HEAD
-  "Account Settings": "கணக்கு அமைப்புகள்",
-  "Edit Supplier Profile": "சப்ளையர் پروஃபைலைத் திருத்தவும்",
-  "Logout": "வெளியேறு",
-=======
->>>>>>> AG-26
 
   "Premium Grade": "பிரீமியம் தரம்",
   "Grade A": "A தரம்",
@@ -304,68 +244,6 @@
   "item_removed": "பொருள் வண்டியிலிருந்து நீக்கப்பட்டது.",
 
   "Specializations": "நிபுணத்துவங்கள்",
-<<<<<<< HEAD
-  "Availability Saved Successfully": "கிடைக்கும் நேரம் வெற்றிகரமாக சேமிக்கப்பட்டது",
-  "Availability Updated Successfully": "கிடைக்கும் நேரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
-
-  
-  "Saved Availability": "சேமிக்கப்பட்ட நேரங்கள்",
-  "date": "குறிப்பிட்ட தேதி",
-  "week": "வாராந்திரம்",
-  "month": "மாதாந்திரம்",
-
-  
-  "weekday": {
-    "mon": "திங்கள்",
-    "tue": "செவ்வாய்",
-    "wed": "புதன்",
-    "thu": "வியாழன்",
-    "fri": "வெள்ளி",
-    "sat": "சனி",
-    "sun": "ஞாயிறு"
-  },
-  "month": {
-    "jan": "ஜனவரி",
-    "feb": "பிப்ரவரி",
-    "mar": "மார்ச்",
-    "apr": "ஏப்ரல்",
-    "may": "மே",
-    "jun": "ஜூன்",
-    "jul": "ஜூலை",
-    "aug": "ஆகஸ்ட்",
-    "sep": "செப்டம்பர்",
-    "oct": "அக்டோபர்",
-    "nov": "நவம்பர்",
-    "dec": "டிசம்பர்"
-  }, 
-
-  "Checkout": "செக்அவுட்",
-  "Order Summary": "ஆர்டர் சுருக்கம்",
-  "Delivery": "விநியோகம்",
-  "Free": "இலவசம்",
-  "Total": "மொத்தம்",
-  "Delivery Information": "விநியோக தகவல்",
-  "Full Name": "முழு பெயர்",
-  "John Doe": "ஜான் டோ",
-  "WhatsApp Number": "வாட்ஸ்அப் எண்",
-  "0712345678": "0712345678",
-  "Delivery Address": "விநியோக முகவரி",
-  "123, Main Street, Colombo": "123, மெயின் தெரு, கொழும்பு",
-  "Payment Method": "பணம் செலுத்தும் முறை",
-  "Credit/Debit Card": "கிரெடிட்/டெபிட் கார்டு",
-  "Cash on Delivery": "டெலிவரியில் பணம்",
-  "Card Details": "கார்டு விவரங்கள்",
-  "Card Holder Name": "கார்டு வைத்திருப்பவரின் பெயர்",
-  "Card Number": "கார்டு எண்",
-  "1234567890123456": "1234567890123456",
-  "Expiry (MM/YY)": "காலாவதியாகும் தேதி (MM/YY)",
-  "12/25": "12/25",
-  "CVV": "CVV",
-  "123": "123",
-  "Processing...": "செயலாக்கப்படுகிறது...",
-  "Place Order": "ஆர்டர் செய்"
-
-=======
   "My Orders": "எனது ஆர்டர்கள்",
   "Order": "ஆர்டர்",
   "Placed on {{date}}": "{{date}} அன்று வைக்கப்பட்டது",
@@ -423,6 +301,5 @@
   "Login": "உள்நுழைய",
   "Buyer Details": "வாங்குபவர் விவரங்கள்",
   "N/A": "இல்லை"
->>>>>>> AG-26
 
 }

@@ -11,10 +11,7 @@ use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\RatingController;
->>>>>>> AG-26
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -56,19 +53,8 @@ Route::prefix('supplier')->name('suppliers.')->group(function () {
     Route::get('/{supplier}', [SupplierController::class, 'show'])->name('show');
     Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
 
-<<<<<<< HEAD
-
-    // Product routes (nested under supplier)
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-=======
     // Product routes (nested under supplier)
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
->>>>>>> AG-26
 });
 
 // Buyer routes (including prefixed cart routes)
@@ -86,18 +72,10 @@ Route::prefix('buyer')->name('buyers.')->middleware('auth')->group(function () {
 
     // Checkout route - FIXED: point to 'index' method
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-<<<<<<< HEAD
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('orders.store');
-
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-=======
->>>>>>> AG-26
 
     // Orders routes (note: you had duplicate '/orders' GET)
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-<<<<<<< HEAD
-=======
 
     // Rating routes
     Route::post('/orders/{order}/rating', [RatingController::class, 'store'])->name('orders.rating.store');
@@ -106,7 +84,6 @@ Route::prefix('buyer')->name('buyers.')->middleware('auth')->group(function () {
 // Supplier order status update route
 Route::middleware('auth')->group(function () {
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
->>>>>>> AG-26
 });
 
 // Advisor routes
@@ -121,18 +98,6 @@ Route::prefix('advisor')->name('advisors.')->middleware('auth')->group(function 
 
     Route::get('/certifications', [AdvisorController::class, 'certifications'])->name('certifications.edit');
     Route::post('/certifications', [AdvisorController::class, 'updateCertifications'])->name('certifications.update');
-<<<<<<< HEAD
-
-    // Consultation availability routes
-    Route::get('/profile', [AdvisorController::class, 'profile'])->name('profile.show');
-    Route::post('/consultation-availability', [AdvisorController::class, 'storeAvailability'])->name('availability.store');
-    Route::put('/consultation-availability/{id}', [AdvisorController::class, 'updateAvailability'])->name('availability.update');
-    Route::delete(
-        '/consultation-availability/{id}',
-        [AdvisorController::class, 'destroyAvailability']
-    )->name('availability.destroy');
-=======
->>>>>>> AG-26
 });
 
 // Admin routes
@@ -150,13 +115,6 @@ Route::prefix('list')->name('list.')->group(function () {
     Route::get('/pesticides', [ProductListController::class, 'pesticides'])->name('pesticides');
     Route::get('/others', [ProductListController::class, 'others'])->name('others');
 });
-<<<<<<< HEAD
-
-// Product detail page
-Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
-
-=======
->>>>>>> AG-26
 Route::get('/advisor/{advisor}', [AdvisorController::class, 'show'])->name('advisor.show');
 
 require __DIR__ . '/auth.php';
