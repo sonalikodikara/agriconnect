@@ -25,11 +25,8 @@ export default function AdvisorProfile() {
   const [newCertification, setNewCertification] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [coverImage, setCoverImage] = useState<File | null>(null);
-<<<<<<< HEAD
-=======
   const [availableTime, setAvailableTime] = useState<{ day: string; start: string; end: string }[]>([]);
   const [newTimeSlot, setNewTimeSlot] = useState({ day: '', start: '', end: '' });
->>>>>>> AG-26
 
   const [errors, setErrors] = useState<any>({});
 
@@ -87,8 +84,6 @@ export default function AdvisorProfile() {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleAddTimeSlot = () => {
     if (newTimeSlot.day && newTimeSlot.start && newTimeSlot.end) {
       setAvailableTime([...availableTime, { ...newTimeSlot }]);
@@ -110,7 +105,6 @@ export default function AdvisorProfile() {
     { key: 'Sunday', label: t('Sunday') },
   ];
 
->>>>>>> AG-26
   const validateForm = () => {
     const newErrors: any = {};
 
@@ -131,12 +125,6 @@ export default function AdvisorProfile() {
     return Object.keys(newErrors).length === 0;
   };
 
-<<<<<<< HEAD
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-=======
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -145,7 +133,6 @@ export default function AdvisorProfile() {
     }
 
     console.log('Submitting form...');
->>>>>>> AG-26
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
@@ -160,21 +147,6 @@ export default function AdvisorProfile() {
 
     specialization.forEach((spec, i) => formData.append(`specialization[${i}]`, spec));
     certifications.forEach((cert, i) => formData.append(`certifications[${i}]`, cert));
-<<<<<<< HEAD
-
-    if (profileImage) formData.append('profile_image', profileImage);
-    if (coverImage) formData.append('cover_image', coverImage);
-
-    router.post(route('advisors.store'), formData, {
-      onSuccess: () => {
-        toast({ title: t('Success'), description: t('Advisor profile created successfully!') });
-        router.visit(route('advisors.profile.show'));
-      },
-      onError: (err) => {
-        setErrors(err);
-        toast({ title: t('Error'), description: t('Please fix the errors below') });
-      },
-=======
     
     // Add available_time as array
     availableTime.forEach((slot, i) => {
@@ -232,7 +204,6 @@ export default function AdvisorProfile() {
       onFinish: () => {
         console.log('Request finished');
       },
->>>>>>> AG-26
     });
   };
 
@@ -265,13 +236,6 @@ export default function AdvisorProfile() {
                   )}
                   <input
                     type="file"
-<<<<<<< HEAD
-                    accept="image/*"
-                    onChange={(e) => setProfileImage(e.target.files?.[0] || null)}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                  />
-                </div>
-=======
                     accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
@@ -294,7 +258,6 @@ export default function AdvisorProfile() {
                   />
                 </div>
                 {errors.profile_image && <p className="text-red-600 text-sm mt-2">{errors.profile_image}</p>}
->>>>>>> AG-26
               </div>
 
               <div className="bg-gray-50 rounded-2xl p-6 text-center">
@@ -307,13 +270,6 @@ export default function AdvisorProfile() {
                   )}
                   <input
                     type="file"
-<<<<<<< HEAD
-                    accept="image/*"
-                    onChange={(e) => setCoverImage(e.target.files?.[0] || null)}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                  />
-                </div>
-=======
                     accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
@@ -336,7 +292,6 @@ export default function AdvisorProfile() {
                   />
                 </div>
                 {errors.cover_image && <p className="text-red-600 text-sm mt-2">{errors.cover_image}</p>}
->>>>>>> AG-26
               </div>
             </div>
 
@@ -529,8 +484,6 @@ export default function AdvisorProfile() {
               </div>
             </div>
 
-<<<<<<< HEAD
-=======
             {/* Available Time */}
             <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-6 border-4 border-blue-200">
               <label className="block text-xl font-semibold mb-4 text-blue-800">{t("Available Time")}</label>
@@ -586,7 +539,6 @@ export default function AdvisorProfile() {
               </div>
             </div>
 
->>>>>>> AG-26
             <div className="flex justify-center gap-6 pt-8">
               <button
                 type="button"

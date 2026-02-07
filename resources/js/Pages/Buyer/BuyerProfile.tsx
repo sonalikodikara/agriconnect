@@ -18,35 +18,24 @@ export default function BuyerDashboard() {
   const { t } = useTranslation();
   const goHome = () => router.visit("/home");
 
-<<<<<<< HEAD
-  const { auth, orders = [], cartCount = 0 } = usePage<{
-=======
   const pageProps = usePage<{
->>>>>>> AG-26
     auth: { user?: { name?: string; email?: string } }; // Make user optional
     orders: Array<{
       id: number;
       items: string;
       total: number;
-<<<<<<< HEAD
-      status: 'pending' | 'processing' | 'shipped' | 'delivered';
-=======
       status: string;
->>>>>>> AG-26
       created_at: string;
     }>;
     cartCount?: number;
   }>().props;
 
-<<<<<<< HEAD
-=======
   const { auth, orders = [], cartCount = 0 } = pageProps;
 
   // Debug: Log orders to console
   console.log('Buyer Dashboard - Orders received:', orders);
   console.log('Buyer Dashboard - Orders count:', orders.length);
 
->>>>>>> AG-26
   // Critical: Guard against auth.user being undefined
   if (!auth?.user) {
     // Optional: Show loading or redirect
@@ -72,10 +61,6 @@ export default function BuyerDashboard() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered': return 'bg-green-100 text-green-800';
-<<<<<<< HEAD
-      case 'shipped': return 'bg-blue-100 text-blue-800';
-      case 'processing': return 'bg-yellow-100 text-yellow-800';
-=======
       case 'accepted': return 'bg-blue-100 text-blue-800';
       case 'packed': return 'bg-indigo-100 text-indigo-800';
       case 'dispatched': return 'bg-purple-100 text-purple-800';
@@ -84,15 +69,11 @@ export default function BuyerDashboard() {
       case 'processing': return 'bg-yellow-100 text-yellow-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       case 'cancelled': return 'bg-red-100 text-red-800';
->>>>>>> AG-26
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusText = (status: string) => {
-<<<<<<< HEAD
-    return t(status.charAt(0).toUpperCase() + status.slice(1));
-=======
     const statusLabels: { [key: string]: string } = {
       'pending': t('Pending'),
       'accepted': t('Accepted'),
@@ -105,7 +86,6 @@ export default function BuyerDashboard() {
       'processing': t('Processing'),
     };
     return statusLabels[status] || t(status.charAt(0).toUpperCase() + status.slice(1));
->>>>>>> AG-26
   };
 
   return (
