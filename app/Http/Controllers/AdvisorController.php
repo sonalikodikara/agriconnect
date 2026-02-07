@@ -3,74 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-<<<<<<< HEAD
-use Inertia\Inertia;
-use App\Models\Advisor;
-use App\Models\ConsultationAvailability;
-use App\Models\ConsultationTimeSlot;
-use Carbon\Carbon;
-use Illuminate\Validation\ValidationException;
-=======
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use App\Models\Advisor;
->>>>>>> AG-26
 
 class AdvisorController extends Controller
 {
     public function index()
     {
-<<<<<<< HEAD
-        return Inertia::render('Dashboard/AdvisorProfile');
-=======
         return Inertia::render('Advisor/AdvisorProfile');
->>>>>>> AG-26
     }
 
     public function store(Request $request)
     {
-<<<<<<< HEAD
-        $user = auth()->user();
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:advisors,email',
-            'phone' => 'required|string|max:20',
-            'district' => 'required|string',
-            'province' => 'required|string',
-            'address' => 'required|string',
-            'description' => 'nullable|string',
-            'qualifications' => 'nullable|string',
-            'specialization' => 'nullable|array',
-            'certifications' => 'nullable|array',
-            'website' => 'nullable|url',
-            'established' => 'nullable|date',
-            'experience' => 'nullable|integer',
-            'profile_image' => 'nullable|image|max:2048',
-            'cover_image' => 'nullable|image|max:4096',
-        ]);
-
-        // Handle arrays
-        $validated['specialization'] = json_encode($validated['specialization'] ?? []);
-        $validated['certifications'] = json_encode($validated['certifications'] ?? []);
-
-        // Handle file uploads
-        if ($request->hasFile('profile_image')) {
-            $validated['profile_image'] = $request->file('profile_image')->store('advisors', 'public');
-        }
-
-        if ($request->hasFile('cover_image')) {
-            $validated['cover_image'] = $request->file('cover_image')->store('advisors', 'public');
-        }
-
-        // Add the user_id
-        $validated['user_id'] = $user->id;
-
-        $advisor = Advisor::create($validated);
-
-        return redirect()->route('advisors.profile.show')
-            ->with('success', 'Advisor profile created successfully!');
-=======
         try {
             $user = auth()->user();
 
@@ -142,7 +87,6 @@ class AdvisorController extends Controller
 
             return back()->withErrors(['general' => 'An error occurred: ' . $e->getMessage()]);
         }
->>>>>>> AG-26
     }
 
     public function profile()
@@ -163,18 +107,8 @@ class AdvisorController extends Controller
             ? asset('storage/' . $advisor->cover_image)
             : null;
 
-<<<<<<< HEAD
-        $advisor->load([
-            'consultationAvailabilities.timeSlots'
-        ]);
-
         return Inertia::render('Advisor/Profile', [
             'advisor' => $advisor,
-            'availabilities' => $advisor->consultationAvailabilities,
-=======
-        return Inertia::render('Advisor/Profile', [
-            'advisor' => $advisor,
->>>>>>> AG-26
         ]);
     }
 
@@ -276,117 +210,6 @@ class AdvisorController extends Controller
             ->with('status_key', 'certifications.updated_successfully');
     }
 
-<<<<<<< HEAD
-    public function storeAvailability(Request $request)
-    {
-        $advisor = auth()->user()->advisor;
-
-        $validated = $request->validate([
-            'type' => 'required|in:date,week,month',
-            'specific_date' => 'nullable|required_if:type,date|date',
-            'weekdays' => 'nullable|array',
-            'weekdays.*' => 'string',
-            'months' => 'nullable|required_if:type,month|array',
-            'months.*' => 'string',
-            'time_slots' => 'required|array|min:1',
-            'time_slots.*.start' => 'required|date_format:H:i',
-            'time_slots.*.end' => 'required|date_format:H:i',
-        ]);
-
-        // Manual same-day time validation
-        foreach ($validated['time_slots'] as $index => $slot) {
-            $start = \Carbon\Carbon::createFromFormat('H:i', $slot['start']);
-            $end   = \Carbon\Carbon::createFromFormat('H:i', $slot['end']);
-
-            if ($end->lessThanOrEqualTo($start)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    "time_slots.$index.end" => "End time must be after start time."
-                ]);
-            }
-        }
-
-        $availability = ConsultationAvailability::create([
-            'advisor_id' => $advisor->id,
-            'type' => $validated['type'],
-            'specific_date' => $validated['specific_date'] ?? null,
-            'weekdays' => $validated['weekdays'] ?? null,
-            'months' => $validated['months'] ?? [],
-        ]);
-
-        foreach ($validated['time_slots'] as $slot) {
-            $availability->timeSlots()->create([
-                'start_time' => $slot['start'],
-                'end_time' => $slot['end'],
-            ]);
-        }
-
-        return redirect()
-            ->route('advisors.profile.show')
-            ->with('status_key', 'Availability Saved Successfully');
-    }
-
-    public function updateAvailability(Request $request, $id)
-    {
-        $availability = ConsultationAvailability::where('advisor_id', auth()->user()->advisor->id)
-            ->findOrFail($id);
-
-        $validated = $request->validate([
-            'type' => 'required|in:date,week,month',
-            'specific_date' => 'nullable|required_if:type,date|date',
-            'weekdays' => 'nullable|array',
-            'months' => 'nullable|array',
-            'time_slots' => 'required|array|min:1',
-            'time_slots.*.start' => 'required|date_format:H:i',
-            'time_slots.*.end' => 'required|date_format:H:i',
-        ]);
-
-        // Manual same-day validation
-        foreach ($validated['time_slots'] as $i => $slot) {
-            $start = \Carbon\Carbon::createFromFormat('H:i', $slot['start']);
-            $end = \Carbon\Carbon::createFromFormat('H:i', $slot['end']);
-
-            if ($end->lessThanOrEqualTo($start)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    "time_slots.$i.end" => "End time must be after start time."
-                ]);
-            }
-        }
-
-        $availability->update([
-            'type' => $validated['type'],
-            'specific_date' => $validated['specific_date'] ?? null,
-            'weekdays' => $validated['weekdays'] ?? null,
-            'months' => $validated['months'] ?? null,
-        ]);
-
-        // Replace slots
-        $availability->timeSlots()->delete();
-        foreach ($validated['time_slots'] as $slot) {
-            $availability->timeSlots()->create($slot);
-        }
-
-        return redirect()
-            ->route('advisors.profile.show')
-            ->with('status_key', 'Availability Updated Successfully');
-    }
-
-    public function destroyAvailability($id)
-    {
-        $availability = ConsultationAvailability::where(
-            'advisor_id',
-            auth()->user()->advisor->id
-        )->findOrFail($id);
-
-        $availability->timeSlots()->delete();
-        $availability->delete();
-
-        return redirect()
-            ->route('advisors.profile.show')
-            ->with('status_key', 'Availability Deleted Successfully');
-    }
-
-}
-=======
     /**
      * Display public advisor profile
      */
@@ -431,4 +254,3 @@ class AdvisorController extends Controller
         }
     }
 }
->>>>>>> AG-26

@@ -2,25 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\Order;
-use Illuminate\Support\Facades\Auth;
-
-class BuyerController extends Controller
-{
-    
-    public function dashboard()
-    {
-        $orders = Order::with(['items.product'])
-            ->where('user_id', Auth::id())
-            ->latest()
-            ->get();
-
-        return inertia('Buyer/Orders', [
-            'orders' => $orders
-=======
 use App\Models\Order;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
@@ -79,7 +60,6 @@ class BuyerController extends Controller
             'auth' => ['user' => $user],
             'orders' => $formattedOrders,
             'cartCount' => $cartCount,
->>>>>>> AG-26
         ]);
     }
 
@@ -118,8 +98,4 @@ class BuyerController extends Controller
             'orders' => [], // From DB
         ]);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> AG-26

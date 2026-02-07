@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Advisor;
-<<<<<<< HEAD
-=======
 use Illuminate\Support\Facades\Log;
->>>>>>> AG-26
 use Inertia\Inertia;
 
 class ProductListController extends Controller
@@ -15,11 +12,7 @@ class ProductListController extends Controller
     public function seeds()
     {
         $products = Product::where('category', 'like', '%seed%')
-<<<<<<< HEAD
-            ->with('supplier')
-=======
             ->with('supplier.ratings')
->>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -34,11 +27,7 @@ class ProductListController extends Controller
         $products = Product::where('category', 'like', '%fertilizer%')
             ->orWhere('category', 'like', '%පොහොර%')
             ->orWhere('category', 'like', '%உரம்%')
-<<<<<<< HEAD
-            ->with('supplier')
-=======
             ->with('supplier.ratings')
->>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -51,11 +40,7 @@ class ProductListController extends Controller
     public function equipment()
     {
         $products = Product::whereIn('category', ['irrigation_equipment', 'farm_tools', 'greenhouse_materials'])
-<<<<<<< HEAD
-            ->with('supplier')
-=======
             ->with('supplier.ratings')
->>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -69,11 +54,7 @@ class ProductListController extends Controller
     {
         $products = Product::where('category', 'like', '%vehicle%')
             ->orWhere('category', 'like', '%tractor%')
-<<<<<<< HEAD
-            ->with('supplier')
-=======
             ->with('supplier.ratings')
->>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -91,11 +72,7 @@ class ProductListController extends Controller
             ->orWhere('category', 'like', '%insecticide%')
             ->orWhere('category', 'like', '%පළිබෝධනාශක%')
             ->orWhere('category', 'like', '%பூச்சிக்கொல்லி%')
-<<<<<<< HEAD
-            ->with('supplier')
-=======
             ->with('supplier.ratings')
->>>>>>> AG-26
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
 
@@ -113,15 +90,9 @@ class ProductListController extends Controller
                 $query->where('category', 'not like', "%{$term}%");
             }
         })
-<<<<<<< HEAD
-        ->with('supplier')
-        ->get()
-        ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
-=======
             ->with('supplier.ratings')
             ->get()
             ->append(['primary_image_url', 'optional_images_urls', 'certificates_urls']);
->>>>>>> AG-26
 
         return Inertia::render('ListPages/Others', [
             'products' => $products,
@@ -129,43 +100,6 @@ class ProductListController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
-public function advisors()
-{
-    $advisors = Advisor::all()->map(function ($advisor) {
-        // Decode specialization if it's a string, otherwise use as-is
-        if (is_string($advisor->specialization)) {
-            $advisor->specialization = json_decode($advisor->specialization, true) ?? [];
-        } elseif (!is_array($advisor->specialization)) {
-            $advisor->specialization = [];
-        }
-
-        // Decode certifications if it's a string, otherwise use as-is
-        if (is_string($advisor->certifications)) {
-            $advisor->certifications = json_decode($advisor->certifications, true) ?? [];
-        } elseif (!is_array($advisor->certifications)) {
-            $advisor->certifications = [];
-        }
-
-        // Add full URL for profile image if exists
-        $advisor->profile_image_url = $advisor->profile_image
-            ? asset('storage/' . $advisor->profile_image)
-            : null;
-
-        $advisor->cover_image_url = $advisor->cover_image
-            ? asset('storage/' . $advisor->cover_image)
-            : null;
-
-        return $advisor;
-    });
-
-    return Inertia::render('ListPages/Advisors', [
-        'advisors' => $advisors,
-        'category_name' => 'Advisors & Consultants',
-    ]);
-}
-}
-=======
     public function advisors()
     {
         $query = Advisor::query();
@@ -242,4 +176,3 @@ public function advisors()
         ]);
     }
 }
->>>>>>> AG-26
