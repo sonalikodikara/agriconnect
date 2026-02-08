@@ -3,22 +3,13 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { router, usePage } from "@inertiajs/react";
-<<<<<<< HEAD
-import { X, Bold, List, ArrowLeft } from "lucide-react";
-=======
 import { X, Bold, List } from "lucide-react";
->>>>>>> AG-26
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
 export default function AddProduct() {
   const { t } = useTranslation();
-<<<<<<< HEAD
-  const { flash, product } = usePage().props as any;
-  const isEdit = !!product;
-=======
   const { flash } = usePage().props;
->>>>>>> AG-26
   const successMessage = flash?.status_key ? t(flash.status_key) : null;
 
   const editor = useEditor({
@@ -37,29 +28,10 @@ export default function AddProduct() {
   // Shared Image States
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
   const [primaryPreview, setPrimaryPreview] = useState<string | null>(null);
-<<<<<<< HEAD
-  const [removedPrimary, setRemovedPrimary] = useState(false);
-
-  // New uploads
-  const [optionalImages, setOptionalImages] = useState<File[]>([]);
-  const [optionalPreviews, setOptionalPreviews] = useState<string[]>([]);
-
-  // Existing (for edit mode)
-  const [existingOptionalPaths, setExistingOptionalPaths] = useState<string[]>([]);
-  const [existingOptionalPreviews, setExistingOptionalPreviews] = useState<string[]>([]);
-  const [removedExistingOptional, setRemovedExistingOptional] = useState<string[]>([]);
-
-  const [certificates, setCertificates] = useState<File[]>([]);
-  const [certificatePreviews, setCertificatePreviews] = useState<string[]>([]);
-  const [existingCertificatePaths, setExistingCertificatePaths] = useState<string[]>([]);
-  const [existingCertificatePreviews, setExistingCertificatePreviews] = useState<string[]>([]);
-  const [removedExistingCertificates, setRemovedExistingCertificates] = useState<string[]>([]);
-=======
   const [optionalImages, setOptionalImages] = useState<File[]>([]);
   const [optionalPreviews, setOptionalPreviews] = useState<string[]>([]);
   const [certificates, setCertificates] = useState<File[]>([]);
   const [certificatePreviews, setCertificatePreviews] = useState<string[]>([]);
->>>>>>> AG-26
 
   // Validation Errors
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -122,78 +94,11 @@ export default function AddProduct() {
     "Farm Fresh", "Non-GMO",
   ];
 
-<<<<<<< HEAD
-  useEffect(() => {
-    if (product) {
-      setProductType(product.product_type || 'general');
-    }
-  }, [product]);
-
-  useEffect(() => {
-    setErrors({});
-    if (product) {
-      setProductType(product.product_type || 'general');
-      setName(product.name || '');
-      setBrand(product.brand || '');
-      setCategory(product.category || '');
-      setQuality(product.quality || '');
-      setPrice(product.price ? String(product.price) : '');
-      setQuantity(product.quantity ? String(product.quantity) : '');
-      setQuantityUnit(product.quantity_unit || 'kg');
-      setMinimumOrder(product.minimum_order || 1);
-      setPackagingSize(product.packaging_size || '');
-
-      // Nutrition
-      setNpk(product.npk || { nitrogen: '', phosphorous: '', potassium: '' });
-      setOtherNutrition(product.other_nutrition || { organicMatter: '', moisture: '', ph: '' });
-      setIngredients(product.ingredients || []);
-      setMicronutrients(product.micronutrients || []);
-
-      setManufacturingDetails(product.manufacturing_details || '');
-      setSoilType(product.soil_type || '');
-      setInstructions(product.instructions || '');
-      setSafetyStorage(product.safety_storage || '');
-
-      // Vehicle
-      setVehicleType(product.vehicle_type || '');
-      setBrandModel(product.brand_model || '');
-      setVehiclePublishedDate(product.year ? String(product.year) + '-01-01' : '');
-      setEnginePower(product.engine_power_hp || '');
-      setCondition(product.condition || 'new');
-      setForRent(Boolean(product.for_rent));
-      setRentalPrice(product.rental_price_per_day ? String(product.rental_price_per_day) : '');
-      setVehicleQuantity(product.quantity ? String(product.quantity) : '1');
-
-      // Tool
-      setToolName(product.tool_name || '');
-      setToolType(product.tool_type || 'manual');
-      setPowerSource(product.power_source || 'manual');
-      setWorkingWidth(product.working_width || '');
-      setToolQuantity(product.quantity ? String(product.quantity) : '1');
-      setToolPublishedDate(product.year ? String(product.year) + '-01-01' : '');
-
-      // Images & certificates
-      setPrimaryPreview(product.primary_image_url || null);
-      setExistingOptionalPaths(product.optional_images || []);
-      setExistingOptionalPreviews(product.optional_images_urls || []);
-      setExistingCertificatePaths(product.certificates || []);
-      setExistingCertificatePreviews(product.certificates_urls || []);
-
-      // Description
-      if (product.description) {
-        editor?.commands.setContent(product.description);
-      }
-    } else {
-      editor?.commands.clearContent();
-    }
-  }, [product, productType, editor]);
-=======
   // Clear editor when product type changes
   useEffect(() => {
     editor?.commands.clearContent();
     setErrors({});
   }, [productType, editor]);
->>>>>>> AG-26
 
   // Image Handlers
   const handlePrimaryImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,10 +106,6 @@ export default function AddProduct() {
     if (file) {
       setPrimaryImage(file);
       setPrimaryPreview(URL.createObjectURL(file));
-<<<<<<< HEAD
-      setRemovedPrimary(false);
-=======
->>>>>>> AG-26
       setErrors(prev => ({ ...prev, primary_image: "" }));
     }
   };
@@ -227,69 +128,6 @@ export default function AddProduct() {
     }
   };
 
-<<<<<<< HEAD
-  const removePrimaryImage = () => {
-    if (primaryPreview && isEdit && !primaryImage) {
-      // removing existing primary
-      setRemovedPrimary(true);
-    }
-    setPrimaryImage(null);
-    setPrimaryPreview(null);
-  };
-
-  const removeOptionalImage = (i: number) => {
-    // if it's a newly added image
-    if (i < optionalPreviews.length) {
-      setOptionalImages(p => p.filter((_, x) => x !== i));
-      setOptionalPreviews(p => p.filter((_, x) => x !== i));
-      return;
-    }
-    // otherwise it's an existing image (index shifted by new previews length)
-    const existingIndex = i - optionalPreviews.length;
-    const path = existingOptionalPaths[existingIndex];
-    if (path) {
-      setRemovedExistingOptional(prev => [...prev, path]);
-      setExistingOptionalPaths(p => p.filter((_, x) => x !== existingIndex));
-      setExistingOptionalPreviews(p => p.filter((_, x) => x !== existingIndex));
-    }
-  };
-
-  const removeCertificate = (i: number) => {
-    if (i < certificatePreviews.length) {
-      setCertificates(p => p.filter((_, x) => x !== i));
-      setCertificatePreviews(p => p.filter((_, x) => x !== i));
-      return;
-    }
-    const existingIndex = i - certificatePreviews.length;
-    const path = existingCertificatePaths[existingIndex];
-    if (path) {
-      setRemovedExistingCertificates(prev => [...prev, path]);
-      setExistingCertificatePaths(p => p.filter((_, x) => x !== existingIndex));
-      setExistingCertificatePreviews(p => p.filter((_, x) => x !== existingIndex));
-    }
-  };
-  // Success message timeout
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  useEffect(() => {
-    if (successMessage) {
-      setShowSuccess(true);
-
-      const timer = setTimeout(() => {
-        setShowSuccess(false);
-      }, 5000); // 5 seconds
-
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
-
-  useEffect(() => {
-    if (showSuccess) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [showSuccess]);
-
-=======
   const removePrimaryImage = () => { setPrimaryImage(null); setPrimaryPreview(null); };
   const removeOptionalImage = (i: number) => {
     setOptionalImages(p => p.filter((_, x) => x !== i));
@@ -299,18 +137,13 @@ export default function AddProduct() {
     setCertificates(p => p.filter((_, x) => x !== i));
     setCertificatePreviews(p => p.filter((_, x) => x !== i));
   };
->>>>>>> AG-26
 
   // Client-side validation
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
     // Common required fields
-<<<<<<< HEAD
-    if (!primaryImage && !primaryPreview) newErrors.primary_image = t("Primary image is required");
-=======
     if (!primaryImage) newErrors.primary_image = t("Primary image is required");
->>>>>>> AG-26
     if (!price || Number(price) <= 0) newErrors.price = t("Valid price is required");
 
     const descriptionHTML = editor?.getHTML().trim() || "";
@@ -341,45 +174,18 @@ export default function AddProduct() {
     }
 
     setErrors(newErrors);
-<<<<<<< HEAD
-    return newErrors;
-=======
     return Object.keys(newErrors).length === 0;
->>>>>>> AG-26
   };
 
   // Submit handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-<<<<<<< HEAD
-    const newErrors = validateForm();
-    if (Object.keys(newErrors).length > 0) {
-      // Scroll to first error (and switch tabs if needed so the element exists)
-      const firstErrorKey = Object.keys(newErrors)[0];
-
-      const vehicleKeys = ['brand_model', 'vehicle_type', 'published_date', 'engine_power', 'condition', 'quantity'];
-      const toolKeys = ['tool_name', 'power_source', 'published_date', 'quantity'];
-
-      let el = document.querySelector(`[name="${firstErrorKey}"]`);
-      if (!el) {
-        if (vehicleKeys.includes(firstErrorKey)) {
-          setProductType('vehicle');
-          setActiveTab('basic');
-        } else if (toolKeys.includes(firstErrorKey)) {
-          setProductType('tool');
-          setActiveTab('basic');
-        }
-        el = document.querySelector(`[name="${firstErrorKey}"]`);
-      }
-      if (el) (el as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
-=======
     if (!validateForm()) {
       // Scroll to first error
       const firstErrorKey = Object.keys(errors)[0];
       if (firstErrorKey) {
         document.querySelector(`[name="${firstErrorKey}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
       }
->>>>>>> AG-26
       return;
     }
 
@@ -394,24 +200,8 @@ export default function AddProduct() {
 
     // Images
     if (primaryImage) formData.append("primary_image", primaryImage);
-<<<<<<< HEAD
-    if (removedPrimary) formData.append('remove_primary', '1');
-
-    optionalImages.forEach((f, i) => formData.append(`optional_images[${i}]`, f));
-    // include removed existing optional image paths
-    removedExistingOptional.forEach((p, i) => formData.append(`remove_optional_images[${i}]`, p));
-
-    certificates.forEach((f, i) => formData.append(`certificates[${i}]`, f));
-    removedExistingCertificates.forEach((p, i) => formData.append(`remove_certificates[${i}]`, p));
-
-    // if editing, mark method and product id
-    if (isEdit && product) {
-      formData.append('_method', 'put');
-    }
-=======
     optionalImages.forEach((f, i) => formData.append(`optional_images[${i}]`, f));
     certificates.forEach((f, i) => formData.append(`certificates[${i}]`, f));
->>>>>>> AG-26
 
     // General
     if (productType === "general") {
@@ -450,11 +240,7 @@ export default function AddProduct() {
       formData.append("condition", condition);
       formData.append("for_rent", forRent ? "1" : "0");
       if (forRent) formData.append("rental_price_per_day", rentalPrice);
-<<<<<<< HEAD
-      if (enginePower) formData.append("engine_power", enginePower);
-=======
       formData.append("vehicle_features", editor?.getHTML() || "");
->>>>>>> AG-26
     }
 
     // Tool
@@ -467,25 +253,6 @@ export default function AddProduct() {
       formData.append("power_source", powerSource);
       formData.append("working_width", workingWidth);
       formData.append("published_date", toolPublishedDate);
-<<<<<<< HEAD
-    }
-
-    if (isEdit && product) {
-      // Update
-      router.post(route('suppliers.products.update', product.id), formData, {
-        forceFormData: true,
-        preserveState: true,
-        preserveScroll: true,
-      });
-    } else {
-      // Create
-      router.post(route('suppliers.products.store'), formData, {
-        forceFormData: true,
-        preserveState: true,
-        preserveScroll: true,
-      });
-    }
-=======
       formData.append("tool_features", editor?.getHTML() || "");
     }
 
@@ -494,7 +261,6 @@ export default function AddProduct() {
       preserveState: true,
       preserveScroll: true,
     });
->>>>>>> AG-26
   };
 
   const RichTextToolbar = () => (
@@ -502,22 +268,14 @@ export default function AddProduct() {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBold().run()}
-<<<<<<< HEAD
-        className={`p-2 sm:p-3 rounded-lg ${editor?.isActive('bold') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
-=======
         className={`p-3 rounded-lg ${editor?.isActive('bold') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
->>>>>>> AG-26
       >
         <Bold size={20} />
       </button>
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-<<<<<<< HEAD
-        className={`p-2 sm:p-3 rounded-lg ${editor?.isActive('bulletList') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
-=======
         className={`p-3 rounded-lg ${editor?.isActive('bulletList') ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
->>>>>>> AG-26
       >
         <List size={20} />
       </button>
@@ -533,10 +291,6 @@ export default function AddProduct() {
         </label>
         <input
           type="file"
-<<<<<<< HEAD
-          name="primary_image"
-=======
->>>>>>> AG-26
           accept="image/*"
           onChange={handlePrimaryImageChange}
           className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-green-600 file:text-white hover:file:bg-green-700"
@@ -563,34 +317,14 @@ export default function AddProduct() {
           className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-blue-600 file:text-white hover:file:bg-blue-700"
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
-<<<<<<< HEAD
-          {/* New uploads first */}
-          {optionalPreviews.map((src, i) => (
-            <div key={`n-${i}`} className="relative">
-              <img src={src} alt={`Optional new ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
-=======
           {optionalPreviews.map((src, i) => (
             <div key={i} className="relative">
               <img src={src} alt={`Optional ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
->>>>>>> AG-26
               <button type="button" onClick={() => removeOptionalImage(i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
                 <X size={16} />
               </button>
             </div>
           ))}
-<<<<<<< HEAD
-
-          {/* Existing images (edit mode) */}
-          {existingOptionalPreviews.map((src, i) => (
-            <div key={`e-${i}`} className="relative">
-              <img src={src} alt={`Optional existing ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
-              <button type="button" onClick={() => removeOptionalImage(optionalPreviews.length + i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
-                <X size={16} />
-              </button>
-            </div>
-          ))}
-=======
->>>>>>> AG-26
         </div>
       </div>
 
@@ -604,18 +338,10 @@ export default function AddProduct() {
           className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:bg-purple-600 file:text-white hover:file:bg-purple-700"
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
-<<<<<<< HEAD
-          {/* New upload certificates */}
-          {certificatePreviews.map((src, i) => (
-            <div key={`n-cert-${i}`} className="relative">
-              {certificates[i]?.type.includes("image") ? (
-                <img src={src} alt={`Cert ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
-=======
           {certificatePreviews.map((src, i) => (
             <div key={i} className="relative">
               {certificates[i]?.type.includes("image") ? (
                 <img src={src} alt={`Cert ${i + 1}`} className="w-full h-48 object-cover rounded-lg shadow" />
->>>>>>> AG-26
               ) : (
                 <div className="bg-gray-100 border-2 border-dashed rounded-lg p-6 text-center">
                   <p className="text-gray-600 font-medium text-sm break-all">{certificates[i]?.name}</p>
@@ -626,54 +352,17 @@ export default function AddProduct() {
               </button>
             </div>
           ))}
-<<<<<<< HEAD
-
-          {/* Existing certificates */}
-          {existingCertificatePreviews.map((src, i) => (
-            <div key={`e-cert-${i}`} className="relative">
-              <img src={src} alt={`Cert existing ${i + 1}`} className="w-full h-40 sm:h-48 object-cover rounded-lg shadow" />
-              <button type="button" onClick={() => removeCertificate(certificatePreviews.length + i)} className="absolute top-1 right-1 bg-red-600 text-white p-1.5 rounded-full">
-                <X size={16} />
-              </button>
-            </div>
-          ))}
-=======
->>>>>>> AG-26
         </div>
       </div>
     </div>
   );
 
   return (
-<<<<<<< HEAD
-    <div className="bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-10 max-w-full sm:max-w-4xl w-full mx-auto my-6">
-      {/* Success Message */}
-      {showSuccess && successMessage && (
-        <div className="mb-10 p-4 bg-green-100 border-l-8 border-green-600 rounded-xl shadow-lg">
-          <p className="text-lg sm:text-xl font-semibold text-green-800">
-            {successMessage}
-          </p>
-        </div>
-      )}
-
-      {/* Back button when editing */}
-      {isEdit && product && (
-        <div className="mb-4">
-          <button
-            type="button"
-            onClick={() => window.history.back()}
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-green-600"
-          >
-            <ArrowLeft size={18} />
-            <span>{t('Back')}</span>
-          </button>
-=======
     <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 max-w-6xl mx-auto my-10">
       {/* Success Message */}
       {successMessage && (
         <div className="mb-10 p-6 bg-green-100 border-4 border-green-500 rounded-2xl text-center shadow-lg">
           <p className="text-2xl sm:text-3xl font-bold text-green-800">{successMessage}</p>
->>>>>>> AG-26
         </div>
       )}
 
@@ -688,18 +377,11 @@ export default function AddProduct() {
             key={tab.id}
             type="button"
             onClick={() => setProductType(tab.id as any)}
-<<<<<<< HEAD
-            className={`px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition ${productType === tab.id
-              ? "bg-green-600 text-white shadow-lg"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-=======
             className={`px-6 py-3 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition ${
               productType === tab.id
                 ? "bg-green-600 text-white shadow-lg"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
->>>>>>> AG-26
           >
             {tab.label}
           </button>
@@ -717,18 +399,11 @@ export default function AddProduct() {
                   key={tab}
                   type="button"
                   onClick={() => setActiveTab(tab as any)}
-<<<<<<< HEAD
-                  className={`px-5 py-2 rounded-lg font-medium text-sm sm:text-base transition ${activeTab === tab
-                    ? "bg-green-600 text-white shadow"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-=======
                   className={`px-5 py-2 rounded-lg font-medium text-sm sm:text-base transition ${
                     activeTab === tab
                       ? "bg-green-600 text-white shadow"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
->>>>>>> AG-26
                 >
                   {t(tab === "basic" ? "Basic Information" : tab === "nutrition" ? "Nutritional Info" : tab === "images" ? "Images & Docs" : "Advanced")}
                 </button>
@@ -741,10 +416,6 @@ export default function AddProduct() {
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Product Name")} <span className="text-red-600">*</span></label>
                   <input
                     type="text"
-<<<<<<< HEAD
-                    name="name"
-=======
->>>>>>> AG-26
                     value={name}
                     onChange={e => setName(e.target.value)}
                     className={`w-full p-3 border rounded-lg ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
@@ -758,10 +429,6 @@ export default function AddProduct() {
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Category")} <span className="text-red-600">*</span></label>
                   <select
-<<<<<<< HEAD
-                    name="category"
-=======
->>>>>>> AG-26
                     value={category}
                     onChange={e => setCategory(e.target.value)}
                     className={`w-full p-3 border rounded-lg ${errors.category ? 'border-red-500' : 'border-gray-300'}`}
@@ -776,10 +443,6 @@ export default function AddProduct() {
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Quality Grade")} <span className="text-red-600">*</span></label>
                   <select
-<<<<<<< HEAD
-                    name="quality"
-=======
->>>>>>> AG-26
                     value={quality}
                     onChange={e => setQuality(e.target.value)}
                     className={`w-full p-3 border rounded-lg ${errors.quality ? 'border-red-500' : 'border-gray-300'}`}
@@ -793,20 +456,12 @@ export default function AddProduct() {
                   <label className="block font-semibold text-gray-700 mb-2 text-base">{t("Price (LKR)")} <span className="text-red-600">*</span></label>
                   <input
                     type="number"
-<<<<<<< HEAD
-                    name="price"
-=======
->>>>>>> AG-26
                     value={price}
                     onChange={e => setPrice(e.target.value)}
                     min="0"
                     step="0.01"
                     className={`w-full p-3 border rounded-lg ${errors.price ? 'border-red-500' : 'border-gray-300'}`}
                   />
-<<<<<<< HEAD
-                  <input type="hidden" name="description" value={editor?.getHTML() || ""} />
-=======
->>>>>>> AG-26
                   {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
                 </div>
                 <div>
@@ -814,10 +469,6 @@ export default function AddProduct() {
                   <div className="flex gap-3">
                     <input
                       type="number"
-<<<<<<< HEAD
-                      name="quantity"
-=======
->>>>>>> AG-26
                       value={quantity}
                       onChange={e => setQuantity(e.target.value)}
                       min="0"
@@ -998,11 +649,7 @@ export default function AddProduct() {
 
         {/* ====================== VEHICLE FORM ====================== */}
         {productType === "vehicle" && (
-<<<<<<< HEAD
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-4 sm:p-8 lg:p-10 border-4 border-yellow-400">
-=======
           <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-10 border-4 border-yellow-400">
->>>>>>> AG-26
             <div className="flex flex-wrap gap-2 mb-8 border-b-2 border-gray-200 pb-4 overflow-x-auto">
               {["basic", "images"].map((tab) => (
                 <button
@@ -1017,17 +664,6 @@ export default function AddProduct() {
             </div>
 
             {activeTab === "basic" && (
-<<<<<<< HEAD
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Vehicle Name / Model")} *</label>
-                  <input name="brand_model" value={brandModel} onChange={e => setBrandModel(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.brand_model ? 'border-red-500' : 'border-orange-400'}`} />
-                  {errors.brand_model && <p className="text-red-600 text-sm mt-1">{errors.brand_model}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Vehicle Type")} *</label>
-                  <select name="vehicle_type" value={vehicleType} onChange={e => setVehicleType(e.target.value)} required className={`vehicle_type w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.vehicle_type ? 'border-red-500' : 'border-orange-400'}`}>
-=======
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Vehicle Name / Model")} *</label>
@@ -1036,28 +672,11 @@ export default function AddProduct() {
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Vehicle Type")} *</label>
                   <select value={vehicleType} onChange={e => setVehicleType(e.target.value)} required className="vehicle_type w-full p-5 border-2 border-orange-400 rounded-xl">
->>>>>>> AG-26
                     <option value="">{t("Select Type")}</option>
                     <option value="tractor">{t("Tractor")}</option>
                     <option value="harvester">{t("Harvester")}</option>
                     <option value="rotavator">{t("Rotavator")}</option>
                   </select>
-<<<<<<< HEAD
-                  {errors.vehicle_type && <p className="text-red-600 text-sm mt-1">{errors.vehicle_type}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Date Published / Listed")} *</label>
-                  <input name="published_date" type="date" value={vehiclePublishedDate} onChange={e => setVehiclePublishedDate(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.published_date ? 'border-red-500' : 'border-orange-400'}`} />
-                  {errors.published_date && <p className="text-red-600 text-sm mt-1">{errors.published_date}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Engine Power (HP)")}</label>
-                  <input value={enginePower} onChange={e => setEnginePower(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-orange-400 rounded-lg sm:rounded-xl" />
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Condition")} *</label>
-                  <select value={condition} onChange={e => setCondition(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-orange-400 rounded-lg sm:rounded-xl">
-=======
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Date Published / Listed")} *</label>
@@ -1071,40 +690,11 @@ export default function AddProduct() {
                   
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Condition")} *</label>
                   <select value={condition} onChange={e => setCondition(e.target.value)} className="w-full p-5 border-2 border-orange-400 rounded-xl">
->>>>>>> AG-26
                     <option value="new">{t("Brand New")}</option>
                     <option value="used">{t("Used")}</option>
                   </select>
                 </div>
                 <div>
-<<<<<<< HEAD
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Available Quantity")} *</label>
-                  <input name="quantity" type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.quantity ? 'border-red-500' : 'border-orange-400'}`} />
-                  {errors.quantity && <p className="text-red-600 text-sm mt-1">{errors.quantity}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Price (LKR)")} *</label>
-                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.price ? 'border-red-500' : 'border-orange-400'}`} />
-                  {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
-                </div>
-                <div className="flex items-center gap-2 sm:gap-4">
-                  <input type="checkbox" checked={forRent} onChange={e => setForRent(e.target.checked)} className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <label className="text-base sm:text-lg lg:text-xl">{t("Available for Rent")}</label>
-                </div>
-                {forRent && (
-                  <div>
-                    <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Rental Price per Day (LKR)")}</label>
-                    <input type="number" value={rentalPrice} onChange={e => setRentalPrice(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-orange-400 rounded-lg sm:rounded-xl" />
-                  </div>
-                )}
-                <div className="sm:col-span-2">
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-orange-800 mb-2 sm:mb-3">{t("Description")} <span className="text-red-600">*</span></label>
-                  <RichTextToolbar />
-                  <div className={`border-2 rounded-lg sm:rounded-xl min-h-40 sm:min-h-64 p-3 sm:p-4 bg-white ${errors.description ? 'border-red-500' : 'border-orange-400'}`}>
-                    <EditorContent editor={editor} />
-                  </div>
-                  {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
-=======
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Available Quantity")} *</label>
                   <input type="number" value={vehicleQuantity} onChange={e => setVehicleQuantity(e.target.value)} min="1" required className="w-full p-5 border-2 border-orange-400 rounded-xl" />
                 </div>
@@ -1126,7 +716,6 @@ export default function AddProduct() {
                   <label className="block font-bold text-xl text-orange-800 mb-3">{t("Description")}</label>
                   <RichTextToolbar />
                   <EditorContent editor={editor} className="border-2 border-orange-400 rounded-xl min-h-64 p-4 bg-white" />
->>>>>>> AG-26
                 </div>
               </div>
             )}
@@ -1137,11 +726,7 @@ export default function AddProduct() {
 
         {/* ====================== TOOL FORM ====================== */}
         {productType === "tool" && (
-<<<<<<< HEAD
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-4 sm:p-8 lg:p-10 border-4 border-blue-400">
-=======
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-10 border-4 border-blue-400">
->>>>>>> AG-26
             <div className="flex flex-wrap gap-2 mb-8 border-b-2 border-gray-200 pb-4 overflow-x-auto">
               {["basic", "images"].map((tab) => (
                 <button
@@ -1156,17 +741,6 @@ export default function AddProduct() {
             </div>
 
             {activeTab === "basic" && (
-<<<<<<< HEAD
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Tool Name")} *</label>
-                  <input name="tool_name" value={toolName} onChange={e => setToolName(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.tool_name ? 'border-red-500' : 'border-blue-400'}`} />
-                  {errors.tool_name && <p className="text-red-600 text-sm mt-1">{errors.tool_name}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Tool Type")} *</label>
-                  <select name="tool_type" value={toolType} onChange={e => setToolType(e.target.value)} className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.tool_type ? 'border-red-500' : 'border-blue-400'}`}>
-=======
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Tool Name")} *</label>
@@ -1175,23 +749,10 @@ export default function AddProduct() {
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Tool Type")} *</label>
                   <select value={toolType} onChange={e => setToolType(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
->>>>>>> AG-26
                     <option value="manual">{t("Hand Tool")}</option>
                     <option value="battery">{t("Battery")}</option>
                     <option value="tractor_mounted">{t("Tractor Mounted")}</option>
                   </select>
-<<<<<<< HEAD
-                  {errors.tool_type && <p className="text-red-600 text-sm mt-1">{errors.tool_type}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Date Published / Listed")} *</label>
-                  <input name="published_date" type="date" value={toolPublishedDate} onChange={e => setToolPublishedDate(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.published_date ? 'border-red-500' : 'border-blue-400'}`} />
-                  {errors.published_date && <p className="text-red-600 text-sm mt-1">{errors.published_date}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Power Source")} *</label>
-                  <select name="power_source" value={powerSource} onChange={e => setPowerSource(e.target.value)} className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.power_source ? 'border-red-500' : 'border-blue-400'}`}>
-=======
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Date Published / Listed")} *</label>
@@ -1200,36 +761,10 @@ export default function AddProduct() {
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Power Source")} *</label>
                   <select value={powerSource} onChange={e => setPowerSource(e.target.value)} className="w-full p-5 border-2 border-blue-400 rounded-xl">
->>>>>>> AG-26
                     <option value="manual">{t("Manual")}</option>
                     <option value="petrol">{t("Petrol")}</option>
                     <option value="battery">{t("Battery")}</option>
                   </select>
-<<<<<<< HEAD
-                  {errors.power_source && <p className="text-red-600 text-sm mt-1">{errors.power_source}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Working Width (cm)")}</label>
-                  <input value={workingWidth} onChange={e => setWorkingWidth(e.target.value)} className="w-full p-3 sm:p-4 border-2 border-blue-400 rounded-lg sm:rounded-xl" />
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Available Quantity")} *</label>
-                  <input name="quantity" type="number" value={toolQuantity} onChange={e => setToolQuantity(e.target.value)} min="1" required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.quantity ? 'border-red-500' : 'border-blue-400'}`} />
-                  {errors.quantity && <p className="text-red-600 text-sm mt-1">{errors.quantity}</p>}
-                </div>
-                <div>
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Price (LKR)")} *</label>
-                  <input name="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl ${errors.price ? 'border-red-500' : 'border-blue-400'}`} />
-                  {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block font-bold text-base sm:text-lg lg:text-xl text-blue-800 mb-2 sm:mb-3">{t("Description")} <span className="text-red-600">*</span></label>
-                  <RichTextToolbar />
-                  <div className={`border-2 rounded-lg sm:rounded-xl min-h-40 sm:min-h-64 p-3 sm:p-4 bg-white ${errors.description ? 'border-red-500' : 'border-blue-400'}`}>
-                    <EditorContent editor={editor} />
-                  </div>
-                  {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
-=======
                 </div>
                 <div>
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Working Width (cm)")}</label>
@@ -1247,7 +782,6 @@ export default function AddProduct() {
                   <label className="block font-bold text-xl text-blue-800 mb-3">{t("Description")}</label>
                   <RichTextToolbar />
                   <EditorContent editor={editor} className="border-2 border-blue-400 rounded-xl min-h-64 p-4 bg-white" />
->>>>>>> AG-26
                 </div>
               </div>
             )}
@@ -1256,29 +790,6 @@ export default function AddProduct() {
           </div>
         )}
 
-<<<<<<< HEAD
-        <div className="text-center pt-8 flex flex-col sm:flex-row sm:justify-center gap-4 items-center">
-          <button
-            type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white font-bold text-xl sm:text-2xl px-12 sm:px-16 py-4 sm:py-5 rounded-2xl shadow-xl transition w-full sm:w-auto"
-          >
-            {isEdit ? t("Update Product") : t("Save Product")}
-          </button>
-
-          {isEdit && product && (
-            <button
-              type="button"
-              onClick={() => {
-                if (confirm(t('Are you sure you want to delete this product?'))) {
-                  router.delete(route('suppliers.products.destroy', product.id));
-                }
-              }}
-              className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-6 py-3 rounded-2xl shadow"
-            >
-              {t('Delete')}
-            </button>
-          )}
-=======
        <div className="text-center pt-8">
           <button
             type="submit"
@@ -1286,7 +797,6 @@ export default function AddProduct() {
           >
             {t("Save Product")}
           </button>
->>>>>>> AG-26
         </div>
       </form>
     </div>

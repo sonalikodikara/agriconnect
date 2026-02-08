@@ -35,18 +35,6 @@ export default function Home({ user }: HomeProps) {
     const getDashboardRoute = () => {
         // Define routes based on role
         switch (user.role) {
-<<<<<<< HEAD
-             case 'supplier':
-                return route('suppliers.profile.show');
-            case 'farmer':
-                return route('farmer.dashboard');
-            case 'advisor':
-                return route('advisor.dashboard');
-            case 'admin':
-                return route('admin.dashboard');
-            default:
-                return route('dashboard'); // Fallback
-=======
             case 'supplier':
                 return route('suppliers.profile.show');
             case 'buyer':
@@ -59,7 +47,6 @@ export default function Home({ user }: HomeProps) {
                 return route('admin.dashboard');
             default:
                 return route('buyers.dashboard'); // Default to buyer dashboard
->>>>>>> AG-26
         }
     };
 

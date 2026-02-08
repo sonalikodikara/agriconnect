@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-// resources/js/Pages/Buyer/Orders.tsx (updated with success message handling)
-import { Head, Link } from '@inertiajs/react';
-=======
 // resources/js/Pages/Buyer/Orders.tsx (updated with real-time tracking and all statuses)
 import { Head, Link, router, useForm } from '@inertiajs/react';
->>>>>>> AG-26
 import { useTranslation } from 'react-i18next';
 import BuyerNavbar from '@/components/BuyerNavbar';
 import { 
@@ -12,12 +7,6 @@ import {
   CheckCircle, 
   Package, 
   Truck,
-<<<<<<< HEAD
-  CreditCard 
-} from 'lucide-react';
-import { usePage } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
-=======
   CreditCard,
   XCircle,
   RefreshCw,
@@ -27,15 +16,10 @@ import { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
->>>>>>> AG-26
 
 export default function Orders() {
   const { t } = useTranslation();
   const { props } = usePage<{ orders: any[], flash?: { status_key?: string } }>();
-<<<<<<< HEAD
-  const orders = props.orders || [];
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-=======
   const [orders, setOrders] = useState(props.orders || []);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
@@ -89,7 +73,6 @@ export default function Orders() {
       setLastUpdated(new Date());
     }
   }, [props.orders, t]);
->>>>>>> AG-26
 
   useEffect(() => {
     if (props.flash?.status_key) {
@@ -103,8 +86,6 @@ export default function Orders() {
     switch (status) {
       case 'pending':
         return <Clock size={40} className="text-yellow-600" />;
-<<<<<<< HEAD
-=======
       case 'accepted':
         return <CreditCard size={40} className="text-blue-600" />;
       case 'packed':
@@ -118,16 +99,10 @@ export default function Orders() {
       case 'cancelled':
         return <XCircle size={40} className="text-red-600" />;
       // Legacy statuses
->>>>>>> AG-26
       case 'confirmed':
         return <CreditCard size={40} className="text-blue-600" />;
       case 'shipping':
         return <Truck size={40} className="text-purple-600" />;
-<<<<<<< HEAD
-      case 'delivered':
-        return <CheckCircle size={40} className="text-green-600" />;
-=======
->>>>>>> AG-26
       default:
         return <Package size={40} className="text-gray-600" />;
     }
@@ -136,11 +111,6 @@ export default function Orders() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800';
-<<<<<<< HEAD
-      case 'confirmed': return 'bg-blue-100 text-blue-800';
-      case 'shipping': return 'bg-purple-100 text-purple-800';
-      case 'delivered': return 'bg-green-100 text-green-800';
-=======
       case 'accepted': return 'bg-blue-100 text-blue-800';
       case 'packed': return 'bg-indigo-100 text-indigo-800';
       case 'dispatched': return 'bg-purple-100 text-purple-800';
@@ -150,13 +120,10 @@ export default function Orders() {
       // Legacy statuses
       case 'confirmed': return 'bg-blue-100 text-blue-800';
       case 'shipping': return 'bg-purple-100 text-purple-800';
->>>>>>> AG-26
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-<<<<<<< HEAD
-=======
   const getStatusLabel = (status: string) => {
     const labels: { [key: string]: string } = {
       'pending': t('Pending'),
@@ -233,7 +200,6 @@ export default function Orders() {
     );
   };
 
->>>>>>> AG-26
   return (
     <>
       <Head title={t('My Orders')} />
@@ -248,11 +214,6 @@ export default function Orders() {
         )}
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-<<<<<<< HEAD
-          <h1 className="text-5xl font-bold text-green-800 text-center mb-12">
-            {t('My Orders')}
-          </h1>
-=======
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
             <h1 className="text-5xl font-bold text-green-800">
               {t('My Orders')}
@@ -290,7 +251,6 @@ export default function Orders() {
               {t('Last updated')}: {lastUpdated.toLocaleTimeString()}
             </p>
           )}
->>>>>>> AG-26
 
           {orders.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-3xl shadow-xl">
@@ -328,12 +288,6 @@ export default function Orders() {
                         </div>
                       </div>
 
-<<<<<<< HEAD
-                      <div className="mt-4 md:mt-0">
-                        <span className={`inline-block px-8 py-4 rounded-full text-xl font-bold shadow-md ${getStatusColor(order.status)}`}>
-                          {order.status_label || t(order.status.charAt(0).toUpperCase() + order.status.slice(1))}
-                        </span>
-=======
                       <div className="mt-4 md:mt-0 flex flex-col items-end gap-2">
                         <span className={`inline-block px-8 py-4 rounded-full text-xl font-bold shadow-md ${getStatusColor(order.status)}`}>
                           {getStatusLabel(order.status)}
@@ -343,7 +297,6 @@ export default function Orders() {
                             {t('Updated')}: {new Date(order.updated_at).toLocaleString()}
                           </p>
                         )}
->>>>>>> AG-26
                       </div>
                     </div>
 
@@ -371,13 +324,6 @@ export default function Orders() {
 
                       <div className="text-right">
                         <p className="text-lg font-semibold text-gray-700 mb-2">{t('Total Amount')}</p>
-<<<<<<< HEAD
-                        <p className="text-4xl font-bold text-green-700">
-                          Rs. {parseFloat(order.total_amount).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-=======
                         <p className="text-4xl font-bold text-green-700 mb-4">
                           Rs. {parseFloat(order.total_amount).toLocaleString()}
                         </p>
@@ -481,7 +427,6 @@ export default function Orders() {
                         )}
                       </div>
                     )}
->>>>>>> AG-26
                   </div>
                 </div>
               ))}

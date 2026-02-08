@@ -44,11 +44,7 @@ class AuthenticatedSessionController extends Controller
             case 'advisor':
                 return redirect()->route('advisors.profile.show');
             case 'buyer':
-<<<<<<< HEAD
-                return redirect()->route('dashboard');
-=======
                 return redirect()->route('buyers.dashboard');
->>>>>>> AG-26
             case 'admin':
                 return redirect()->route('admin.dashboard');
             default:
@@ -69,8 +65,4 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> AG-26

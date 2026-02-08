@@ -40,11 +40,8 @@ export default function ProductListPage({ products, category_name }) {
     switch (props.auth.user?.role) {
       case 'supplier':
         return route('suppliers.profile.show');
-<<<<<<< HEAD
-=======
       case 'buyer':
         return route('buyers.dashboard');
->>>>>>> AG-26
       case 'farmer':
         return route('farmer.dashboard');
       case 'advisor':
@@ -52,11 +49,7 @@ export default function ProductListPage({ products, category_name }) {
       case 'admin':
         return route('admin.dashboard');
       default:
-<<<<<<< HEAD
-        return route('dashboard');
-=======
         return route('buyers.dashboard');
->>>>>>> AG-26
     }
   };
 
@@ -233,11 +226,7 @@ export default function ProductListPage({ products, category_name }) {
                   </div>
 
                   <div className="p-6 flex flex-col flex-grow">
-<<<<<<< HEAD
-                    <h3 className="text-l font-bold text-green-800 mb-2 line-clamp-2">{product.name}</h3>
-=======
                     <h3 className="text-xl font-bold text-green-800 mb-2 line-clamp-2">{product.name}</h3>
->>>>>>> AG-26
                     <p className="text-gray-600 mb-4 flex-grow line-clamp-3">{product.description}</p>
 
                     {/* Quantity Selector */}
@@ -261,22 +250,14 @@ export default function ProductListPage({ products, category_name }) {
                     <div className="grid grid-cols gap-3 mt-auto">
                       <button
                         onClick={() => addToCart(product.id)}
-<<<<<<< HEAD
-                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-md"
-=======
                         className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 transition shadow-md"
->>>>>>> AG-26
                       >
                         <FaShoppingCart />
                         {t('Add to Cart')}
                       </button>
 
                       <Link
-<<<<<<< HEAD
-                        href={route('product.show', product.id)}
-=======
                         href={`/product/${product.id}`} // New: Product detail page
->>>>>>> AG-26
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 transition shadow-md text-center"
                       >
                         <FaEye />
@@ -289,12 +270,6 @@ export default function ProductListPage({ products, category_name }) {
                       <p className="flex items-center gap-2 mb-1">
                         <FaPhone /> {product.supplier?.phone || 'N/A'}
                       </p>
-<<<<<<< HEAD
-                      <p className="flex items-center gap-2">
-                        <FaMapMarkerAlt /> {product.supplier?.district || 'N/A'}
-                      </p>
-                    </div>                    
-=======
                       <p className="flex items-center gap-2 mb-1">
                         <FaMapMarkerAlt /> {product.supplier?.district || 'N/A'}
                       </p>
@@ -318,7 +293,6 @@ export default function ProductListPage({ products, category_name }) {
                     >
                       {t('View Supplier')}
                     </Link>
->>>>>>> AG-26
                   </div>
                 </div>
               ))}
