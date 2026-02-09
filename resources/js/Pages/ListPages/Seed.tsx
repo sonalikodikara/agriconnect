@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import ProductListPage from './ProductListPage';
 
-export default function Seed({ products }) {
+export default function Seed({ products }: { products: any[] }) {
   return <ProductListPage products={products} category_name="Seeds" />;
 }

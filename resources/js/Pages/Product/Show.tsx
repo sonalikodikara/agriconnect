@@ -1,6 +1,6 @@
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function Show() {
@@ -39,7 +39,7 @@ export default function Show() {
 
                         {product.optional_images_urls && product.optional_images_urls.length > 0 && (
                             <div className="mt-4 grid grid-cols-4 gap-2">
-                                {product.optional_images_urls.map((url, i) => (
+                                {product.optional_images_urls.map((url: string | undefined, i: Key | null | undefined) => (
                                     <img key={i} src={url} alt={`${product.name}-${i}`} className="w-full h-20 object-cover rounded-lg" />
                                 ))}
                             </div>
@@ -78,7 +78,7 @@ export default function Show() {
                                 <div className="mt-4">
                                     <h4 className="font-semibold">{t('Ingredients')}</h4>
                                     <ul className="list-disc ml-5 mt-2 text-sm">
-                                        {product.ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
+                                        {product.ingredients.map((ing: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Iterable<ReactNode> | null | undefined, i: Key | null | undefined) => <li key={i}>{ing}</li>)}
                                     </ul>
                                 </div>
                             )}
@@ -87,7 +87,7 @@ export default function Show() {
                                 <div className="mt-4">
                                     <h4 className="font-semibold">{t('Certificates')}</h4>
                                     <div className="flex gap-3 mt-2">
-                                        {product.certificates_urls.map((c, i) => (
+                                        {product.certificates_urls.map((c: string | undefined, i: Key | null | undefined) => (
                                             <a key={i} href={c} target="_blank" rel="noreferrer" className="text-sm text-green-700 underline">{t('View Certificate')}</a>
                                         ))}
                                     </div>

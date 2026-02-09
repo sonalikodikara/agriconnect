@@ -7,6 +7,24 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 
+interface FormData {
+  business_name: string;
+  contact_person: string;
+  email: string;
+  phone: string;
+  district: string;
+  province: string;
+  address: string;
+  description: string;
+  website: string;
+  established: string;
+  experience: string;
+  specialization: string[];
+  certifications: string[];
+  profile_image: File | null;
+  cover_image: File | null;
+}
+
 interface Props {
   supplier: any;
   districts: { key: string; label: string }[];
@@ -20,7 +38,7 @@ export default function EditProfileDetails({ supplier, districts, provinces, aut
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const { data, setData, put, processing, errors } = useForm({
+  const { data, setData, processing } = useForm<FormData>({
     business_name: supplier?.business_name || '',
     contact_person: supplier?.contact_person || '',
     email: supplier?.email || '',
@@ -34,8 +52,8 @@ export default function EditProfileDetails({ supplier, districts, provinces, aut
     experience: supplier?.experience || '',
     specialization: Array.isArray(supplier?.specialization) ? supplier.specialization : [],
     certifications: Array.isArray(supplier?.certifications) ? supplier.certifications : [],
-    profile_image: null as File | null,
-    cover_image: null as File | null,
+    profile_image: null,
+    cover_image: null,
   });
 
   const [newSpecialization, setNewSpecialization] = useState('');
@@ -311,12 +329,12 @@ export default function EditProfileDetails({ supplier, districts, provinces, aut
               <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-10 border-4 border-green-300">
                 <h3 className="text-3xl font-bold text-green-800 mb-6">{t("Specializations")}</h3>
                 <div className="flex flex-wrap gap-4 mb-6">
-                  {data.specialization.map((item, i) => (
+                  {data.specialization.map((item: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Iterable<React.ReactNode> | null | undefined, i: React.Key | null | undefined) => (
                     <span key={i} className="bg-green-600 text-white px-6 py-3 rounded-full text-xl font-bold flex items-center gap-3 shadow-lg">
                       {item}
                       <button
                         type="button"
-                        onClick={() => setData('specialization', data.specialization.filter((_, idx) => idx !== i))}
+                        onClick={() => setData('specialization', data.specialization.filter((_: any, idx: React.Key | null | undefined) => idx !== i))}
                         className="hover:bg-red-600 rounded-full p-1"
                       >
                         <FaTimes />
@@ -360,12 +378,12 @@ export default function EditProfileDetails({ supplier, districts, provinces, aut
               <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-3xl p-10 border-4 border-blue-300">
                 <h3 className="text-3xl font-bold text-blue-800 mb-6">{t("Certifications")}</h3>
                 <div className="flex flex-wrap gap-4 mb-6">
-                  {data.certifications.map((item, i) => (
+                  {data.certifications.map((item: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Iterable<React.ReactNode> | null | undefined, i: React.Key | null | undefined) => (
                     <span key={i} className="bg-blue-600 text-white px-6 py-3 rounded-full text-xl font-bold flex items-center gap-3 shadow-lg">
                       {item}
                       <button
                         type="button"
-                        onClick={() => setData('certifications', data.certifications.filter((_, idx) => idx !== i))}
+                        onClick={() => setData('certifications', data.certifications.filter((_: any, idx: any) => idx !== i))}
                         className="hover:bg-red-600 rounded-full p-1"
                       >
                         <FaTimes />

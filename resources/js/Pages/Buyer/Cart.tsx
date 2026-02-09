@@ -1,14 +1,15 @@
 // resources/js/Pages/Buyer/Cart.tsx (updated with minor checks, but mostly same)
 import { Head, Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import BuyerNavbar from '@/components/BuyerNavbar';
+import BuyerNavbar from '@/Components/BuyerNavbar';
 import { Trash2, Plus, Minus } from 'lucide-react'; // Removed unused CheckCircle
 import { usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
+import { PageProps } from '@/types';
 
 export default function Cart() {
   const { t } = useTranslation();
-  const { props } = usePage<{ cartItems: any[], flash?: { status_key?: string } }>();
+  const { props } = usePage<PageProps<{ cartItems: any[], flash?: { status_key?: string } }>>();
   const cartItems = props.cartItems || []; // Use props instead of example data
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 

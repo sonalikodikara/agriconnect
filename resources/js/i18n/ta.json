@@ -301,6 +301,12 @@
   "Send Email": "மின்னஞ்சல் அனுப்பவும்",
   "Login": "உள்நுழைய",
   "Buyer Details": "வாங்குபவர் விவரங்கள்",
-  "N/A": "இல்லை"
+  "N/A": "இல்லை",
+
+  "pesticides": "பூச்சிக்கொல்லிகள்",
+  "Specialty": "நிபுணத்துவம்",
+  "No advisors registered yet.": "இன்னும் பதிவு செய்யப்பட்ட ஆலோசகர்கள் இல்லை.",
+  "Explore Other Categories": "மற்ற வகைகளை ஆராயவும்",
+  "No products available in this category.": "இந்த வகையில் கிடைக்கும் பொருட்கள் இல்லை."
 
 }

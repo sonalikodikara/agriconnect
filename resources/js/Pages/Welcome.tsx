@@ -69,7 +69,6 @@ export default function Welcome() {
                 <div className="hidden md:flex space-x-6">
                     <a href="#home" className="hover:text-yellow-300">{t('home')}</a>
                     <a href="#services" className="hover:text-yellow-300">{t('services')}</a>
-                    <a href="#resources" className="hover:text-yellow-300">{t('resources')}</a>
                     <a href="#about" className="hover:text-yellow-300">{t('about')}</a>
                     <a href="#contact" className="hover:text-yellow-300">{t('contact')}</a>
                 </div>

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate, FaWhatsapp, FaFilter } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate, FaWhatsapp, FaFilter, FaArrowLeft } from 'react-icons/fa';
 
 interface Advisor {
   id: number;
@@ -155,6 +155,18 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
             )}
           </div>
         </div>
+
+        {/* Back Button */}
+        <div className="max-w-7xl mx-auto px-4 mb-6">
+          <button
+            onClick={() => window.history.back()} 
+            className="flex items-center gap-2 text-green-700 font-bold text-lg hover:underline"
+          >
+            <FaArrowLeft />
+            {t('Back')}
+          </button>
+        </div>
+
 
         {/* Advisors Grid */}
         <div className="max-w-7xl mx-auto px-4 py-12">

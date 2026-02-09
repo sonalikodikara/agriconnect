@@ -9,7 +9,7 @@ import StarterKit from "@tiptap/starter-kit";
 
 export default function AddProduct() {
   const { t } = useTranslation();
-  const { flash } = usePage().props;
+  const { flash } = usePage().props as { flash?: { status_key?: string } };
   const successMessage = flash?.status_key ? t(flash.status_key) : null;
 
   const editor = useEditor({

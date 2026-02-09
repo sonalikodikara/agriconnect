@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import BuyerNavbar from '@/components/BuyerNavbar';
+import BuyerNavbar from '@/Components/BuyerNavbar';
 import { CreditCard, Check } from 'lucide-react';
 import { useForm } from '@inertiajs/react';
 import { usePage } from '@inertiajs/react';
@@ -8,7 +8,7 @@ import { FormEvent } from 'react';
 
 export default function Checkout() {
   const { t } = useTranslation();
-  const { props } = usePage<{ cartItems: any[], total: number, errors?: any }>();
+  const { props } = usePage<{ cartItems: any[], total: number, errors?: any, auth: any }>();
   const cartItems = props.cartItems || [];
   const total = props.total || 0;
   const errors = props.errors || {};

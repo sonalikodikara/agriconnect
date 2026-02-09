@@ -246,7 +246,7 @@ export function ProfileSetup({ userRole, onSave, onBack }: ProfileSetupProps) {
                 <Label className="block text-sm font-medium text-gray-700 mb-2">
                   {t('profile.district')} *
                 </Label>
-                <Select onValueChange={(value) => handleInputChange('district', value)}>
+                <Select onValueChange={(value: string) => handleInputChange('district', value)}>
                   <SelectTrigger className="border-agri-neutral-light focus:border-agri-primary">
                     <SelectValue placeholder="Select district" />
                   </SelectTrigger>
@@ -264,7 +264,7 @@ export function ProfileSetup({ userRole, onSave, onBack }: ProfileSetupProps) {
                 <Label className="block text-sm font-medium text-gray-700 mb-2">
                   {t('profile.province')} *
                 </Label>
-                <Select onValueChange={(value) => handleInputChange('province', value)}>
+                <Select onValueChange={(value: string) => handleInputChange('province', value)}>
                   <SelectTrigger className="border-agri-neutral-light focus:border-agri-primary">
                     <SelectValue placeholder="Select province" />
                   </SelectTrigger>

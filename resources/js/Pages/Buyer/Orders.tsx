@@ -1,7 +1,7 @@
 // resources/js/Pages/Buyer/Orders.tsx (updated with real-time tracking and all statuses)
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import BuyerNavbar from '@/components/BuyerNavbar';
+import BuyerNavbar from '@/Components/BuyerNavbar';
 import { 
   Clock, 
   CheckCircle, 
@@ -19,7 +19,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 
 export default function Orders() {
   const { t } = useTranslation();
-  const { props } = usePage<{ orders: any[], flash?: { status_key?: string } }>();
+  const { props } = usePage<{ auth: { user: any }, orders: any[], flash?: { status_key?: string } }>();
   const [orders, setOrders] = useState(props.orders || []);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
@@ -34,7 +34,6 @@ export default function Orders() {
       setIsRefreshing(true);
       router.reload({
         only: ['orders'],
-        preserveScroll: true,
         onFinish: () => {
           setIsRefreshing(false);
           setLastUpdated(new Date());
@@ -159,7 +158,7 @@ export default function Orders() {
       rating: formData.rating,
       review: formData.review || '',
     }, {
-      preserveScroll: true,
+      preserveUrl: true,
       onSuccess: () => {
         setShowRatingForm({ ...showRatingForm, [orderId]: false });
         setRatingForms({ ...ratingForms, [orderId]: { rating: 0, review: '' } });
@@ -230,7 +229,7 @@ export default function Orders() {
                   setIsRefreshing(true);
                   router.reload({
                     only: ['orders'],
-                    preserveScroll: true,
+                    preserveUrl: true,
                     onFinish: () => {
                       setIsRefreshing(false);
                       setLastUpdated(new Date());
@@ -329,7 +328,7 @@ export default function Orders() {
                         </p>
                         {getWhatsAppUrl(order) && (
                           <a
-                            href={getWhatsAppUrl(order)}
+                            href={getWhatsAppUrl(order) || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition shadow-md mb-3"

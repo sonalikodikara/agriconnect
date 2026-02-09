@@ -24,7 +24,7 @@ export default function BuyerNavbar({ cartCount = 0 }: BuyerNavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const { auth } = usePage<{ auth: { user: { name: string; email: string } } }>().props;
+  const { auth } = usePage<{ auth: { user: { id: number; name: string; email: string; role: string } } }>().props;
 
   const handleLogout = () => {
     router.post(route("logout"));

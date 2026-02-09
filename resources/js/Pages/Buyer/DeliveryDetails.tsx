@@ -1,6 +1,6 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import BuyerNavbar from '@/components/BuyerNavbar';
+import BuyerNavbar from '@/Components/BuyerNavbar';
 import { MapPin, Phone } from 'lucide-react';
 
 export default function DeliveryDetails() {
@@ -18,7 +18,7 @@ export default function DeliveryDetails() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     post(route('buyers.delivery.save'), {
-      onSuccess: () => router.back(), // Back to checkout
+      onSuccess: () => window.history.back(), // Back to checkout
     });
   };
 
