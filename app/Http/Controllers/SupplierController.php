@@ -25,7 +25,7 @@ class SupplierController extends Controller
     public function create()
     {
         // Render the same Dashboard/SupplierProfile page in "create" mode
-        return Inertia::render('Dashboard/SupplierProfile', [
+        return Inertia::render('Supplier/SupplierProfile', [
             'supplier' => null,
             'mode'     => 'create',
         ]);
@@ -160,36 +160,40 @@ class SupplierController extends Controller
 
     public function profile()
     {
+        // Get the currently authenticated user's supplier profile
         $supplier = Supplier::where('user_id', auth()->id())->first();
-        if ($supplier) {
-            $supplier->profile_image = $supplier->profile_image ? asset('storage/' . $supplier->profile_image) : null;
-            $supplier->cover_image = $supplier->cover_image ? asset('storage/' . $supplier->cover_image) : null;
 
-            // Load ratings with user info
-            $supplier->load(['ratings.user']);
+        // If no supplier profile exists, redirect to the form to create one
+        if (!$supplier) {
+            return redirect()->route('suppliers.create');
         }
-        $products = $supplier ? $supplier->products : [];
+
+        // If supplier exists, prepare the data and show the dashboard
+        $supplier->profile_image = $supplier->profile_image ? asset('storage/' . $supplier->profile_image) : null;
+        $supplier->cover_image = $supplier->cover_image ? asset('storage/' . $supplier->cover_image) : null;
+
+        // Load ratings with user info
+        $supplier->load(['ratings.user']);
+
+        $products = $supplier->products;
         $flash = session()->has('status_key') ? ['status_key' => session('status_key')] : null;
 
         // Fetch orders containing this supplier's products, with only their items
-        $supplierOrders = collect([]);
-        if ($supplier) {
-            $supplierOrders = Order::whereHas('items', function ($query) use ($supplier) {
-                $query->where('supplier_id', $supplier->id);
-            })->with([
-                'user', // Load buyer/user information
-                'items' => function ($query) use ($supplier) {
-                    $query->where('supplier_id', $supplier->id)->with('product');
-                }
-            ])->latest()->get();
+        $supplierOrders = Order::whereHas('items', function ($query) use ($supplier) {
+            $query->where('supplier_id', $supplier->id);
+        })->with([
+            'user', // Load buyer/user information
+            'items' => function ($query) use ($supplier) {
+                $query->where('supplier_id', $supplier->id)->with('product');
+            }
+        ])->latest()->get();
 
-            // Append status_label and status_color to each order
-            $supplierOrders = $supplierOrders->map(function ($order) {
-                $order->status_label = $order->status_label;
-                $order->status_color = $order->status_color;
-                return $order;
-            });
-        }
+        // Append status_label and status_color to each order
+        $supplierOrders = $supplierOrders->map(function ($order) {
+            $order->status_label = $order->status_label;
+            $order->status_color = $order->status_color;
+            return $order;
+        });
 
         return Inertia::render('Supplier/Profile', [
             'supplier' => $supplier,

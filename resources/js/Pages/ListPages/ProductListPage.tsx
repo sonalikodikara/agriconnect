@@ -14,14 +14,14 @@ import {
   FaEye,
 } from 'react-icons/fa';
 import { X, Menu } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, SetStateAction } from 'react';
 
-export default function ProductListPage({ products, category_name }) {
+export default function ProductListPage({ products, category_name }: { products: Array<{ id: Key | null | undefined; primary_image_url: string; name: string; price: { toLocaleString: () => string }; description: string; supplier: { phone: string; district: string; rating: string | number; review_count: number; id: number }; }>; category_name: string }) {
   const { t } = useTranslation();
-  const { props } = usePage<{ auth: { user?: any }, flash?: { status_key?: string } }>();
-  const [quantities, setQuantities] = useState(products.reduce((acc, p) => ({ ...acc, [p.id]: 1 }), {}));
+  const { props } = usePage<{ auth: { user: any }, flash?: { status_key?: string } }>();
+  const [quantities, setQuantities] = useState(products.reduce((acc: any, p: { id: any; }) => ({ ...acc, [p.id]: 1 }), {}));
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedProductId, setSelectedProductId] = useState<Key | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -40,11 +40,8 @@ export default function ProductListPage({ products, category_name }) {
     switch (props.auth.user?.role) {
       case 'supplier':
         return route('suppliers.profile.show');
-<<<<<<< HEAD
-=======
       case 'buyer':
         return route('buyers.dashboard');
->>>>>>> AG-26
       case 'farmer':
         return route('farmer.dashboard');
       case 'advisor':
@@ -52,35 +49,33 @@ export default function ProductListPage({ products, category_name }) {
       case 'admin':
         return route('admin.dashboard');
       default:
-<<<<<<< HEAD
-        return route('dashboard');
-=======
         return route('buyers.dashboard');
->>>>>>> AG-26
     }
   };
 
-  const addToCart = (productId) => {
+  const addToCart = (productId: Key | undefined) => {
     if (!props.auth.user) {
       setShowLoginModal(true);
-      setSelectedProductId(productId);
+      if (productId !== undefined) {
+        setSelectedProductId(productId);
+      }
       return;
     }
 
     router.post(route('buyers.cart.add'), {
-      product_id: productId,
-      quantity: quantities[productId],
+      product_id: String(productId),
+      quantity: quantities[String(productId)],
     }, {
       preserveScroll: true,
     });
   };
 
-  const increaseQuantity = (productId) => {
-    setQuantities((prev) => ({ ...prev, [productId]: prev[productId] + 1 }));
+  const increaseQuantity = (productId: Key | null | undefined) => {
+    setQuantities((prev: { [x: string]: number; }) => ({ ...prev, [String(productId)]: prev[String(productId)] + 1 }));
   };
 
-  const decreaseQuantity = (productId) => {
-    setQuantities((prev) => ({ ...prev, [productId]: Math.max(1, prev[productId] - 1) }));
+  const decreaseQuantity = (productId: Key | null | undefined) => {
+    setQuantities((prev: { [x: string]: number; }) => ({ ...prev, [String(productId)]: Math.max(1, prev[String(productId)] - 1) }));
   };
 
   return (
@@ -124,19 +119,22 @@ export default function ProductListPage({ products, category_name }) {
               )}
 
               {/* Login/Register if not logged in */}
-              {!props.auth.user && (
-                <div className="flex gap-4">
-                  <Link href="/login" className="text-green-800 hover:text-green-600 font-bold">
-                    {t('Login')}
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold shadow-md"
-                  >
-                    {t('Register')}
-                  </Link>
-                </div>
-              )}
+                {!props.auth.user && (
+                  <div className="flex gap-4">
+                    <Link
+                      href="/login"
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition flex items-center justify-center" 
+                    >
+                      {t('Login')}
+                    </Link>
+                    <Link
+                      href="/register"
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition flex items-center justify-center"
+                    >
+                      {t('Register')}
+                    </Link>
+                  </div>
+                )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -173,7 +171,7 @@ export default function ProductListPage({ products, category_name }) {
 
             <div className="space-y-4">
               <Link
-                href="/home"
+                href="/"
                 className="block text-center bg-blue-600 text-white py-4 rounded-xl font-bold text-xl"
               >
                 {t('Home')}
@@ -206,17 +204,17 @@ export default function ProductListPage({ products, category_name }) {
 
           {products.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-3xl shadow-2xl">
-              <p className="text-3xl text-gray-500 mb-8">{t('No products available in this category.')}</p>
+              <p className="text-2xl text-gray-500 mb-8">{t('No products available in this category.')}</p>
               <Link
-                href="/home"
-                className="bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl text-2xl font-bold shadow-lg transition"
+                href="/"
+                 className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-10 py-4 sm:py-5 rounded-2xl text-xl sm:text-xl font-bold shadow-lg transition block w-full sm:inline-block text-center"
               >
                 {t('Explore Other Categories')}
               </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {products.map((product) => (
+              {products.map((product: { id: Key | null | undefined; primary_image_url: any; name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined; price: { toLocaleString: () => string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Iterable<ReactNode> | null | undefined; }; description: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Iterable<ReactNode> | null | undefined; supplier: { phone: any; district: any; rating: string | number; review_count: any; id: any; }; }) => (
                 <div
                   key={product.id}
                   className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl hover:-translate-y-3 transition-all duration-300 flex flex-col"
@@ -224,7 +222,7 @@ export default function ProductListPage({ products, category_name }) {
                   <div className="relative">
                     <img
                       src={product.primary_image_url || '/placeholder.jpg'}
-                      alt={product.name}
+                      alt={String(product.name) || 'Product'}
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-bold">
@@ -233,11 +231,7 @@ export default function ProductListPage({ products, category_name }) {
                   </div>
 
                   <div className="p-6 flex flex-col flex-grow">
-<<<<<<< HEAD
-                    <h3 className="text-l font-bold text-green-800 mb-2 line-clamp-2">{product.name}</h3>
-=======
                     <h3 className="text-xl font-bold text-green-800 mb-2 line-clamp-2">{product.name}</h3>
->>>>>>> AG-26
                     <p className="text-gray-600 mb-4 flex-grow line-clamp-3">{product.description}</p>
 
                     {/* Quantity Selector */}
@@ -248,7 +242,7 @@ export default function ProductListPage({ products, category_name }) {
                       >
                         <FaMinus size={16} />
                       </button>
-                      <span className="text-xl font-bold w-12 text-center">{quantities[product.id]}</span>
+                      <span className="text-xl font-bold w-12 text-center">{quantities[String(product.id)]}</span>
                       <button
                         onClick={() => increaseQuantity(product.id)}
                         className="bg-white p-3 rounded-full shadow hover:bg-gray-200 transition"
@@ -260,23 +254,15 @@ export default function ProductListPage({ products, category_name }) {
                     {/* Action Buttons */}
                     <div className="grid grid-cols gap-3 mt-auto">
                       <button
-                        onClick={() => addToCart(product.id)}
-<<<<<<< HEAD
-                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-md"
-=======
+                        onClick={() => product.id !== null && product.id !== undefined && addToCart(product.id)}
                         className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 transition shadow-md"
->>>>>>> AG-26
                       >
                         <FaShoppingCart />
                         {t('Add to Cart')}
                       </button>
 
                       <Link
-<<<<<<< HEAD
-                        href={route('product.show', product.id)}
-=======
                         href={`/product/${product.id}`} // New: Product detail page
->>>>>>> AG-26
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 transition shadow-md text-center"
                       >
                         <FaEye />
@@ -289,21 +275,15 @@ export default function ProductListPage({ products, category_name }) {
                       <p className="flex items-center gap-2 mb-1">
                         <FaPhone /> {product.supplier?.phone || 'N/A'}
                       </p>
-<<<<<<< HEAD
-                      <p className="flex items-center gap-2">
-                        <FaMapMarkerAlt /> {product.supplier?.district || 'N/A'}
-                      </p>
-                    </div>                    
-=======
                       <p className="flex items-center gap-2 mb-1">
                         <FaMapMarkerAlt /> {product.supplier?.district || 'N/A'}
                       </p>
                       {/* Supplier Rating */}
-                      {product.supplier?.rating > 0 && (
+                      {parseFloat(String(product.supplier?.rating)) > 0 && (
                         <div className="flex items-center gap-2 mt-2">
                           <span className="text-yellow-500">★</span>
                           <span className="font-semibold text-gray-800">
-                            {parseFloat(product.supplier.rating).toFixed(1)}
+                            {parseFloat(String(product.supplier.rating)).toFixed(1)}
                           </span>
                           <span className="text-gray-500 text-xs">
                             ({product.supplier.review_count || 0} {t('reviews')})
@@ -318,7 +298,6 @@ export default function ProductListPage({ products, category_name }) {
                     >
                       {t('View Supplier')}
                     </Link>
->>>>>>> AG-26
                   </div>
                 </div>
               ))}

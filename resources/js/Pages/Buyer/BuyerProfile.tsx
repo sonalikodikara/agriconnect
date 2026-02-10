@@ -19,7 +19,7 @@ export default function BuyerDashboard() {
   const goHome = () => router.visit("/home");
 
   const pageProps = usePage<{
-    auth: { user?: { name?: string; email?: string } }; // Make user optional
+    auth: { user: { id: number; name: string; email: string; role: string } };
     orders: Array<{
       id: number;
       items: string;

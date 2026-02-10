@@ -13,7 +13,7 @@ export default function Profile() {
 
   const { advisor, auth, flash } = usePage<{
     advisor: any;
-    auth: { user: { name: string; email: string } };
+    auth: { user: { id: number; name: string; email: string; role: string } };
     flash: { status_key?: string };
   }>().props;
 

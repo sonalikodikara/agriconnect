@@ -38,7 +38,7 @@ export default function Login({
     };
 
     // Determine the message to display: translate if status_key is present, else use raw status
-    const displayMessage = props.status_key ? t(props.status_key) : status;
+    const displayMessage = props.status_key && typeof props.status_key === 'string' ? t(props.status_key) : status;
 
     return (
         <div className="min-h-screen text-gray-800">

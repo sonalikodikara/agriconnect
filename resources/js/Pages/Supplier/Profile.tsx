@@ -1,6 +1,6 @@
 // resources/js/Pages/Supplier/Profile.tsx
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Key } from "react";
 import { Link, usePage, router } from "@inertiajs/react";
 import { Edit, Plus, LogOut, Settings, Menu, X, ChevronDown } from "lucide-react";
 import { FaHome } from "react-icons/fa";
@@ -15,7 +15,7 @@ export default function Profile() {
   const { supplier, products, auth, flash, orders } = usePage<{
     supplier: any;
     products: any[];
-    auth: { user: { name: string; email: string } };
+    auth: { user: { id: number; name: string; email: string; role: string } };
     flash: { status_key?: string; whatsapp_url?: string };
     orders: any[];
   }>().props;
@@ -293,7 +293,7 @@ export default function Profile() {
                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-10 shadow-xl">
                   <h4 className="text-3xl font-bold text-green-800 mb-6">{t("Specializations")}</h4>
                   <div className="flex flex-wrap gap-4">
-                    {specialization.map((spec, i) => (
+                    {specialization.map((spec: any | string | string[], i: Key | null | undefined) => (
                       <span key={i} className="bg-green-600 text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg">
                         {t(spec)}
                       </span>
@@ -306,7 +306,7 @@ export default function Profile() {
                 <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-3xl p-10 shadow-xl">
                   <h4 className="text-3xl font-bold text-blue-800 mb-6">{t("Certifications")}</h4>
                   <div className="flex flex-wrap gap-4">
-                    {certifications.map((cert, i) => (
+                    {certifications.map((cert: any | string | string[], i: number) => (
                       <span key={i} className="bg-blue-600 text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg">
                         {t(cert)}
                       </span>

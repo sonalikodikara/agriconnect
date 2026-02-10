@@ -1,20 +1,9 @@
 // resources/js/Pages/ListPages/Advisors.tsx
 
-<<<<<<< HEAD
-import { Head, Link, usePage } from '@inertiajs/react';
-import { useTranslation } from 'react-i18next';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate } from 'react-icons/fa';
-
-export default function Advisors() {
-  const { t } = useTranslation();
-  const { props } = usePage<any>();
-  const advisors = props.advisors || [];
-  const category_name = props.category_name || 'Advisors & Consultants';
-=======
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate, FaWhatsapp, FaFilter } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaGlobe, FaCertificate, FaWhatsapp, FaFilter, FaArrowLeft } from 'react-icons/fa';
 
 interface Advisor {
   id: number;
@@ -62,7 +51,6 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
     advisors: advisors,
     filters: filters,
   });
->>>>>>> AG-26
 
   return (
     <>
@@ -97,11 +85,6 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
           </p>
         </div>
 
-<<<<<<< HEAD
-        {/* Advisors Grid */}
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          {advisors.length === 0 ? (
-=======
         {/* Filters */}
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="bg-white rounded-2xl shadow-lg p-6 border-4 border-green-100">
@@ -173,10 +156,21 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
           </div>
         </div>
 
+        {/* Back Button */}
+        <div className="max-w-7xl mx-auto px-4 mb-6">
+          <button
+            onClick={() => window.history.back()} 
+            className="flex items-center gap-2 text-green-700 font-bold text-lg hover:underline"
+          >
+            <FaArrowLeft />
+            {t('Back')}
+          </button>
+        </div>
+
+
         {/* Advisors Grid */}
         <div className="max-w-7xl mx-auto px-4 py-12">
           {!advisors || advisors.length === 0 ? (
->>>>>>> AG-26
             <div className="text-center py-20 bg-white rounded-3xl shadow-xl">
               <p className="text-3xl text-gray-600 mb-8">{t('No advisors registered yet.')}</p>
               <Link href="/home" className="bg-green-600 text-white px-10 py-4 rounded-2xl text-xl font-bold hover:bg-green-700">
@@ -207,9 +201,6 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
                     )}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                       <h3 className="text-3xl font-bold text-white">{advisor.name}</h3>
-<<<<<<< HEAD
-                      <p className="text-xl text-yellow-300">{t(advisor.specialization?.[0] || 'Expert')}</p>
-=======
                       <p className="text-xl text-yellow-300">
                         {(() => {
                           const specs = Array.isArray(advisor.specialization) 
@@ -226,7 +217,6 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
                           return t(Array.isArray(specs) && specs.length > 0 ? specs[0] : 'Expert');
                         })()}
                       </p>
->>>>>>> AG-26
                     </div>
                   </div>
 
@@ -265,28 +255,6 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
                     )}
 
                     {/* Specializations */}
-<<<<<<< HEAD
-                    {advisor.specialization && advisor.specialization.length > 0 && (
-                      <div className="mb-6">
-                        <p className="font-bold text-green-800 mb-2">{t('Specializations')}:</p>
-                        <div className="flex flex-wrap gap-2">
-                          {advisor.specialization.map((spec, i) => (
-                            <span key={i} className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
-                              {t(spec)}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Contact Button */}
-                    <Link
-                      href={`/advisor/${advisor.id}`}
-                      className="block text-center bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 to-emerald-700 text-white font-bold text-xl py-4 rounded-2xl transition shadow-lg"
-                    >
-                      {t('View Profile & Contact')}
-                    </Link>
-=======
                     {(() => {
                       const specs = Array.isArray(advisor.specialization) 
                         ? advisor.specialization 
@@ -380,7 +348,6 @@ export default function Advisors({ advisors = [], category_name, filters = { spe
                         )}
                       </div>
                     </div>
->>>>>>> AG-26
                   </div>
                 </div>
               ))}
